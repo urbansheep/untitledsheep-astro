@@ -1,15 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PostCard from '../components/PostCard.astro';
+import Layout from '@/layouts/Layout.astro';
+import PostCard from '@/components/PostCard.astro';
+
+const title = "*Безымянная овца";
+const description = "";
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Untitled Sheep</h1>
-		<PostCard />
-	</main>
+<Layout homepage={true} title={title} description={description}>
+    <h1>Untitled Sheep</h1>
+    <PostCard />
 </Layout>
-
-<style>
-	
-</style>
