@@ -49,7 +49,7 @@ All commands are run from the root of the project, from a terminal:
 
 
 
-TODO:
+## TODO:
 
 - страницы mdx не получают  title и description
 - подвал: стили для ссылки "rss"
