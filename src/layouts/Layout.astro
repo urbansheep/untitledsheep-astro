@@ -1,25 +1,103 @@
 ---
+import MetaHead from '@/components/MetaHead.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import SkipLinks from '@/components/SkipLinks.astro';
+import '@/styles/global.css';
+import MetaDev from '@/components/MetaDev.astro';
+
+// const isDevMetaVisible = true;
+const isDevMetaVisible = false;
+
 export interface Props {
-	title: string;
+    homepage?: boolean;
+    title?: string;
+    description?: string;
 }
 
-const { title } = Astro.props;
+const {
+    homepage = false,
+    title = "*Безымянная овца",
+    description = "*Безымянная овца" // TODO: add description
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="ru" dir="ltr" class="page">
+
+    <MetaHead
+        homepage={homepage}
+        title={title}
+        description={description}
+
+    />
+
+    <body class="body">
+        <SkipLinks />
+        <div class="wrapper">
+            <Header />
+            <main class="main">
+                <slot />
+            </main>
+            <Footer />
+        </div>
+
+        {isDevMetaVisible &&
+            <MetaDev
+                title={title}
+                description={description}
+                canonical={canonical}
+            />
+        }
+
+    </body>
+
 </html>
 
 <style is:global>
-	
+
+    .page {
+        scroll-behavior: smooth;
+    }
+
+    .body {
+        height: 100%;
+        min-width: 320px;
+        max-width: 1920px;
+        margin: 0 auto;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-flow: column;
+        max-width: 800px;
+        min-height: 100vh;
+        padding: 0 var(--spacing-sm);
+        margin: 0 auto;
+    }
+
+    @media (width >= 360px) {
+        .wrapper {
+            padding: 0 var(--spacing-lg);
+        }
+    }
+
+    @media (width >= 600px) {
+        .wrapper {
+            padding: 0 var(--spacing-xl);
+        }
+    }
+
+    .main {
+        padding: 36px 0 24px;
+        flex: 1;
+    }
+
+    .text-base {
+        font-size: var(--font-size-base);
+        line-height: 1.5;
+    }
+
 </style>
