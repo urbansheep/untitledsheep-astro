@@ -1,0 +1,39 @@
+---
+import Nav from "@/components/Nav.astro";
+
+const linksTop = [
+    { href: "/", title: "Главная" },
+    { href: "/archive", title: "Архив" },
+    { href: "/favorite", title: "Избранное" },
+    { href: "/tagcloud", title: "Рубрики" },
+    { href: "/kickstarter", title: "Кикстартер" },
+    { href: "/rss", title: "RSS", bordered: true },
+];
+
+const linksBottom = [
+    { href: "/about", title: "О блоге" },
+    { href: "/changelog", title: "Changelog" },
+];
+---
+
+<footer class="footer">
+    <Nav links={linksTop} aligned="center" />
+    <Nav links={linksBottom} type="secondary" aligned="center" />
+    <p class="description">(c) 2023, Urbansheep</p>
+</footer>
+
+<style>
+    .footer {
+        display: grid;
+        gap: var(--spacing-base);
+        margin-bottom: var(--spacing-lg);
+        padding-top: var(--spacing-lg);
+        box-shadow: 0 -6px 9px -9px #999;
+    }
+
+    .description {
+        text-align: center;
+        font-size: small;
+    }
+
+</style>

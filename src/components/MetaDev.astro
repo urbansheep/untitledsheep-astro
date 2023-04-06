@@ -1,0 +1,50 @@
+---
+export interface Props {
+    title: string;
+    description: string;
+    canonical: URL;
+}
+
+const {
+    title,
+    description,
+    canonical,
+} = Astro.props;
+---
+
+<section class="meta">
+    <details open>
+        <summary>META tags</summary>
+        <p>SEO</p>
+        <ul>
+            <li><b>SEO title</b>: {title}</li>
+            <li><b>SEO description</b>: {description}</li>
+            <li><b>SEO canonical URL</b>: {canonical}</li>
+        </ul>
+        <p>SMM</p>
+        <ul>
+            <li><b>OG title</b>: _____ </li>
+            <li><b>OG description</b>: ____ </li>
+            <li><b>OG URL</b>: {canonical}</li>
+            <li><b>OG image</b>: _____</li>
+        </ul>
+    </details>
+</section>
+
+<style is:global>
+    .meta {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 16px;
+        background-color: bisque;
+    }
+
+    .meta p {
+        padding: 16px 0;
+        color: red;
+        font-weight: bold;
+    }
+
+</style>

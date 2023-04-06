@@ -1,0 +1,52 @@
+---
+import Nav from "@/components/Nav.astro";
+
+const links = [
+    {
+        title: 'Архив',
+        href: '/archive',
+    }, {
+        title: 'Избранное',
+        href: '/favorite'
+    }, {
+        title: 'Рубрики',
+        href: '/tagcloud'
+    }, {
+        title: 'Кикстартер',
+        href: '/kickstarter'
+    }, {
+        title: 'Задать вопрос',
+        href: '/ask'
+    }
+];
+---
+
+<header class="header">
+    <div class="title"><a href="/">*Безымянная овца</a></div>
+    <Nav links={links} />
+
+</header>
+
+<style>
+
+    .header {
+        margin-top: var(--spacing-lg);
+    }
+
+    .header a {
+        text-decoration: none;
+        color: var(--theme-color-dark);
+    }
+
+    .header a:hover,
+    .header a:active {
+        text-decoration: underline;
+        color: var(--theme-color-dark);
+    }
+
+    .title {
+        margin-bottom: var(--spacing-sm);
+    }
+
+
+</style>
