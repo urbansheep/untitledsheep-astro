@@ -21,8 +21,13 @@ Inside of your Astro project, you'll see the following folders and files:
 ├── src/
 │   ├── components/
 │   │   └── Card.astro
+│   ├── content/blog/
+│   │   └── blog-post.md
 │   ├── layouts/
 │   │   └── Layout.astro
+│   ├── media/
+│   ├── styles/
+│   ├── utils/
 │   └── pages/
 │       └── index.astro
 └── package.json
