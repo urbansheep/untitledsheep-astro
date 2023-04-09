@@ -1,1 +1,32 @@
-<div>One Post in list</div>
+---
+export interface Props {
+    post: {
+        slug: string;
+        data: {
+            id: number;
+            form: string;
+            date: Date;
+            title: string;
+        };
+    };
+}
+
+const {
+    post
+} = Astro.props;
+
+// Pretty print the date using Russian locale
+const date = new Date(post.data.date);
+const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
+const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
+
+---
+
+
+
+<article>
+    <a href={`/post/${post.slug}`}>{post.data.id} - [{post.data.form}] {post.data.title || ""}</a>
+    <p>{prettyDate} * {prettyTime}</p>
+
+
+</article>

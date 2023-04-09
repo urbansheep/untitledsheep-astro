@@ -24,7 +24,7 @@ const {
     >
         { links.map((link) => (
             <li class="item">
-                <a class="link" href={link.href}>{link.title}</a>
+                <a class="link" href={link.href} data-navLink>{link.title}</a>
             </li>
         ))}
 
@@ -59,6 +59,8 @@ const {
         content: ' ';
     }
 
+
+
     .link {
         text-decoration: none;
 
@@ -67,6 +69,10 @@ const {
     .link:hover,
     .link:active {
         text-decoration: underline;
+    }
+
+    .link:active {
+        background-color: tomato;
     }
 
     .primary a {
@@ -88,3 +94,7 @@ const {
     }
 
 </style>
+
+<script>
+    import "@/utils/nav.js";
+</script>

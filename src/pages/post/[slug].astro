@@ -1,0 +1,176 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import '@/styles/prose.css';
+
+import { getCollection, CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog', (post) => {
+        return !post.data.isDraft && post.data.date <= new Date();
+    });
+    return posts.map((post) => ({
+        params: { slug: post.slug},
+        props: {post},
+    }));
+}
+
+
+
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  form: string
+}
+
+const {
+    post,
+    form = post.data.form,
+} = Astro.props;
+
+const { Content } = await post.render();
+
+const title = post.data.title || "Пост " + post.data.id;
+const description = "";
+
+// Pretty print the date using Russian locale
+const date = new Date(post.data.date);
+const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
+const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
+
+---
+
+<Layout title={title} description={description}>
+
+    <article class:list={[
+        "prose",
+        form
+        ]} itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting"
+    >
+
+        {post.data.form === 'link' && post.data.title &&
+            <h1><a href={ post.data.linkurl }>{ post.data.title}</a></h1>
+        }
+
+        {post.data.form === 'regular' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        {post.data.form === 'chat' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        {post.data.form === 'photo' &&
+            <>
+                {post.data.title && <h1>{ post.data.title}</h1>}
+                <img
+                    src={post.data.photo}
+                    class="cover"
+                    alt={post.data.photo_caption || post.data.title || ""}
+                    loading="lazy"
+                >
+            </>
+        }
+
+        {post.data.form === 'photogallery' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        {post.data.form === 'quote' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        {post.data.form === 'audio' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        {post.data.form === 'video' && post.data.title &&
+            <h1>{ post.data.title}</h1>
+        }
+
+        <Content />
+
+    </article>
+
+    <section class="details">
+        <ul class="tags">
+            {post.data.tags.length > 0 && post.data.tags.map((tag) => <li class="tag__item"><a class="tag__link" href={`/tagged/${tag}`}>{tag}</a></li>)}
+        </ul>
+        <nav>
+            <a class="date" href={post.slug} itemprop="datePublished">{prettyDate}</a> ★
+            <a class="date" href={post.data.tumblr}>Tumblr: {prettyTime}</a>
+            { post.data.photo_source_url &&
+                <>
+                    ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_url}</a>
+                </>
+            }
+        </nav>
+    </section>
+
+    <nav class="pagination">
+        <span><a href="#">← В ПРОШЛОЕ</a></span>
+        <span><a href="#">В БУДУЩЕЕ →</a></span>
+    </nav>
+
+</Layout>
+
+<style>
+    .details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin: 36px 0;
+        color: var(--color-grey-400);
+        font-size: var(--font-size-xs);
+    }
+
+    .details a {
+        color: var(--color-grey-400);
+        text-decoration: none;
+    }
+
+    .details a:hover {
+        color: var(--color-grey-400);
+        text-decoration: underline;
+    }
+
+    .tags {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+
+    }
+
+    .center {
+        align-items: center;
+    }
+
+    .tag__item::after {
+        content: '•';
+        padding: 0 0.5rem;
+    }
+
+    .tag__item:last-child::after {
+        content: ' ';
+    }
+
+    .pagination {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 36px 0;
+    }
+
+    .pagination a {
+        color: var(--color-grey-400);
+        text-decoration: none;
+    }
+
+    .pagination a:hover {
+        color: var(--color-grey-400);
+        text-decoration: underline;
+    }
+
+</style>

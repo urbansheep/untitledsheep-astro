@@ -10,14 +10,19 @@
     padding: 0;
 }
 
-:root {
-    /* --color-white: #fff;
-    --color-grey-90: #333;
-    --color-theme-base: #6498cc;
-    --color-link-post-bg: #EAF1F9;
-    --color-quote-bg: #F7FAF9;
-    --color-quote-accent: #AFBDB9; */
+/* prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+}
 
+:root {
     /* Spacing */
 
     --spacing-xxs: 2px;
@@ -97,6 +102,15 @@ html {
     line-height: var(--line-height-base);
 }
 
+h1,
+h2 {
+    color: var(--color-grey-700);
+    font-weight: normal;
+    margin: var(--spacing-lg) 0;
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+}
+
 code,
 kbd,
 pre,
@@ -152,6 +166,10 @@ a:focus-visible {
     outline-offset: 2px;
 }
 
+.link[aria-current="page"] {
+    font-weight: bold;
+}
+
 img,
 svg,
 video,
@@ -204,6 +222,46 @@ Make sure disabled buttons don't get the pointer cursor.
 }
 
 
+.page {
+    scroll-behavior: smooth;
+}
 
+.body {
+    height: 100%;
+    min-width: 320px;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-flow: column;
+    max-width: 800px;
+    min-height: 100vh;
+    padding: 0 var(--spacing-sm);
+    margin: 0 auto;
+}
+
+@media (width >= 360px) {
+    .wrapper {
+        padding: 0 var(--spacing-lg);
+    }
+}
+
+@media (width >= 600px) {
+    .wrapper {
+        padding: 0 var(--spacing-xl);
+    }
+}
+
+.main {
+    padding: 36px 0;
+    flex: 1;
+}
+
+.text-base {
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
 
 

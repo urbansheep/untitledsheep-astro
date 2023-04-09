@@ -1,0 +1,110 @@
+.prose {
+    max-width: 70ch;
+    margin: 0 auto;
+}
+
+.prose p {
+    margin: 0.67em 0;
+}
+
+.prose p small {
+    font-size: 80%;
+}
+
+.prose p big {
+    font-size: 120%;
+}
+
+.prose .splitter {
+    margin: 1em 0;
+    text-align: center;
+    color: #AFBDB9;
+}
+
+.prose a,
+.prose a:link,
+.prose a:active {
+    padding: 1px 0;
+    color: #333;
+    background-color: #eaf1f9;
+    text-decoration: none;
+}
+
+.prose a:visited {
+    padding: 1px 0;
+    color: #333;
+    background-color: #f1dbf3;
+}
+
+.prose a:hover {
+    text-decoration: underline;
+}
+
+.prose li {
+    margin-left: var(--spacing-xxl);
+}
+
+.prose hr {
+    width: 80%;
+    margin: 2em auto;
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.5), rgba(0,0,0,0));
+}
+
+/* .prose h1,
+.prose h2 {
+    color: var(--color-grey-700);
+    font-weight: normal;
+    margin: var(--spacing-lg) 0;
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+} */
+
+.prose .link {
+
+}
+
+.prose .cover {
+
+}
+
+.prose .regular blockquote {
+    padding: 5px 5px 5px 20px;
+    border-left: #AFBDB9 3px solid;
+    background-color: #F7FAF9;
+    margin-left: -1.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.prose .link h1 {
+    color: #666;
+    font-weight: normal;
+    margin: 0.83em 0px;
+    padding-bottom: 1em;
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+
+.prose .link h1::before {
+    content: "→";
+    margin-right: 0.5em;
+    margin-left: -1.5em;
+}
+
+.prose .quote blockquote {
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+}
+
+.prose .quote blockquote:before {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+    margin-left: -0.6em;
+    content: "«";
+    color: #D3E3DE;
+    font-size: 4em;
+}

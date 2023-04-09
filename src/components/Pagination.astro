@@ -1,0 +1,12 @@
+---
+const { prevUrl, nextUrl } = Astro.props;
+---
+
+<nav>
+    { prevUrl && (
+        <a href={prevUrl}>Previous</a>
+    )}
+    { nextUrl && (
+        <a href={nextUrl}>Next</a>
+    )}
+</nav>

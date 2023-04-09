@@ -1,9 +1,35 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
 const title = "Архив";
 const description = "";
+
+import { THEME } from '@/config';
+
+const pageLimit = THEME.postsPerPage;
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
 ---
 
 <Layout title={title} description={description}>
     <h1>Archive</h1>
+    <ul class="archive">
+        {posts.map((post) => (
+            <li><PostCard post={post} /></li>
+        ))}
+    </ul>
 </Layout>
+
+<style>
+    .archive {
+        display: grid;
+        gap: var(--spacing-xl);
+        margin: var(--spacing-xl) 0;
+    }
+</style>

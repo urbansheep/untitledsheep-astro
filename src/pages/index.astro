@@ -1,12 +1,25 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
 import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
 
 const title = "*Безымянная овца";
 const description = "";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// receive one random post from the collection
+const randomPost = posts[Math.floor(Math.random() * posts.length)];
 ---
 
 <Layout homepage={true} title={title} description={description}>
     <h1>Untitled Sheep</h1>
-    <PostCard />
+    <p>Random post for the index page</p>
+    <PostCard post={randomPost} />
+
 </Layout>

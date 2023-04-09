@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/Layout.astro
+layout: ../layouts/LayoutContent.astro
 title: Поддержанные проекты на Кикстартере
 description:
 ---
@@ -10,7 +10,7 @@ description:
 
 ### 7 сентября 2013
 
-<a href="https://href.li/?http://www.kickstarter.com/projects/jonatherton/nota-the-ultrafine-tip-stylus-for-ipad-android-tab"><img src="/static/kikstarter-2013-09-07.jpg" alt=""></a>
+<a href="https://href.li/?http://www.kickstarter.com/projects/jonatherton/nota-the-ultrafine-tip-stylus-for-ipad-android-tab"><img src="/static/kikstarter-2013-09-07.jpg" alt="" /></a>
 
 <a href="https://href.li/?http://www.kickstarter.com/projects/jonatherton/nota-the-ultrafine-tip-stylus-for-ipad-android-tab">Nota: The Ultrafine Tip Stylus for iPad + Android Tablets</a>
 
@@ -32,7 +32,7 @@ description:
 
 ### 13 июня 2013
 
-<a href="https://href.li/?http://www.kickstarter.com/projects/806146824/melon-a-headband-and-mobile-app-to-measure-your-fo"><img src="/static/kikstarter-2013-06-13_1.jpg" alt=""></a>
+<a href="https://href.li/?http://www.kickstarter.com/projects/806146824/melon-a-headband-and-mobile-app-to-measure-your-fo"><img src="/static/kikstarter-2013-06-13_1.jpg" alt="" /></a>
 
 <a href="https://href.li/?http://www.kickstarter.com/projects/806146824/melon-a-headband-and-mobile-app-to-measure-your-fo"><img src="/static/kikstarter-2013-06-13_2.png" alt=""></a>
 
@@ -42,7 +42,7 @@ description:
 
 ### 28 мая 2013
 
-<a href="https://href.li/?http://www.kickstarter.com/projects/johnonolan/ghost-just-a-blogging-platform"><img src="/static/kikstarter-2013-05-28.jpg" alt=""></a>
+<a href="https://href.li/?http://www.kickstarter.com/projects/johnonolan/ghost-just-a-blogging-platform"><img src="/static/kikstarter-2013-05-28.jpg" alt="" /></a>
 
 <a href="https://href.li/?http://www.kickstarter.com/projects/johnonolan/ghost-just-a-blogging-platform">Ghost: Just a Blogging Platform</a>
 
@@ -50,7 +50,7 @@ description:
 
 ### 27 марта 2013
 
-<a href="https://href.li/?http://www.kickstarter.com/projects/156287353/the-tomorrow-girl-dresden-codak-volume-1"><img src="/static/kikstarter-2013-03-27.jpg" alt=""></a>
+<a href="https://href.li/?http://www.kickstarter.com/projects/156287353/the-tomorrow-girl-dresden-codak-volume-1"><img src="/static/kikstarter-2013-03-27.jpg" alt="" /></a>
 
 <a href="https://href.li/?http://www.kickstarter.com/projects/156287353/the-tomorrow-girl-dresden-codak-volume-1">The Tomorrow Girl: Dresden Codak Volume 1</a>
 
@@ -60,6 +60,6 @@ description:
 
 ### 27 декабря 2012
 
-<a href="https://href.li/?http://www.kickstarter.com/projects/cesarkuriyama/1-second-everyday-app"><img src="/static/kikstarter-2012-12-27.jpg" alt=""></a>
+<a href="https://href.li/?http://www.kickstarter.com/projects/cesarkuriyama/1-second-everyday-app"><img src="/static/kikstarter-2012-12-27.jpg" alt="" /></a>
 
 <a href="https://href.li/?http://www.kickstarter.com/projects/cesarkuriyama/1-second-everyday-app">1 Second Everyday App</a>

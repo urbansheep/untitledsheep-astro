@@ -7,7 +7,7 @@ const links = [
         href: '/archive',
     }, {
         title: 'Избранное',
-        href: '/favorite'
+        href: '/tagged/избранное'
     }, {
         title: 'Рубрики',
         href: '/tagcloud'
@@ -17,13 +17,16 @@ const links = [
     }, {
         title: 'Задать вопрос',
         href: '/ask'
+    }, {
+        title: 'Post для редиректа',
+        href: '/post'
     }
 ];
 ---
 
 <header class="header">
     <div class="title"><a href="/">*Безымянная овца</a></div>
-    <Nav links={links} />
+    <Nav links={links} aligned="center" />
 
 </header>
 
@@ -38,15 +41,19 @@ const links = [
         color: var(--theme-color-dark);
     }
 
-    .header a:hover,
-    .header a:active {
+    .header a:hover {
         text-decoration: underline;
         color: var(--theme-color-dark);
+
     }
+
+    /* .header a:active {
+        text-decoration: underline;
+        color: var(--theme-color-dark);
+        background-color: tomato;
+    } */
 
     .title {
         margin-bottom: var(--spacing-sm);
     }
-
-
 </style>

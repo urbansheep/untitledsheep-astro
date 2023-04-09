@@ -1,10 +1,38 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+
 
 const title = "Теги и рубрикатор";
 const description = "";
+
+
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+const tags = [...new Set([].concat.apply([], posts.map(post => post.data.tags)))]
 ---
 
 <Layout title={title} description={description}>
     <h1>Теги и рубрикатор Безымянной овцы</h1>
+    <ul class="list">
+        {tags.map((tag) => (
+           <li><a class="tag" href={`/tagged/${tag}`}>{tag}</a></li>
+       ))}
+       </ul>
 </Layout>
+
+<style>
+    .list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
+    .tag {
+        text-decoration: none;
+    }
+</style>

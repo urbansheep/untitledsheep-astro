@@ -1,10 +1,11 @@
 ---
 import MetaHead from '@/components/MetaHead.astro';
+import MetaDev from '@/components/MetaDev.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import SkipLinks from '@/components/SkipLinks.astro';
 import '@/styles/global.css';
-import MetaDev from '@/components/MetaDev.astro';
+import '@/styles/prose.css';
 
 // const isDevMetaVisible = true;
 const isDevMetaVisible = false;
@@ -31,7 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         homepage={homepage}
         title={title}
         description={description}
-
+        canonical={canonical}
     />
 
     <body class="body">
@@ -55,49 +56,3 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </body>
 
 </html>
-
-<style is:global>
-
-    .page {
-        scroll-behavior: smooth;
-    }
-
-    .body {
-        height: 100%;
-        min-width: 320px;
-        max-width: 1920px;
-        margin: 0 auto;
-    }
-
-    .wrapper {
-        display: flex;
-        flex-flow: column;
-        max-width: 800px;
-        min-height: 100vh;
-        padding: 0 var(--spacing-sm);
-        margin: 0 auto;
-    }
-
-    @media (width >= 360px) {
-        .wrapper {
-            padding: 0 var(--spacing-lg);
-        }
-    }
-
-    @media (width >= 600px) {
-        .wrapper {
-            padding: 0 var(--spacing-xl);
-        }
-    }
-
-    .main {
-        padding: 36px 0 24px;
-        flex: 1;
-    }
-
-    .text-base {
-        font-size: var(--font-size-base);
-        line-height: 1.5;
-    }
-
-</style>

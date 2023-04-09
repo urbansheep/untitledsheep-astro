@@ -1,4 +1,6 @@
 ---
+import { SITE } from '@/config'
+
 export interface Props {
     homepage?: boolean;
     title: string;
@@ -21,8 +23,8 @@ const {
     <link rel="canonical" href={canonical} />
 
     <!-- Primary Meta Tags -->
-    {homepage ? <title>{title}</title> : <title>{title} • *Безымянная овца</title>}
-    <meta name="title" content={title} />
+    {homepage ? <title>{title}</title> : <title>{title} • {SITE.title}</title>}
+    {homepage ? <meta name="title" content={title} /> : <meta name="title" content={`${title} • ${SITE.title}`} />}
     <!-- TODO: -->
     <meta name="description" content={description}>
 
