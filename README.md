@@ -6,13 +6,7 @@
 - npm v8 - идет в комплекте с Node 16
 - AstroJS v2 - https://docs.astro.build/
 
-*Настройки блога*
-
-```
-/
-├── src/
-│   └── config.ts
-```
+*Настройки блога* - `/src/config.ts`
 
 [Шаблон для блог-поста](TEMPLATE.md)
 
