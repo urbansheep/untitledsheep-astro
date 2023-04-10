@@ -1,32 +1,45 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 export interface Props {
-    post: {
-        slug: string;
-        data: {
-            id: number;
-            form: string;
-            date: Date;
-            title: string;
-        };
-    };
+    post: CollectionEntry<'blog'>;
 }
 
-const {
-    post
-} = Astro.props;
+const { post } = Astro.props;
 
 // Pretty print the date using Russian locale
 const date = new Date(post.data.date);
 const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
 const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
-
 ---
 
-
-
 <article>
-    <a href={`/post/${post.slug}`}>{post.data.id} - [{post.data.form}] {post.data.title || ""}</a>
+    <a href={`/post/${post.slug}`} class="header">
+        { post.data.title ? <h2>→ {post.data.title}</h2> : <h2>→ Пост {post.data.id}</h2>}
+    </a>
+
+    <p>{post.data.form}</p>
+
     <p>{prettyDate} * {prettyTime}</p>
 
 
 </article>
+
+<style>
+    .header {
+        text-decoration: none;
+        color: var(--theme-color-base);
+    }
+
+    .header:hover {
+        text-decoration: underline;
+    }
+
+    .header:visited {
+        color: var(--theme-color-base);
+    }
+
+    .header h2 {
+        color: var(--theme-color-base);
+    }
+</style>
