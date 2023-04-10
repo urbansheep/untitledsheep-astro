@@ -8,7 +8,10 @@ export const SITE = {
 
 // Theme configuration
 export const THEME = {
-    // Theme: Posts per page (pagination)
-    postsPerPage: 5,
+    // Posts per page (pagination) on website
+    postsPerPage: 2,
+
+    // Posts per feed on RSS
+    postsPerFeed: 10,
 }
 
