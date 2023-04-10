@@ -23,7 +23,10 @@
   "dependencies": {
     "@astrojs/mdx": "^0.18.2",
     "@astrojs/node": "^5.1.1",
-    "astro": "^2.2.1"
+    "@astrojs/rss": "^2.3.2",
+    "astro": "^2.2.1",
+    "markdown-it": "^13.0.1",
+    "sanitize-html": "^2.10.0"
   },
   "devDependencies": {
     "editorconfig-checker": "^5.0.1",
