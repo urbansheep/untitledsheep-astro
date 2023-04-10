@@ -1,12 +1,37 @@
 ---
-const { prevUrl, nextUrl } = Astro.props;
+const { page } = Astro.props
 ---
 
-<nav>
-    { prevUrl && (
-        <a href={prevUrl}>Previous</a>
+<nav class="pagination">
+    { page.url.prev && (
+        <span><a href={page.url.prev}>← В будущее</a></span>
     )}
-    { nextUrl && (
-        <a href={nextUrl}>Next</a>
+    { page.url.next && (
+        <span><a href={page.url.next}>В прошлое →</a></span>
     )}
 </nav>
+
+
+<style>
+
+    .pagination {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 36px 0;
+        color: var(--color-grey-400);
+        font-size: var(--font-size-xs);
+    }
+
+    .pagination a {
+        color: var(--color-grey-400);
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+
+    .pagination a:hover {
+        color: var(--color-grey-400);
+        text-decoration: underline;
+    }
+
+</style>
