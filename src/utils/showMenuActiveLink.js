@@ -1,4 +1,5 @@
-const navLinks = document.querySelectorAll("[data-navLink]");
+const header = document.querySelector("header");
+const navLinks = header.querySelectorAll("[data-navLink]");
 
 navLinks.forEach((link) => {
     if (link.getAttribute("href") === window.location.pathname) {
