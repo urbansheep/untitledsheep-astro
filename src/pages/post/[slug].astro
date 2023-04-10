@@ -2,7 +2,9 @@
 export const prerender = true;
 
 import Layout from '@/layouts/LayoutBase.astro';
+import Pagination from '@/components/Pagination.astro';
 import '@/styles/prose.css';
+import { slugify } from '@/utils/slugify.js';
 
 import { getCollection, CollectionEntry } from 'astro:content';
 
@@ -15,9 +17,6 @@ export async function getStaticPaths() {
         props: {post},
     }));
 }
-
-
-
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -39,6 +38,9 @@ const date = new Date(post.data.date);
 const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
 const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
 
+// Filter out the "post" tag
+const tagList = post.data.tags.filter((tag) => tag !== 'post');
+
 ---
 
 <Layout title={title} description={description}>
@@ -49,19 +51,19 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
         ]} itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting"
     >
 
-        {post.data.form === 'link' && post.data.title &&
+        {form === 'link' && post.data.title &&
             <h1><a href={ post.data.linkurl }>{ post.data.title}</a></h1>
         }
 
-        {post.data.form === 'regular' && post.data.title &&
+        {form === 'regular' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
-        {post.data.form === 'chat' && post.data.title &&
+        {form === 'chat' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
-        {post.data.form === 'photo' &&
+        {form === 'photo' &&
             <>
                 {post.data.title && <h1>{ post.data.title}</h1>}
                 <img
@@ -73,19 +75,19 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
             </>
         }
 
-        {post.data.form === 'photogallery' && post.data.title &&
+        {form === 'photogallery' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
-        {post.data.form === 'quote' && post.data.title &&
+        {form === 'quote' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
-        {post.data.form === 'audio' && post.data.title &&
+        {form === 'audio' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
-        {post.data.form === 'video' && post.data.title &&
+        {form === 'video' && post.data.title &&
             <h1>{ post.data.title}</h1>
         }
 
@@ -95,7 +97,7 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
 
     <section class="details">
         <ul class="tags">
-            {post.data.tags.length > 0 && post.data.tags.map((tag) => <li class="tag__item"><a class="tag__link" href={`/tagged/${tag}`}>{tag}</a></li>)}
+            {tagList.length > 0 && tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}`}>{tag}</a></li>)}
         </ul>
         <nav>
             <a class="date" href={post.slug} itemprop="datePublished">{prettyDate}</a> ★
@@ -112,6 +114,8 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
         <span><a href="#">← В ПРОШЛОЕ</a></span>
         <span><a href="#">В БУДУЩЕЕ →</a></span>
     </nav>
+
+    <!-- <Pagination page={page} />  -->
 
 </Layout>
 
@@ -138,39 +142,18 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
 
     .tags {
         display: flex;
-        flex-direction: row;
+        flex-wrap: wrap;
         list-style: none;
-
+        justify-content: center;
     }
 
-    .center {
-        align-items: center;
-    }
-
-    .tag__item::after {
+    .tags li::after {
         content: '•';
         padding: 0 0.5rem;
     }
 
-    .tag__item:last-child::after {
+    .tags li:last-child::after {
         content: ' ';
-    }
-
-    .pagination {
-        display:flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin: 36px 0;
-    }
-
-    .pagination a {
-        color: var(--color-grey-400);
-        text-decoration: none;
-    }
-
-    .pagination a:hover {
-        color: var(--color-grey-400);
-        text-decoration: underline;
     }
 
 </style>
