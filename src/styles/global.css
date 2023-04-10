@@ -31,7 +31,10 @@
     --spacing-md: 12px;
     --spacing-lg: 16px;
     --spacing-xl: 24px;
-    --spacing-xxl: 32px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 40px;
+    --spacing-4xl: 48px;
+    --spacing-5xl: 64px;
 
     /* Font sizes */
 
@@ -85,18 +88,21 @@
     --color-blue-900: #0c4a6e;
     --color-blue-950: #082f49;
 
+    /* Accent colors */
+
+    --color-pink-100: #fce7f3;
 
     /* Theme colors */
 
-    --theme-color-base: var(--color-blue-500);
-    --theme-color-light: var(--color-blue-300);
-    --theme-color-dark: var(--color-blue-700);
-
+    --theme-color-light: var(--color-blue-500);
+    --theme-color-base: var(--color-blue-700);
+    --theme-color-dark: var(--color-blue-900);
+    --theme-color-accent: var(--color-pink-100);
 }
 
 html {
     font-family: Lora,'Iowan Old Style', Georgia, 'Times New Roman', Times, serif;
-    color: var(--color-grey-90);
+    color: var(--color-grey-700);
     background-color: var(--color-white);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-base);
@@ -162,8 +168,8 @@ a:hover {
 }
 
 a:focus-visible {
-    outline: 3px solid;
-    outline-offset: 2px;
+    outline: var(--spacing-xxs) solid;
+    outline-offset: var(--spacing-xxs);
 }
 
 .link[aria-current="page"] {
@@ -195,19 +201,13 @@ object {
     clip-path: inset(100%);
 }
 
-
-
-/*
-Prevent resizing textareas horizontally by default.
-*/
+/* Prevent resizing textareas horizontally by default. */
 
 textarea {
     resize: vertical;
 }
 
-/*
-Set the default cursor for buttons.
-*/
+/* Set the default cursor for buttons. */
 
 button,
 [role="button"] {
@@ -220,7 +220,6 @@ Make sure disabled buttons don't get the pointer cursor.
 :disabled {
     cursor: default;
 }
-
 
 .page {
     scroll-behavior: smooth;
@@ -255,13 +254,13 @@ Make sure disabled buttons don't get the pointer cursor.
 }
 
 .main {
-    padding: 36px 0;
+    padding: var(--spacing-2xl) 0;
     flex: 1;
 }
 
 .text-base {
     font-size: var(--font-size-base);
-    line-height: 1.5;
+    line-height: var(--line-height-base);
 }
 
 
