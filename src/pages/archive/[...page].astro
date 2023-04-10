@@ -1,0 +1,55 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import PostCard from '@/components/PostCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { THEME } from '@/config';
+
+
+export async function getStaticPaths({ paginate }) {
+    const allPosts = await getCollection('blog', (post) => {
+        return !post.data.isDraft && post.data.date <= new Date();
+    });
+    const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+    return paginate(sortedPosts, { pageSize: THEME.postsPerPage })
+}
+const { page } = Astro.props
+
+const title = page.currentPage === 1 ? "Архив" : `Архив - Страница ${page.currentPage}`;
+const description = "";
+
+console.log(page);
+
+
+---
+
+<Layout title={title} description={description}>
+
+    {page.currentPage === 1 ? (
+        <h1>Архив</h1>
+    ):(
+        <h1>Архив - Страница {page.currentPage}</h1>
+    )}
+
+
+    <ul class="archive">
+        {page.data.map((post) => (
+            <li><PostCard post={post} /></li>
+        ))}
+    </ul>
+
+    { page.total > THEME.postsPerPage &&  (
+        <Pagination page={page} />
+    )}
+
+</Layout>
+
+<style>
+    .archive {
+        display: grid;
+        gap: var(--spacing-xl);
+        margin: var(--spacing-xl) 0;
+    }
+</style>
