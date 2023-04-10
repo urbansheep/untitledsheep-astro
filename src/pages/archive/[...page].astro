@@ -2,7 +2,7 @@
 export const prerender = true;
 
 import Layout from '@/layouts/LayoutBase.astro';
-import PostCard from '@/components/PostCard.astro';
+import PostList from '@/components/PostList.astro';
 import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
 import { THEME } from '@/config';
@@ -12,15 +12,17 @@ export async function getStaticPaths({ paginate }) {
     const allPosts = await getCollection('blog', (post) => {
         return !post.data.isDraft && post.data.date <= new Date();
     });
-    const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+    // const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+
+    // Sort posts by date in descending order (newest first). Type of `date` is number.
+    const sortedPosts = allPosts.sort((a, b) => b.data.date - a.data.date);
+
     return paginate(sortedPosts, { pageSize: THEME.postsPerPage })
 }
 const { page } = Astro.props
 
 const title = page.currentPage === 1 ? "Архив" : `Архив - Страница ${page.currentPage}`;
 const description = "";
-
-console.log(page);
 
 
 ---
@@ -33,12 +35,7 @@ console.log(page);
         <h1>Архив - Страница {page.currentPage}</h1>
     )}
 
-
-    <ul class="archive">
-        {page.data.map((post) => (
-            <li><PostCard post={post} /></li>
-        ))}
-    </ul>
+    <PostList posts={page.data} />
 
     { page.total > THEME.postsPerPage &&  (
         <Pagination page={page} />
