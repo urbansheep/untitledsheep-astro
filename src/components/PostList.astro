@@ -1,0 +1,24 @@
+---
+import PostCard from '@/components/PostCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+    posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="list">
+    {posts.map((post) => (
+        <li class="item"><PostCard post={post} /></li>
+    ))}
+</ul>
+
+<style>
+    .list {
+        display: grid;
+        gap: var(--spacing-2xl);
+        list-style: none;
+    }
+</style>
