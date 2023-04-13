@@ -1,13 +1,13 @@
 ---
-const { page } = Astro.props
+const { next, prev } = Astro.props
 ---
 
 <nav class="pagination">
-    { page.url.prev && (
-        <span><a href={page.url.prev}>← В будущее</a></span>
+    { next && (
+        <span><a href={next}>← Назад</a></span>
     )}
-    { page.url.next && (
-        <span><a href={page.url.next}>В прошлое →</a></span>
+    { prev && (
+        <span><a href={prev}>Вперед →</a></span>
     )}
 </nav>
 
