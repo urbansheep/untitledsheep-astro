@@ -1,1 +1,74 @@
-<h1>Page of one tag</h1>
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import PostList from '@/components/PostList.astro';
+import Pagination from '@/components/Pagination.astro';
+import '@/styles/prose.css';
+import { slugify } from '@/utils/slugify';
+import { fetchPosts } from '@/utils/fetchPosts';
+import { THEME } from '@/config';
+import type { GetStaticPathsOptions, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const posts = await fetchPosts();
+
+
+    function getUniqueTags(posts: CollectionEntry<"blog">[] = []) {
+        let tags = new Set<string>();
+        posts.forEach((post) => {
+            post.data.tags.map((tag) => tags.add(tag.toLowerCase()));
+        });
+        return [...tags];
+    }
+
+    const uniqueTags = getUniqueTags(posts);
+
+
+
+	return uniqueTags.map((tag) => {
+        const tagSlug = slugify(tag);
+
+
+		const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
+		return paginate(filterPosts, {
+			params: { tag: tagSlug },
+			pageSize: THEME.postsPerPage,
+		});
+	});
+}
+interface Props {
+	page: Page<CollectionEntry<"blog">>;
+}
+const { page } = Astro.props;
+const { tag } = Astro.params;
+
+const title = page.currentPage === 1 ? `Тег ${tag}` : `Тег ${tag} - Страница ${page.currentPage}`;
+const description = "";
+
+console.log('PAGE: ', page);
+console.log('TAG: ', tag);
+
+
+---
+
+
+<Layout title={title} description={description}>
+
+    {page.currentPage === 1 ? (
+        <h1>Тег {tag}</h1>
+    ):(
+        <h1>Тег {tag} - Страница {page.currentPage}</h1>
+    )}
+
+    <PostList posts={page.data} />
+
+    { page.total > THEME.postsPerPage &&  (
+        <Pagination page={page} />
+    )}
+
+</Layout>
+
+
+
