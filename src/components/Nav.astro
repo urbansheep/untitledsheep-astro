@@ -24,7 +24,7 @@ const {
     >
         { links.map((link) => (
             <li class="item">
-                <a class="link" href={link.href} data-navLink>{link.title}</a>
+                <a class:list={["link", {filled: link.isFilled}]} href={link.href} data-navLink>{link.title}</a>
             </li>
         ))}
 
@@ -84,6 +84,17 @@ const {
     .secondary a:hover,
     .secondary a:visited {
         color: var(--color-grey-400);
+    }
+
+    .filled {
+        background-color: var(--color-orange-600);
+        padding: var(--spacing-xxs);
+    }
+
+    .link.filled,
+    .link.filled:hover,
+    .link.filled:visited {
+        color: var(--color-white);
     }
 
 </style>
