@@ -49,7 +49,7 @@
     margin: 2em auto;
     border: 0;
     height: 1px;
-    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.5), rgba(0,0,0,0));
+    background-image: linear-gradient(to left, rgb(0 0 0 / 0%), rgb(0 0 0 / 50%), rgb(0 0 0 / 0%));
 }
 
 .prose .regular blockquote {
@@ -64,7 +64,7 @@
 .prose .link h1 {
     color: #666;
     font-weight: normal;
-    margin: 0.83em 0px;
+    margin: 0.83em 0;
     padding-bottom: 1em;
     font-size: 1.2em;
     line-height: 1.5em;
@@ -81,7 +81,7 @@
     margin-bottom: 2em;
 }
 
-.prose .quote blockquote:before {
+.prose .quote blockquote::before {
     position: relative;
     top: 0;
     left: 0;
