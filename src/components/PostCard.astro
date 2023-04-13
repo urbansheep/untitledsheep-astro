@@ -1,24 +1,21 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { getFormattedDate, getFormattedTime } from '@/utils/dateFormating.js';
+import '@/styles/prose.css';
 
 export interface Props {
     post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
+
+const { Content } = await post.render();
 ---
 
-<article>
+<article class="prose">
     <a href={`/post/${post.slug}`} class="header">
         { post.data.title ? <h2>→ {post.data.title}</h2> : <h2>→ Пост {post.data.id}</h2>}
     </a>
-
-    <p>{post.data.form}</p>
-
-    <p>{getFormattedDate(post.data.date)} * {getFormattedTime(post.data.date)}</p>
-
-
+    <Content />
 </article>
 
 <style>
