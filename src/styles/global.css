@@ -15,10 +15,10 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
 
@@ -91,6 +91,7 @@
     /* Accent colors */
 
     --color-pink-100: #fce7f3;
+    --color-orange-600: #ea580c;
 
     /* Theme colors */
 
