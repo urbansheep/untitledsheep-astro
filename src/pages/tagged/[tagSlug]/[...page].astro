@@ -12,45 +12,42 @@ import type { GetStaticPathsOptions, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-	const posts = await fetchPosts();
+    const posts = await fetchPosts();
 
 
     function getUniqueTags(posts: CollectionEntry<"blog">[] = []) {
         let tags = new Set<string>();
         posts.forEach((post) => {
-            post.data.tags.map((tag) => tags.add(tag.toLowerCase()));
+            post.data.tags.map((tag) => tags.add(tag));
         });
         return [...tags];
     }
 
     const uniqueTags = getUniqueTags(posts);
 
-
-
-	return uniqueTags.map((tag) => {
-		const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
-		return paginate(filterPosts, {
-            // return
-            // tag as a string for using in UI (e.g. in title),
-            // slugged version of tag for using in params (e.g. in URL)
-            // and the number of posts per page for this tag
+    return uniqueTags.map((tag) => {
+        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
+        return paginate(filterPosts, {
             params: {
                 tagSlug: slugify(tag)
             },
-			pageSize: THEME.postsPerPage,
+            pageSize: THEME.postsPerPage,
             props: {
                 tag: tag
             }
-		});
-	});
+        });
+    });
 }
+
 interface Props {
-	page: Page<CollectionEntry<"blog">>;
+    page: Page<CollectionEntry<"blog">>;
 }
+
 const { page, tag } = Astro.props;
 
 const title = page.currentPage === 1 ? `Тег "${tag}"` : `Тег "${tag}" - Страница ${page.currentPage}`;
 const description = "";
+
 ---
 
 
