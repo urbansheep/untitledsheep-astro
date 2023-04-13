@@ -1,16 +1,12 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getFormattedDate, getFormattedTime } from '@/utils/dateFormating.js';
 
 export interface Props {
     post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
-
-// Pretty print the date using Russian locale
-const date = new Date(post.data.date);
-const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
-const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
 ---
 
 <article>
@@ -20,7 +16,7 @@ const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'n
 
     <p>{post.data.form}</p>
 
-    <p>{prettyDate} * {prettyTime}</p>
+    <p>{getFormattedDate(post.data.date)} * {getFormattedTime(post.data.date)}</p>
 
 
 </article>
