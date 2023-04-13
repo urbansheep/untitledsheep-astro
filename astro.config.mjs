@@ -4,7 +4,6 @@ import node from "@astrojs/node";
 
 export default defineConfig({
   site: 'https://untitled.urbansheep.com',
-  trailingSlash: 'never',
   integrations: [mdx()],
   output: 'server',
   adapter: node({
