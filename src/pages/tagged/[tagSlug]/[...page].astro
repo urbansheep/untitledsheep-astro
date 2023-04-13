@@ -28,38 +28,38 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
 
 	return uniqueTags.map((tag) => {
-        const tagSlug = slugify(tag);
-
-
 		const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
 		return paginate(filterPosts, {
-			params: { tag: tagSlug },
+            // return
+            // tag as a string for using in UI (e.g. in title),
+            // slugged version of tag for using in params (e.g. in URL)
+            // and the number of posts per page for this tag
+            params: {
+                tagSlug: slugify(tag)
+            },
 			pageSize: THEME.postsPerPage,
+            props: {
+                tag: tag
+            }
 		});
 	});
 }
 interface Props {
 	page: Page<CollectionEntry<"blog">>;
 }
-const { page } = Astro.props;
-const { tag } = Astro.params;
+const { page, tag } = Astro.props;
 
-const title = page.currentPage === 1 ? `Тег ${tag}` : `Тег ${tag} - Страница ${page.currentPage}`;
+const title = page.currentPage === 1 ? `Тег "${tag}"` : `Тег "${tag}" - Страница ${page.currentPage}`;
 const description = "";
-
-console.log('PAGE: ', page);
-console.log('TAG: ', tag);
-
-
 ---
 
 
 <Layout title={title} description={description}>
 
     {page.currentPage === 1 ? (
-        <h1>Тег {tag}</h1>
+        <h1>Тег "{tag}"</h1>
     ):(
-        <h1>Тег {tag} - Страница {page.currentPage}</h1>
+        <h1>Тег "{tag}" - Страница {page.currentPage}</h1>
     )}
 
     <PostList posts={page.data} />
