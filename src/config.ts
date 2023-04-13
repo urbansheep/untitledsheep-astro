@@ -4,10 +4,14 @@ export const SITE = {
     title: '*Безымянная овца*',
     description: 'Untitled Urbansheep',
     url: 'https://untitled.urbansheep.com',
+    googleAnalyticsId: '',
 }
 
 // Theme configuration
 export const THEME = {
+    language: 'ru',
+    textDirection: 'ltr',
+
     // Posts per page (pagination) on website
     postsPerPage: 2,
 

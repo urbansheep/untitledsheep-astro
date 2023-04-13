@@ -6,6 +6,8 @@ import Footer from '@/components/Footer.astro';
 import SkipLinks from '@/components/SkipLinks.astro';
 import '@/styles/global.css';
 import '@/styles/prose.css';
+import { SITE } from '@/config'
+import { THEME } from '@/config'
 
 // const isDevMetaVisible = true;
 const isDevMetaVisible = false;
@@ -18,15 +20,15 @@ export interface Props {
 
 const {
     homepage = false,
-    title = "*Безымянная овца",
-    description = "*Безымянная овца" // TODO: add description
+    title = SITE.title,
+    description = SITE.description,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!DOCTYPE html>
-<html lang="ru" dir="ltr" class="page">
+<html lang={THEME.language} dir={THEME.textDirection} class="page">
 
     <MetaHead
         homepage={homepage}
