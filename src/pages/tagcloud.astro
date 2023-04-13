@@ -16,13 +16,13 @@ const posts = await getCollection('blog', (post) => {
 // === Receive all tags from each post in posts.
 
 // Step 1. Collect all tags from each post in posts.
-const tagsList = posts.map((post) => {
+const tagsList: string[][] = posts.map((post) => {
     post.data.tags = post.data.tags || [];
     return post.data.tags.filter((tag) => tag !== 'post');
 });
 
 // Step 2. Then flatten the array of arrays into a single array.
-const tags = [].concat.apply([], tagsList);
+const tags = tagsList.flat();
 
 // Step 3. Then remove duplicates and empty strings.
 const uniqueTags = [...new Set(tags)];
@@ -36,9 +36,9 @@ const sortedTags = uniqueTags.sort();
     <h1>Теги и рубрикатор Безымянной овцы</h1>
     <ul class="list">
         {sortedTags.map((tag) => (
-           <li><a class="tag" href={`/tagged/${slugify(tag)}`}>{tag}</a></li>
-       ))}
-       </ul>
+            <li><a class="tag" href={`/tagged/${slugify(tag)}`}>{tag}</a></li>
+        ))}
+    </ul>
 </Layout>
 
 <style>
