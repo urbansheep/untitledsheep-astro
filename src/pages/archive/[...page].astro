@@ -7,12 +7,18 @@ import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
 import { THEME } from '@/config';
 import { fetchPosts } from '@/utils/fetchPosts';
+import type { GetStaticPathsOptions, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
 
-
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     const posts = await fetchPosts();
     return paginate(posts, { pageSize: THEME.postsPerPage })
 }
+
+interface Props {
+    page: Page<CollectionEntry<"blog">>;
+}
+
 const { page } = Astro.props
 
 const title = page.currentPage === 1 ? "Архив" : `Архив - Страница ${page.currentPage}`;
@@ -32,7 +38,7 @@ const description = "";
     <PostList posts={page.data} />
 
     { page.total > THEME.postsPerPage &&  (
-        <Pagination page={page} />
+        <Pagination next={page.url.next} prev={page.url.prev}/>
     )}
 
 </Layout>
