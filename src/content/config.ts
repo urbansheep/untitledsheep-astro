@@ -19,8 +19,7 @@ const blogCollection = defineCollection({
     }),
 });
 
-
 // Name of collection = name of the folder with md files. Example: src/content/blog
 export const collections = {
-  'blog': blogCollection,
+    'blog': blogCollection,
 };
