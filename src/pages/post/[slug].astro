@@ -4,14 +4,14 @@ export const prerender = true;
 import Layout from '@/layouts/LayoutBase.astro';
 import Pagination from '@/components/Pagination.astro';
 import '@/styles/prose.css';
-import { slugify } from '@/utils/slugify.js';
+import { slugify } from '@/utils/slugify';
+import { getFormattedDate, getFormattedTime } from '@/utils/dateFormating';
+import { fetchPosts } from '@/utils/fetchPosts';
 
-import { getCollection, CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
-    const posts = await getCollection('blog', (post) => {
-        return !post.data.isDraft && post.data.date <= new Date();
-    });
+    const posts = await fetchPosts();
     return posts.map((post) => ({
         params: { slug: post.slug},
         props: {post},
@@ -32,11 +32,6 @@ const { Content } = await post.render();
 
 const title = post.data.title || "Пост " + post.data.id;
 const description = "";
-
-// Pretty print the date using Russian locale
-const date = new Date(post.data.date);
-const prettyDate = date.toLocaleDateString('ru-RU', {year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'});
-const prettyTime = date.toLocaleTimeString('ru-RU', {hour: 'numeric', minute: 'numeric', timeZone: 'UTC'});
 
 // Filter out the "post" tag
 const tagList = post.data.tags.filter((tag) => tag !== 'post');
@@ -100,8 +95,8 @@ const tagList = post.data.tags.filter((tag) => tag !== 'post');
             {tagList.length > 0 && tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}`}>{tag}</a></li>)}
         </ul>
         <nav>
-            <a class="date" href={post.slug} itemprop="datePublished">{prettyDate}</a> ★
-            <a class="date" href={post.data.tumblr}>Tumblr: {prettyTime}</a>
+            <a class="date" href={post.slug} itemprop="datePublished">{getFormattedDate(post.data.date)}</a> ★
+            <a class="date" href={post.data.tumblr}>Tumblr: {getFormattedTime(post.data.date)}</a>
             { post.data.photo_source_url &&
                 <>
                     ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_url}</a>

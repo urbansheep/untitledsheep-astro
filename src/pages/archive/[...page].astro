@@ -6,18 +6,12 @@ import PostList from '@/components/PostList.astro';
 import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
 import { THEME } from '@/config';
+import { fetchPosts } from '@/utils/fetchPosts';
 
 
 export async function getStaticPaths({ paginate }) {
-    const allPosts = await getCollection('blog', (post) => {
-        return !post.data.isDraft && post.data.date <= new Date();
-    });
-    // const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
-
-    // Sort posts by date in descending order (newest first). Type of `date` is number.
-    const sortedPosts = allPosts.sort((a, b) => b.data.date - a.data.date);
-
-    return paginate(sortedPosts, { pageSize: THEME.postsPerPage })
+    const posts = await fetchPosts();
+    return paginate(posts, { pageSize: THEME.postsPerPage })
 }
 const { page } = Astro.props
 
@@ -43,10 +37,4 @@ const description = "";
 
 </Layout>
 
-<style>
-    .archive {
-        display: grid;
-        gap: var(--spacing-xl);
-        margin: var(--spacing-xl) 0;
-    }
-</style>
+
