@@ -18,4 +18,3 @@ export const THEME = {
     // Posts per feed on RSS
     postsPerFeed: 10,
 }
-
