@@ -14,17 +14,23 @@ export async function getStaticPaths() {
     const posts = await fetchPosts();
     return posts.map((post) => ({
         params: { slug: post.slug},
-        props: {post},
+        props: {
+            post,
+            next: posts[posts.indexOf(post) + 1],
+            prev: posts[posts.indexOf(post) - 1],
+        },
     }));
 }
 
 interface Props {
-  post: CollectionEntry<'blog'>;
-  form: string
+    post: CollectionEntry<'blog'>;
+    form: string
 }
 
 const {
     post,
+    next,
+    prev,
     form = post.data.form,
 } = Astro.props;
 
@@ -105,12 +111,19 @@ const tagList = post.data.tags.filter((tag) => tag !== 'post');
         </nav>
     </section>
 
-    <nav class="pagination">
-        <span><a href="#">← В ПРОШЛОЕ</a></span>
-        <span><a href="#">В БУДУЩЕЕ →</a></span>
-    </nav>
+    {next && prev &&
+        <Pagination next={`/post/${next?.data.id}`} prev={`/post/${prev?.data.id}`} />
+    }
 
-    <!-- <Pagination page={page} />  -->
+    { next && !prev &&
+        <Pagination next={`/post/${next.data.id}`} />
+    }
+
+    { !next && prev &&
+        <Pagination prev={`/post/${prev.data.id}`} />
+    }
+
+
 
 </Layout>
 
