@@ -68,15 +68,16 @@ All commands are run from the root of the project, from a terminal:
 - добавить мета-тег rss в head: проверить после билда
 - генерить sitemap
 - оптимизировать загрузку шрифтов
-- баг с редиректом /post на /archive: https://github.com/withastro/astro/issues/6795
-- PostCard и страница одного поста: вытащить функцию форматирования дат в /utils/dateFormating.js
++ баг с редиректом /post на /archive: https://github.com/withastro/astro/issues/6795
++ PostCard и страница одного поста: вытащить функцию форматирования дат в /utils/dateFormating.js
 
 страница "задать вопрос"
 - форма сообщения: получение, валидация, отправка
 
 страница одного тега
 + фильтрация тегов: удалить "post"
-- slugify: без спецсимволов, маленькие буквы
++ slugify: без спецсимволов, маленькие буквы
+- название тега в h1 и title писать по названию, без применения slugify
 
 один пост:
 - листалка страниц вперед-назад - ссылки
