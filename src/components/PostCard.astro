@@ -11,12 +11,12 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<article class="prose">
+<section class="prose">
     <a href={`/post/${post.slug}`} class="header">
         { post.data.title ? <h2>→ {post.data.title}</h2> : <h2>→ Пост {post.data.id}</h2>}
     </a>
     <Content />
-</article>
+</section>
 
 <style>
     .header {
