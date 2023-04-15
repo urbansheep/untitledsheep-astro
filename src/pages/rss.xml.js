@@ -17,17 +17,20 @@ export async function get(context) {
     // const sortedPosts = await fetchPosts();
     const posts = sortedPosts.slice(0, THEME.postsPerFeed);
 
+    console.log('posts', posts);
+
     return rss({
         xmlns: { h: 'http://www.w3.org/TR/html4/' },
         title: SITE.title,
+        link: SITE.url,
         description: SITE.description,
         site: context.site,
-        customData: '<language>en-us</language>',
+        customData: '<language>ru</language>',
         items: posts.map(post => ({
-            title: `Пост ${post.data.id}`,
+            title: post.data.title || `Пост ${post.data.id}`,
             pubDate: post.data.date,
-            description: post.data.description || post.data.excerpt || post.data.content || [],
-            link: `/post/${post.data.id}/`,
+            description: post.body,
+            link: `/post/${post.data.id}`,
         }))
     });
 }
