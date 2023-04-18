@@ -12,7 +12,7 @@ export default defineConfig({
         sitemap({
             entryLimit: 5000
         }),
-        prefetch()
+        prefetch(),
     ],
     output: 'server',
     adapter: node({
