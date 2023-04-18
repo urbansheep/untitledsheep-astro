@@ -4,4 +4,4 @@
 defaults
 last 2 version
 not dead
-not ie <= 11
+not ie
