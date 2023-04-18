@@ -118,6 +118,14 @@ h2 {
     line-height: var(--line-height-base);
 }
 
+h3, h4, h5, h6 {
+    color: var(--color-grey-700);
+    font-weight: normal;
+    margin: var(--spacing-md) 0;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
 code,
 kbd,
 pre,
@@ -242,13 +250,13 @@ Make sure disabled buttons don't get the pointer cursor.
     margin: 0 auto;
 }
 
-@media (width >= 360px) {
+@media (min-width: 360px) {
     .wrapper {
         padding: 0 var(--spacing-lg);
     }
 }
 
-@media (width >= 600px) {
+@media (min-width: 600px) {
     .wrapper {
         padding: 0 var(--spacing-xl);
     }
@@ -264,4 +272,37 @@ Make sure disabled buttons don't get the pointer cursor.
     line-height: var(--line-height-base);
 }
 
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: var(--spacing-2xl) 0;
+    color: var(--color-grey-400);
+    font-size: var(--font-size-xs);
+}
 
+.details a {
+    color: var(--color-grey-400);
+    text-decoration: none;
+}
+
+.details a:hover {
+    color: var(--color-grey-400);
+    text-decoration: underline;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+}
+
+.tags li::after {
+    content: '•';
+    padding: 0 var(--spacing-xs);
+}
+
+.tags li:last-child::after {
+    content: ' ';
+}

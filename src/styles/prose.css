@@ -1,5 +1,5 @@
-.prose {
-    max-width: 70ch;
+.prose .content {
+    max-width: 60ch;
     margin: 0 auto;
 }
 
@@ -33,7 +33,7 @@
 .prose a:visited {
     padding: 1px 0;
     color: var(--color-grey-700);
-    background-color: var(--theme-color-accent);
+    background-color: var(--color-blue-100);
 }
 
 .prose a:hover {
@@ -52,7 +52,7 @@
     background-image: linear-gradient(to left, rgb(0 0 0 / 0%), rgb(0 0 0 / 50%), rgb(0 0 0 / 0%));
 }
 
-.prose .regular blockquote {
+.prose.regular blockquote {
     padding: 5px 5px 5px 20px;
     border-left: var(--color-grey-300) var(--spacing-xxs) solid;
     background-color: var(--color-grey-50);
@@ -61,33 +61,79 @@
     margin-bottom: 1em;
 }
 
-.prose .link h1 {
-    color: #666;
-    font-weight: normal;
-    margin: 0.83em 0;
-    padding-bottom: 1em;
-    font-size: 1.2em;
-    line-height: 1.5em;
+
+
+.prose.quote {
+    position: relative;
 }
 
-.prose .link h1::before {
-    content: "→";
-    margin-right: 0.5em;
-    margin-left: -1.5em;
+.prose.quote blockquote {
+    position: relative;
+    padding-left: var(--spacing-2xl);
+    padding-bottom: var(--spacing-3xl);
+    margin-bottom: var(--spacing-3xl);
+    box-shadow: 0 12px 18px -20px var(--color-grey-400);
 }
 
-.prose .quote blockquote {
-    padding-bottom: 2em;
-    margin-bottom: 2em;
-}
-
-.prose .quote blockquote::before {
+.prose.quote blockquote::before {
     position: relative;
     top: 0;
-    left: 0;
+    left: -32px;
     display: block;
-    margin-left: -0.6em;
     content: "«";
     color: var(--color-grey-200);
     font-size: 4em;
+    z-index: -1;
+}
+
+.prose .gallery {
+    display: grid;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.prose.photo img {
+    padding-bottom: var(--spacing-3xl);
+    margin-bottom: var(--spacing-3xl);
+    box-shadow: 0 12px 18px -20px var(--color-grey-400);
+}
+
+.prose.photo blockquote {
+    padding: 16px 16px 16px 24px;
+    border-left: var(--color-grey-300) var(--spacing-xxs) solid;
+    background-color: var(--color-grey-50);
+    margin: var(--spacing-2xl) 0;
+}
+
+.prose.photo blockquote p {
+    margin: 16px 0;
+}
+
+.prose .tagcloud {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 8px;
+}
+
+.prose .tagclouditem {
+    border: 1px solid var(--theme-color-base);
+    background-color: var(--color-blue-100);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-left: 0;
+    min-width: 40px;
+    text-align: center;
+}
+
+.prose .tagcloudlink {
+    text-decoration: none;
+    color: var(--theme-color-base);
+    background-color: transparent;
+}
+
+.prose .tagcloudlink:visited {
+    text-decoration: none;
+    color: var(--color-grey-700);
+    background-color: transparent;
 }
