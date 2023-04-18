@@ -12,7 +12,7 @@
     "dev:host": "astro dev --host",
     "start": "astro dev",
     "check": "astro check",
-    "lint:editorconfig": "editorconfig-checker -exclude '/content/*' -exclude '/data/*'",
+    "lint:editorconfig": "editorconfig-checker -exclude '/content/blog/*'",
     "lint:stylelint": "stylelint \"src/**/*.{astro,css}\" --fix",
     "test": "npm run lint:editorconfig && npm run lint:stylelint && npm run check",
     "build": "astro build",
@@ -36,6 +36,6 @@
     "stylelint": "^15.4.0",
     "stylelint-config-astro": "^1.0.4",
     "stylelint-config-html": "^1.1.0",
-    "stylelint-config-standard": "^32.0.0"
+    "stylelint-config-standard": "^33.0.0"
   }
 }
