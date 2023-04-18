@@ -16,9 +16,16 @@ const posts = await getCollection('blog', (post) => {
 // === Receive all tags from each post in posts.
 
 // Step 1. Collect all tags from each post in posts.
-const tagsList: string[][] = posts.map((post) => {
+const tagsList: (string | number )[][] = posts.map((post) => {
     post.data.tags = post.data.tags || [];
-    return post.data.tags.filter((tag) => tag !== 'post');
+    if (post.data.tags.length > 0) {
+        post.data.tags.map((tag) => {
+            return tag.toString();
+        });
+        return post.data.tags;
+    }
+
+    return post.data.tags;
 });
 
 // Step 2. Then flatten the array of arrays into a single array.
@@ -33,24 +40,17 @@ const sortedTags = uniqueTags.sort();
 ---
 
 <Layout title={title} description={description}>
-    <h1>Теги и рубрикатор Безымянной овцы</h1>
-    <ul class="list">
-        {sortedTags.map((tag) => (
-            <li><a class="tag" href={`/tagged/${slugify(tag)}`}>{tag}</a></li>
-        ))}
-    </ul>
+    <article class="prose">
+        <h1>Теги и рубрикатор Безымянной овцы</h1>
+        <p>В каждом приличном блоге должны быть теги. Безымянная овца хоть и не является в общепринятом смысле приличным блогом, но теги есть и в ней, чтобы можно было легко отфильтровать нужное в данную конкретную секунду (например, в моменты уныния приятно перечитывать <a href="/tagged/волобуев/">цитаты из Волобуева)</a>.</p>
+        <p>Всего в Безымянной овце сейчас тегов: {sortedTags.length}.</p>
+        <p><a href="/tagged/избранное/">избранное</a>, <a href="/tagged/прекрасное/">прекрасное</a>, <a href="/tagged/любимое/">любимое</a></p>
+        <hr />
+        <ul class="tagcloud">
+            {sortedTags.map((tag) => (
+                <li class="tagclouditem"><a class="tagcloudlink" href={`/tagged/${slugify(tag)}/`}>{tag}</a></li>
+            ))}
+        </ul>
+    </article>
 </Layout>
 
-<style>
-    .list {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg);
-    }
-
-    .tag {
-        text-decoration: none;
-        color: var(--theme-color-base);
-    }
-</style>

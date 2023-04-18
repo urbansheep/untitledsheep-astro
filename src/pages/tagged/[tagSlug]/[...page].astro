@@ -18,7 +18,9 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     function getUniqueTags(posts: CollectionEntry<"blog">[] = []) {
         let tags = new Set<string>();
         posts.forEach((post) => {
-            post.data.tags.map((tag) => tags.add(tag));
+            post.data.tags?.map((tag) => {
+                tags.add(tag.toString());
+            });
         });
         return [...tags];
     }
@@ -26,7 +28,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     const uniqueTags = getUniqueTags(posts);
 
     return uniqueTags.map((tag) => {
-        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
+        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag.toString()));
         return paginate(filterPosts, {
             params: {
                 tagSlug: slugify(tag)
@@ -45,27 +47,58 @@ interface Props {
 
 const { page, tag } = Astro.props;
 
-const title = page.currentPage === 1 ? `Тег "${tag}"` : `Тег "${tag}" - Страница ${page.currentPage}`;
+const title = page.currentPage === 1 ? `Все записи с тегом "${tag}"` : `Все записи с тегом "${tag}" - Страница ${page.currentPage}`;
 const description = "";
+const pageTotal = Math.ceil(page.total / THEME.postsPerPage);
 
 ---
 
 
 <Layout title={title} description={description}>
 
-    {page.currentPage === 1 ? (
-        <h1>Тег "{tag}"</h1>
-    ):(
-        <h1>Тег "{tag}" - Страница {page.currentPage}</h1>
-    )}
+    <h1 class="title">Все записи с тегом "<a href={`/tagged/${slugify(tag)}/`}>{tag}</a>"</h1>
+
+    {page.currentPage !== 1 &&
+        <p class="counter">Страница {page.currentPage} из {pageTotal}</p>
+    }
 
     <PostList posts={page.data} />
 
     { page.total > THEME.postsPerPage &&  (
-        <Pagination page={page} />
+        <Pagination
+            next={page.url.next}
+            prev={page.url.prev}
+            current={page.currentPage}
+            total={pageTotal}
+        />
     )}
 
 </Layout>
 
+<style>
+    .title {
+        text-align: center;
+    }
 
+    .title a,
+    .title a:link,
+    .title a:active {
+        padding: 1px 0;
+        color: var(--theme-color-base);
+        text-decoration: none;
+    }
 
+    .title a:visited {
+        padding: 1px 0;
+        color: var(--theme-color-base);
+    }
+
+    .title a:hover {
+        text-decoration: underline;
+    }
+
+    .counter {
+        margin-bottom: 16px;
+        text-align: center;
+    }
+</style>

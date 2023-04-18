@@ -24,7 +24,9 @@ export async function getStaticPaths() {
 
 interface Props {
     post: CollectionEntry<'blog'>;
-    form: string
+    form: string,
+    next?: any;
+    prev?: any;
 }
 
 const {
@@ -36,15 +38,15 @@ const {
 
 const { Content } = await post.render();
 
-const title = post.data.title || "Пост " + post.data.id;
+const title = "Пост " + post.data.id;
 const description = "";
 
 // Filter out the "post" tag
-const tagList = post.data.tags.filter((tag) => tag !== 'post');
+const tagList = post.data.tags;
 
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} type="article">
 
     <article class:list={[
         "prose",
@@ -52,66 +54,44 @@ const tagList = post.data.tags.filter((tag) => tag !== 'post');
         ]} itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting"
     >
 
-        {form === 'link' && post.data.title &&
-            <h1><a href={ post.data.linkurl }>{ post.data.title}</a></h1>
+    {post.data.form === 'link' && post.data.linkurl ?
+        <h1 class="header">→ <a href={post.data.linkurl} target="_blank" rel="noopener noreferrer nofollow">{post.data.title}</a></h1>
+        : <h1 class="header">{post.data.title ? `${post.data.title}` : `Пост ${post.data.id}` }</h1>
+    }
+
+        { form === 'photo' &&
+            <img
+                src={post.data.photo}
+                class="cover"
+                alt={post.data.photo_caption || post.data.title || ""}
+                loading="lazy"
+            >
         }
 
-        {form === 'regular' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
 
-        {form === 'chat' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
-
-        {form === 'photo' &&
-            <>
-                {post.data.title && <h1>{ post.data.title}</h1>}
-                <img
-                    src={post.data.photo}
-                    class="cover"
-                    alt={post.data.photo_caption || post.data.title || ""}
-                    loading="lazy"
-                >
-            </>
-        }
-
-        {form === 'photogallery' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
-
-        {form === 'quote' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
-
-        {form === 'audio' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
-
-        {form === 'video' && post.data.title &&
-            <h1>{ post.data.title}</h1>
-        }
-
-        <Content />
+        { Content && <Content />}
 
     </article>
 
     <section class="details">
-        <ul class="tags">
-            {tagList.length > 0 && tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}`}>{tag}</a></li>)}
-        </ul>
+        {
+            tagList && tagList.length > 0 &&
+                <ul class="tags">
+                    { tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}/`}>{tag}</a></li>)}
+                </ul>
+        }
         <nav>
             <a class="date" href={post.slug} itemprop="datePublished">{getFormattedDate(post.data.date)}</a> ★
-            <a class="date" href={post.data.tumblr}>Tumblr: {getFormattedTime(post.data.date)}</a>
+            <a class="date" href={post.data.tumblr}>{getFormattedTime(post.data.date)}</a>
             { post.data.photo_source_url &&
                 <>
-                    ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_url}</a>
+                    ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_title}</a>
                 </>
             }
         </nav>
     </section>
 
-    {next && prev &&
+    { next && prev &&
         <Pagination next={`/post/${next?.data.id}`} prev={`/post/${prev?.data.id}`} />
     }
 
@@ -122,8 +102,6 @@ const tagList = post.data.tags.filter((tag) => tag !== 'post');
     { !next && prev &&
         <Pagination prev={`/post/${prev.data.id}`} />
     }
-
-
 
 </Layout>
 
@@ -163,5 +141,4 @@ const tagList = post.data.tags.filter((tag) => tag !== 'post');
     .tags li:last-child::after {
         content: ' ';
     }
-
 </style>

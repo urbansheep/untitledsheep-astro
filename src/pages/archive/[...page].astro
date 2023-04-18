@@ -4,7 +4,6 @@ export const prerender = true;
 import Layout from '@/layouts/LayoutBase.astro';
 import PostList from '@/components/PostList.astro';
 import Pagination from '@/components/Pagination.astro';
-import { getCollection } from 'astro:content';
 import { THEME } from '@/config';
 import { fetchPosts } from '@/utils/fetchPosts';
 import type { GetStaticPathsOptions, Page } from "astro";
@@ -23,8 +22,6 @@ const { page } = Astro.props
 
 const title = page.currentPage === 1 ? "Архив" : `Архив - Страница ${page.currentPage}`;
 const description = "";
-
-
 ---
 
 <Layout title={title} description={description}>
