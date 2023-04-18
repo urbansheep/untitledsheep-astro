@@ -4,19 +4,19 @@ import Nav from "@/components/Nav.astro";
 const links = [
     {
         title: 'Архив',
-        href: '/archive',
+        href: '/archive/',
     }, {
         title: 'Избранное',
-        href: '/tagged/избранное'
+        href: '/tagged/избранное/'
     }, {
         title: 'Рубрики',
-        href: '/tagcloud'
+        href: '/tagcloud/'
     }, {
         title: 'Кикстартер',
-        href: '/kickstarter'
+        href: '/kickstarter/'
     }, {
         title: 'Задать вопрос',
-        href: '/ask'
+        href: '/ask/'
     }
 ];
 ---
@@ -28,12 +28,11 @@ const links = [
 </header>
 
 <style>
-
     .header {
         margin-top: var(--spacing-lg);
     }
 
-    .header a {
+    /* .header a {
         text-decoration: none;
         color: var(--theme-color-base);
     }
@@ -42,9 +41,21 @@ const links = [
         text-decoration: underline;
         color: var(--theme-color-base);
 
-    }
+    } */
 
     .title {
         margin-bottom: var(--spacing-sm);
     }
+
+    .title a,
+    .title a:visited {
+        text-decoration: none;
+        color: var(--theme-color-base);
+    }
+
+    .title a:hover {
+        text-decoration: underline;
+        color: var(--theme-color-base);
+    }
+
 </style>

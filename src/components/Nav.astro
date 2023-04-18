@@ -20,11 +20,11 @@ const {
 <nav class="menu">
     <ul
         role="list"
-        class:list={["list", aligned, type]}
+        class:list={["navlist", aligned, type]}
     >
         { links.map((link) => (
-            <li class="item">
-                <a class:list={["link", {filled: link.isFilled}]} href={link.href} data-navLink>{link.title}</a>
+            <li class="navitem">
+                <a class:list={["navlink", {filled: link.isFilled}]} href={link.href} data-navLink>{link.title}</a>
             </li>
         ))}
 
@@ -40,7 +40,7 @@ const {
         line-height: var(--line-height-base);
     }
 
-    .list {
+    .navlist {
         display: flex;
         flex-flow: row wrap;
         list-style: none;
@@ -50,21 +50,21 @@ const {
         justify-content: center;
     }
 
-    .item::after {
+    .navitem::after {
         content: '•';
-        padding: 0 0.5rem;
+        padding: 0 var(--spacing-sm);
     }
 
-    .item:last-child::after {
+    .navitem:last-child::after {
         content: ' ';
     }
 
-    .link {
+    .navlink {
         text-decoration: none;
     }
 
-    .link:hover,
-    .link:active {
+    .navlink:hover,
+    .navlink:active {
         text-decoration: underline;
     }
 
@@ -86,15 +86,12 @@ const {
         color: var(--color-grey-400);
     }
 
-    .filled {
+    .navlink.filled,
+    .navlink.filled:hover,
+    .navlink.filled:visited {
+        color: var(--color-white);
         background-color: var(--color-orange-600);
         padding: var(--spacing-xxs);
-    }
-
-    .link.filled,
-    .link.filled:hover,
-    .link.filled:visited {
-        color: var(--color-white);
     }
 
 </style>

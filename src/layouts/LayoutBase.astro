@@ -16,12 +16,14 @@ export interface Props {
     homepage?: boolean;
     title?: string;
     description?: string;
+    type?: string;
 }
 
 const {
     homepage = false,
     title = SITE.title,
     description = SITE.description,
+    type = "website"
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -35,6 +37,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         title={title}
         description={description}
         canonical={canonical}
+        type={type}
     />
 
     <body class="body">

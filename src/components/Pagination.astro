@@ -1,13 +1,28 @@
 ---
-const { next, prev } = Astro.props
+export interface Props {
+    next?: string;
+    prev?: string;
+    current?: number;
+    total?: number;
+}
+
+const {
+    next,
+    prev,
+    current,
+    total,
+} = Astro.props;
 ---
 
 <nav class="pagination">
     { next && (
-        <span><a href={next}>← Назад</a></span>
+        <span>← <a href={next}>Назад</a></span>
+    )}
+    { current && total && (
+        <span>Страница {current} из {total}</span>
     )}
     { prev && (
-        <span><a href={prev}>Вперед →</a></span>
+        <span><a href={prev}>Вперед</a> →</span>
     )}
 </nav>
 

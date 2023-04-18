@@ -11,14 +11,30 @@ const { posts } = Astro.props;
 
 <ul class="list">
     {posts.map((post) => (
-        <li class="item"><PostCard post={post} /></li>
+        <li class="listitem"><PostCard post={post} /></li>
     ))}
 </ul>
 
 <style>
     .list {
         display: grid;
-        gap: var(--spacing-2xl);
+        gap: var(--spacing-5xl);
         list-style: none;
+    }
+
+    .listitem {
+        position: relative;
+    }
+
+    .listitem::after {
+        position: absolute;
+        content: '* * *';
+        bottom: calc(-1 * var(--spacing-3xl));
+        width: 100%;
+        text-align: center;
+    }
+
+    .listitem:last-child::after {
+        content: ' ';
     }
 </style>
