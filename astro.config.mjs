@@ -3,19 +3,20 @@ import mdx from "@astrojs/mdx";
 import node from "@astrojs/node";
 import sitemap from "@astrojs/sitemap";
 import prefetch from "@astrojs/prefetch";
+import netlify from "@astrojs/netlify/functions";
 
-// https://astro.build/config
 export default defineConfig({
     site: 'https://untitled.urbansheep.com',
     integrations: [
-        mdx(),
+        mdx(), 
         sitemap({
             entryLimit: 5000
-        }),
-        prefetch(),
+        }), 
+        prefetch()
     ],
     output: 'server',
-    adapter: node({
-        mode: "standalone"
-    })
+    adapter: netlify()
+    // adapter: node({
+    //       mode: "standalone"
+    //   })
 });
