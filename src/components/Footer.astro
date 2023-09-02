@@ -1,6 +1,4 @@
 ---
-import Nav from "@/components/Nav.astro";
-
 const linksTop = [
     { href: "/", title: "Главная" },
     { href: "/archive/", title: "Архив" },
@@ -17,9 +15,25 @@ const linksBottom = [
 ---
 
 <footer class="footer">
-    <Nav links={linksTop} aligned="center" />
-    <Nav links={linksBottom} type="secondary" aligned="center" />
+
+    <ul role="list" class="list">
+        { linksTop.map((link) => (
+            <li class="item">
+                <a class:list={["link primary", {filled: link.isFilled}]} href={link.href}>{link.title}</a>
+            </li>
+        ))}
+    </ul>
+
+    <ul role="list" class="list">
+        { linksBottom.map((link) => (
+            <li class="item">
+                <a class="link secondary" href={link.href}>{link.title}</a>
+            </li>
+        ))}
+    </ul>
+
     <p class="description">(c) 2023, Urbansheep</p>
+
 </footer>
 
 <style>
@@ -34,6 +48,59 @@ const linksBottom = [
     .description {
         text-align: center;
         font-size: small;
+    }
+
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        list-style: none;
+        justify-content: center;
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-base);
+    }
+
+    .item::after {
+        content: '•';
+        padding: 0 var(--spacing-sm);
+    }
+
+    .item:last-child::after {
+        content: ' ';
+    }
+
+    .link {
+        text-decoration: none;
+    }
+
+    .link:hover,
+    .link:active {
+        text-decoration: underline;
+    }
+
+    .primary {
+        color: var(--theme-color-base);
+    }
+
+    .primary:hover,
+    .primary:visited {
+        color: var(--theme-color-base);
+    }
+
+    .secondary {
+        color: var(--color-grey-400);
+    }
+
+    .secondary:hover,
+    .secondary:visited {
+        color: var(--color-grey-400);
+    }
+
+    .filled,
+    .filled:hover,
+    .filled:visited {
+        color: var(--color-white);
+        background-color: var(--color-orange-600);
+        padding: var(--spacing-xxs);
     }
 
 </style>

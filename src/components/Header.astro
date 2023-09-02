@@ -1,6 +1,4 @@
 ---
-import Nav from "@/components/Nav.astro";
-
 const links = [
     {
         title: 'Архив',
@@ -23,7 +21,19 @@ const links = [
 
 <header class="header">
     <div class="title"><a href="/">*Безымянная овца</a></div>
-    <Nav links={links} aligned="center" />
+    <nav class="menu">
+        <ul
+            role="list"
+            class="navlist"
+        >
+            { links.map((link) => (
+                <li class="navitem">
+                    <a class="navlink" href={link.href} data-navLink>{link.title}</a>
+                </li>
+            ))}
+
+        </ul>
+    </nav>
 
 </header>
 
@@ -31,17 +41,6 @@ const links = [
     .header {
         margin-top: var(--spacing-lg);
     }
-
-    /* .header a {
-        text-decoration: none;
-        color: var(--theme-color-base);
-    }
-
-    .header a:hover {
-        text-decoration: underline;
-        color: var(--theme-color-base);
-
-    } */
 
     .title {
         margin-bottom: var(--spacing-sm);
@@ -58,4 +57,40 @@ const links = [
         color: var(--theme-color-base);
     }
 
+    .menu {
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-base);
+    }
+
+    .navlist {
+        display: flex;
+        flex-flow: row wrap;
+        list-style: none;
+        justify-content: center;
+    }
+
+    .navitem::after {
+        content: '•';
+        padding: 0 var(--spacing-sm);
+    }
+
+    .navitem:last-child::after {
+        content: ' ';
+    }
+
+    .navlink {
+        text-decoration: none;
+        color: var(--theme-color-base);
+    }
+
+    .navlink:hover,
+    .navlink:active {
+        text-decoration: underline;
+        color: var(--theme-color-base);
+    }
+
 </style>
+
+<script>
+    import "@/utils/showMenuActiveLink.js";
+</script>
