@@ -5,13 +5,12 @@ import Layout from '@/layouts/LayoutBase.astro';
 import PostCard from '@/components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
+import getPublishedPosts from '@/utils/getPublishedPosts';
 
 const title = "*Безымянная овца";
 const description = "";
 
-const posts = await getCollection('blog', (post) => {
-    return !post.data.isDraft && post.data.date <= new Date();
-});
+const posts = await getPublishedPosts();
 
 // receive one random post from the collection
 const randomPost = posts[Math.floor(Math.random() * posts.length)];

@@ -6,21 +6,9 @@ import Pagination from '@/components/Pagination.astro';
 import '@/styles/prose.css';
 import { slugify } from '@/utils/slugify';
 import { getFormattedDate, getFormattedTime } from '@/utils/dateFormating';
-import { fetchPosts } from '@/utils/fetchPosts';
+import getSortedPosts from '@/utils/getSortedPosts';
 
 import type { CollectionEntry } from 'astro:content';
-
-export async function getStaticPaths() {
-    const posts = await fetchPosts();
-    return posts.map((post) => ({
-        params: { slug: post.slug},
-        props: {
-            post,
-            next: posts[posts.indexOf(post) + 1],
-            prev: posts[posts.indexOf(post) - 1],
-        },
-    }));
-}
 
 interface Props {
     post: CollectionEntry<'blog'>;
@@ -36,6 +24,21 @@ const {
     form = post.data.form,
 } = Astro.props;
 
+export async function getStaticPaths() {
+    const posts = await getSortedPosts();
+
+    // console.log(posts[posts.indexOf(post) + 1]);
+
+    return posts.flatMap((post) => ({
+        params: { slug: post.slug},
+        props: {
+            post,
+            next: posts[posts.indexOf(post) + 1],
+            prev: posts[posts.indexOf(post) - 1],
+        },
+    }));
+}
+
 const { Content } = await post.render();
 
 const title = "Пост " + post.data.id;
@@ -43,7 +46,6 @@ const description = "";
 
 // Filter out the "post" tag
 const tagList = post.data.tags;
-
 ---
 
 <Layout title={title} description={description} type="article">

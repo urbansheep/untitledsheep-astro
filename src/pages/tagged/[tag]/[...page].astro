@@ -1,62 +1,54 @@
 ---
 export const prerender = true;
 
+import { CollectionEntry, getCollection } from "astro:content";
+
+import { THEME } from '@/config';
 import Layout from '@/layouts/LayoutBase.astro';
 import PostList from '@/components/PostList.astro';
 import Pagination from '@/components/Pagination.astro';
 import '@/styles/prose.css';
-import { slugify } from '@/utils/slugify';
-import { fetchPosts } from '@/utils/fetchPosts';
-import { THEME } from '@/config';
-import type { GetStaticPathsOptions, Page } from "astro";
-import type { CollectionEntry } from "astro:content";
+import getUniqueTags from "@/utils/getUniqueTags";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { slugify } from "@/utils/slugify";
 
-export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = await fetchPosts();
+export interface Props {
+  post: CollectionEntry<"blog">;
+  tag: string;
+}
 
+export async function getStaticPaths({ paginate }) {
+  const posts = await getSortedPosts();
 
-    function getUniqueTags(posts: CollectionEntry<"blog">[] = []) {
-        let tags = new Set<string>();
-        posts.forEach((post) => {
-            post.data.tags?.map((tag) => {
-                tags.add(tag.toString());
-            });
-        });
-        return [...tags];
-    }
+  const uniqueTags = getUniqueTags(posts);
 
-    const uniqueTags = getUniqueTags(posts);
+  return uniqueTags.flatMap((tag: string) => {
+        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
 
-    return uniqueTags.map((tag) => {
-        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag.toString()));
         return paginate(filterPosts, {
             params: {
-                tagSlug: slugify(tag)
+                tag: slugify(tag),
             },
             pageSize: THEME.postsPerPage,
             props: {
-                tag: tag
+                tag: tag,
+
             }
         });
     });
-}
 
-interface Props {
-    page: Page<CollectionEntry<"blog">>;
 }
 
 const { page, tag } = Astro.props;
 
-const title = page.currentPage === 1 ? `Все записи с тегом "${tag}"` : `Все записи с тегом "${tag}" - Страница ${page.currentPage}`;
+const title = page.currentPage === 1 ? `Все записи с тегом «${tag}»` : `Все записи с тегом «${tag}» - Страница ${page.currentPage}`;
 const description = "";
 const pageTotal = Math.ceil(page.total / THEME.postsPerPage);
-
 ---
-
 
 <Layout title={title} description={description}>
 
-    <h1 class="title">Все записи с тегом "<a href={`/tagged/${slugify(tag)}/`}>{tag}</a>"</h1>
+    <h1 class="title">Все записи с тегом «<a href={`/tagged/${slugify(tag)}/`}>{tag}</a>»</h1>
 
     {page.currentPage !== 1 &&
         <p class="counter">Страница {page.currentPage} из {pageTotal}</p>
@@ -102,3 +94,4 @@ const pageTotal = Math.ceil(page.total / THEME.postsPerPage);
         text-align: center;
     }
 </style>
+
