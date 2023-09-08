@@ -17,8 +17,8 @@ export default defineConfig({
         }),
     ],
     output: "server",
-    // adapter: netlify(),
-    adapter: node({
-        mode: "standalone",
-    }),
+    adapter: netlify(),
+    // adapter: node({
+    //     mode: "standalone",
+    // }),
 });
