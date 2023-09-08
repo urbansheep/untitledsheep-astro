@@ -5,17 +5,15 @@ import Layout from '@/layouts/LayoutBase.astro';
 import PostList from '@/components/PostList.astro';
 import Pagination from '@/components/Pagination.astro';
 import { THEME } from '@/config';
-import { fetchPosts } from '@/utils/fetchPosts';
-import type { GetStaticPathsOptions, Page } from "astro";
-import type { CollectionEntry } from "astro:content";
+import getSortedPosts from '@/utils/getSortedPosts';
 
-export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = await fetchPosts();
-    return paginate(posts, { pageSize: THEME.postsPerPage })
+export async function getStaticPaths({ paginate }) {
+    const sortedPosts = await getSortedPosts();
+    return paginate(sortedPosts, { pageSize: THEME.postsPerPage })
 }
 
 interface Props {
-    page: Page<CollectionEntry<"blog">>;
+    page;
 }
 
 const { page } = Astro.props
@@ -41,3 +39,4 @@ const description = "";
 </Layout>
 
 
+@/utils/getSortedPosts

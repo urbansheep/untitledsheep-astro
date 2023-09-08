@@ -4,9 +4,6 @@ title: Задать вопрос
 description:
 ---
 
-export const prerender = true;
-
 # Задать вопрос
 
 Когда-нибудь тут будет форма обратной связи. А пока пишите на емейл: <a href='mailto:urbansheep@gmail.com'>urbansheep@gmail.com</a>.
-

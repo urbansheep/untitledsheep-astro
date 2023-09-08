@@ -1,6 +1,4 @@
 ---
-import Nav from "@/components/Nav.astro";
-
 const linksTop = [
     { href: "/", title: "Главная" },
     { href: "/archive/", title: "Архив" },
@@ -17,16 +15,35 @@ const linksBottom = [
 ---
 
 <footer class="footer">
-    <Nav links={linksTop} aligned="center" />
-    <Nav links={linksBottom} type="secondary" aligned="center" />
-    <p class="description">(c) 2023, Urbansheep</p>
+
+    <ul role="list" class="list">
+        { linksTop.map((link) => (
+            <li class="item">
+                <a class:list={["link primary", {filled: link.isFilled}]} href={link.href}>{link.title}</a>
+            </li>
+        ))}
+    </ul>
+
+    <ul role="list" class="list">
+        { linksBottom.map((link) => (
+            <li class="item">
+                <a class="link secondary" href={link.href}>{link.title}</a>
+            </li>
+        ))}
+    </ul>
+
+    <p class="description">Безымянная овца — нерегулярное приложение к овцепедии. Порн, картинки, рок-н-ролл. Хотите что-то сказать? Пишите на sheep * urbansheep.com.</p>
+
+
+    <p class="description">© 2023, Urbansheep</p>
+
 </footer>
 
 <style>
     .footer {
         display: grid;
         gap: var(--spacing-base);
-        margin-bottom: var(--spacing-lg);
+        margin-block: var(--spacing-lg);
         padding-top: var(--spacing-lg);
         box-shadow: 0 -6px 9px -9px var(--color-grey-400);
     }
@@ -34,6 +51,60 @@ const linksBottom = [
     .description {
         text-align: center;
         font-size: small;
+        padding-top: 16px;
+    }
+
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        list-style: none;
+        justify-content: center;
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-base);
+    }
+
+    .item::after {
+        content: '•';
+        padding: 0 var(--spacing-sm);
+    }
+
+    .item:last-child::after {
+        content: ' ';
+    }
+
+    .link {
+        text-decoration: none;
+    }
+
+    .link:hover,
+    .link:active {
+        text-decoration: underline;
+    }
+
+    .primary {
+        color: var(--theme-color-base);
+    }
+
+    .primary:hover,
+    .primary:visited {
+        color: var(--theme-color-base);
+    }
+
+    .secondary {
+        color: var(--color-grey-400);
+    }
+
+    .secondary:hover,
+    .secondary:visited {
+        color: var(--color-grey-400);
+    }
+
+    .filled,
+    .filled:hover,
+    .filled:visited {
+        color: var(--color-white);
+        background-color: var(--color-orange-600);
+        padding: var(--spacing-xxs);
     }
 
 </style>

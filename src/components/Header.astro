@@ -1,6 +1,4 @@
 ---
-import Nav from "@/components/Nav.astro";
-
 const links = [
     {
         title: 'Архив',
@@ -23,7 +21,19 @@ const links = [
 
 <header class="header">
     <div class="title"><a href="/">*Безымянная овца</a></div>
-    <Nav links={links} aligned="center" />
+    <nav class="menu" data-menu>
+        <ul
+            role="list"
+            class="list"
+        >
+            { links.map((link) => (
+                <li class="item">
+                    <a class="link" href={link.href} data-navLink>{link.title}</a>
+                </li>
+            ))}
+
+        </ul>
+    </nav>
 
 </header>
 
@@ -31,17 +41,6 @@ const links = [
     .header {
         margin-top: var(--spacing-lg);
     }
-
-    /* .header a {
-        text-decoration: none;
-        color: var(--theme-color-base);
-    }
-
-    .header a:hover {
-        text-decoration: underline;
-        color: var(--theme-color-base);
-
-    } */
 
     .title {
         margin-bottom: var(--spacing-sm);
@@ -58,4 +57,51 @@ const links = [
         color: var(--theme-color-base);
     }
 
+    .menu {
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-base);
+    }
+
+    .list {
+        display: flex;
+        flex-flow: row wrap;
+        list-style: none;
+        
+    }
+
+    .item {
+        white-space: nowrap;
+    }
+
+    .item::after {
+        content: '•';
+        padding: 0 var(--spacing-sm);
+    }
+
+    .item:last-child::after {
+        content: ' ';
+    }
+
+    .link {
+        text-decoration: none;
+        color: var(--theme-color-base);
+    }
+
+    .link:hover,
+    .link:active {
+        text-decoration: underline;
+        color: var(--theme-color-base);
+    }
+    
+
+    /* Link current */
+
+    [aria-current="page"] {
+        text-decoration: underline;
+    }
+
 </style>
+
+<script>
+    import "@/utils/showMenuActiveLink.js";
+</script>

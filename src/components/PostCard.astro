@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import '@/styles/prose.css';
 import { slugify } from '@/utils/slugify';
 import { getFormattedDate } from '@/utils/dateFormating';
-
+import { Image } from 'astro:assets';
 
 export interface Props {
     post: CollectionEntry<'blog'>;
@@ -19,7 +19,7 @@ const tagList = post.data.tags;
 const { Content } = await post.render();
 ---
 
-<section class="post">
+<article class="post">
     <div class:list={[
         "prose",
         form
@@ -31,14 +31,15 @@ const { Content } = await post.render();
             : <h2 class="header">{post.data.title ? `${post.data.title}` : `Пост ${post.data.id}` }</h2>
         }
 
-        {post.data.form === 'photo' &&
-            <img
+        { post.data.form === 'photo' && post.data.photo &&
+            <Image
                 src={post.data.photo}
                 class="cover"
                 alt={post.data.photo_caption || post.data.title || ""}
                 loading="lazy"
-            >
+            />
         }
+
         <div class="content">
             { Content && <Content />}
         </div>
@@ -50,7 +51,7 @@ const { Content } = await post.render();
             </ul>
         }
         <nav>
-            <a class="date" href={`/post/${post.data.id}/`} itemprop="datePublished">{getFormattedDate(post.data.date)}</a>
+            <a class="date" href={`/post/${post.slug}/`} itemprop="datePublished">{getFormattedDate(post.data.date)}</a>
 
             { post.data.photo_source_url &&
                 <>
@@ -59,7 +60,7 @@ const { Content } = await post.render();
             }
         </nav>
     </div>
-</section>
+</article>
 
 <style>
     .header a {
