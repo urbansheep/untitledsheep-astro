@@ -1,5 +1,7 @@
 # Untitled Sheep with AstroJS
 
+Тестовый стенд: https://luminous-kulfi-2348c6.netlify.app/
+
 ## Стек разработки
 
 - Node.js - v16.12.0 или новее. Проверить версию: `node --version`
