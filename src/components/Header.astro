@@ -21,14 +21,14 @@ const links = [
 
 <header class="header">
     <div class="title"><a href="/">*Безымянная овца</a></div>
-    <nav class="menu">
+    <nav class="menu" data-menu>
         <ul
             role="list"
-            class="navlist"
+            class="list"
         >
             { links.map((link) => (
-                <li class="navitem">
-                    <a class="navlink" href={link.href} data-navLink>{link.title}</a>
+                <li class="item">
+                    <a class="link" href={link.href} data-navLink>{link.title}</a>
                 </li>
             ))}
 
@@ -62,31 +62,42 @@ const links = [
         line-height: var(--line-height-base);
     }
 
-    .navlist {
+    .list {
         display: flex;
         flex-flow: row wrap;
         list-style: none;
-        justify-content: center;
+        
     }
 
-    .navitem::after {
+    .item {
+        white-space: nowrap;
+    }
+
+    .item::after {
         content: '•';
         padding: 0 var(--spacing-sm);
     }
 
-    .navitem:last-child::after {
+    .item:last-child::after {
         content: ' ';
     }
 
-    .navlink {
+    .link {
         text-decoration: none;
         color: var(--theme-color-base);
     }
 
-    .navlink:hover,
-    .navlink:active {
+    .link:hover,
+    .link:active {
         text-decoration: underline;
         color: var(--theme-color-base);
+    }
+    
+
+    /* Link current */
+
+    [aria-current="page"] {
+        text-decoration: underline;
     }
 
 </style>
