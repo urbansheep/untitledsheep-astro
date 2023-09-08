@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { Image } from 'astro:assets';
 
 import Layout from '@/layouts/LayoutBase.astro';
 import Pagination from '@/components/Pagination.astro';
@@ -61,13 +62,13 @@ const tagList = post.data.tags;
         : <h1 class="header">{post.data.title ? `${post.data.title}` : `Пост ${post.data.id}` }</h1>
     }
 
-        { form === 'photo' &&
-            <img
+        { form === 'photo' && post.data.photo &&
+            <Image
                 src={post.data.photo}
                 class="cover"
                 alt={post.data.photo_caption || post.data.title || ""}
                 loading="lazy"
-            >
+            />
         }
 
 
@@ -75,7 +76,7 @@ const tagList = post.data.tags;
 
     </article>
 
-    <section class="details">
+    <div class="details">
         {
             tagList && tagList.length > 0 &&
                 <ul class="tags">
@@ -83,7 +84,7 @@ const tagList = post.data.tags;
                 </ul>
         }
         <nav>
-            <a class="date" href={post.slug} itemprop="datePublished">{getFormattedDate(post.data.date)}</a> ★
+            <a class="date" href={`/post/${post.slug}`} itemprop="datePublished">{getFormattedDate(post.data.date)}</a> ★
             <a class="date" href={post.data.tumblr}>{getFormattedTime(post.data.date)}</a>
             { post.data.photo_source_url &&
                 <>
@@ -91,7 +92,7 @@ const tagList = post.data.tags;
                 </>
             }
         </nav>
-    </section>
+    </div>
 
     { next && prev &&
         <Pagination next={`/post/${next?.data.id}`} prev={`/post/${prev?.data.id}`} />
@@ -133,11 +134,12 @@ const tagList = post.data.tags;
         flex-wrap: wrap;
         list-style: none;
         justify-content: center;
+        gap: var(--spacing-xs);
     }
 
     .tags li::after {
         content: '•';
-        padding: 0 var(--spacing-xs);
+        // padding: 0 var(--spacing-xs);
     }
 
     .tags li:last-child::after {

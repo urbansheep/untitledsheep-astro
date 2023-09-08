@@ -1,53 +1,3 @@
-/* Globals */
-
-/* Lora Variable */
-
-@font-face {
-    font-weight: 100 900;
-    font-family: "Lora Variable";
-    font-style: oblique 0deg 10deg;
-    font-display: swap;
-    src: url("/fonts/Lora-VariableFont_wght.woff2") format("woff2");
-}
-
-/* Lora Static */
-
-@font-face {
-    font-weight: 400;
-    font-family: Lora;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/Lora-Regular.woff2") format("woff2"),
-        url("/fonts/Lora-Regular.woff") format("woff");
-}
-
-@font-face {
-    font-weight: 400;
-    font-family: Lora;
-    font-style: italic;
-    font-display: swap;
-    src: url("/fonts/Lora-Italic.woff2") format("woff2"),
-        url("/fonts/Lora-Italic.woff") format("woff");
-}
-
-@font-face {
-    font-weight: 700;
-    font-family: Lora;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/Lora-Bold.woff2") format("woff2"),
-        url("/fonts/Lora-Bold.woff") format("woff");
-}
-
-@font-face {
-    font-weight: 700;
-    font-family: Lora;
-    font-style: italic;
-    font-display: swap;
-    src: url("/fonts/Lora-BoldItalic.woff2") format("woff2"),
-        url("/fonts/Lora-BoldItalic.woff") format("woff");
-}
-
 *,
 *::before,
 *::after {
@@ -151,12 +101,6 @@
         "Times", serif;
 }
 
-@supports (font-variation-settings: normal) {
-    :root {
-        --font-family-text: "Lora Variable", serif;
-    }
-}
-
 html {
     font-family: var(--font-family-text);
     color: var(--color-grey-700);
@@ -240,10 +184,6 @@ a:focus-visible {
     outline-offset: var(--spacing-xxs);
 }
 
-.link[aria-current="page"] {
-    font-weight: bold;
-}
-
 img,
 svg,
 video,
@@ -253,7 +193,7 @@ iframe,
 embed,
 object {
     display: block;
-    width: 100%;
+    max-width: 100%;
 }
 
 .visually-hidden {
@@ -329,6 +269,10 @@ Make sure disabled buttons don't get the pointer cursor.
 .text-base {
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
+}
+
+.cover {
+    max-width: 100%;
 }
 
 .details {
