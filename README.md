@@ -1,7 +1,5 @@
 # Untitled Sheep with AstroJS
 
-## Стек разработки - AstroJS v3
-
 -   Node.js - v18.14.1 или новее. Проверить версию: `node --version`
 -   npm v8 - идет в комплекте с Node 16. Проверить версию: `npm -v`
 -   AstroJS v3 - https://docs.astro.build/. Проверить версию: написано в файле package.json
