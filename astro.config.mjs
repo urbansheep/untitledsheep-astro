@@ -18,6 +18,9 @@ export default defineConfig({
     ],
     output: "server",
     adapter: netlify(),
+    outputOptions: {
+        format: "esm",
+      },
     // adapter: node({
     //     mode: "standalone",
     // }),
