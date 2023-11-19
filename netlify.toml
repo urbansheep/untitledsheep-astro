@@ -1,6 +1,0 @@
-[build]
-  command = "astro build"
-  publish = "dist"
-
-[functions]
-  node_bundler = "none"  
