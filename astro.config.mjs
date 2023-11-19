@@ -16,7 +16,7 @@ export default defineConfig({
             SVG: false,
         }),
     ],
-    output: "server",
+    output: "static",
     adapter: netlify(),
     outputOptions: {
         format: "esm",
