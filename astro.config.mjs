@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 import node from "@astrojs/node";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
-import netlify from "@astrojs/netlify/functions";
+import vercel from "@astrojs/vercel/static";
 
 export default defineConfig({
     site: "https://untitled.urbansheep.com",
@@ -17,10 +17,14 @@ export default defineConfig({
         }),
     ],
     output: "server",
-    adapter: netlify(),
+    adapter: vercel({
+        webAnalytics: {
+            enabled: true,
+        },
+    }),
     outputOptions: {
         format: "esm",
-      },
+    },
     // adapter: node({
     //     mode: "standalone",
     // }),
