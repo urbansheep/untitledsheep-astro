@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 
-import node from "@astrojs/node";
+// import node from "@astrojs/node";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel/static";
@@ -20,7 +20,8 @@ export default defineConfig({
         "/archive/1": "/archive/",
         "/archive/1/": "/archive/",
     },
-    output: "server",
+    output: "static",
+    // output: "server",
     adapter: vercel({
         webAnalytics: {
             enabled: true,
