@@ -16,6 +16,10 @@ export default defineConfig({
             SVG: false,
         }),
     ],
+    redirects: {
+        "/archive/1": "/archive/",
+        "/archive/1/": "/archive/",
+    },
     output: "server",
     adapter: vercel({
         webAnalytics: {
