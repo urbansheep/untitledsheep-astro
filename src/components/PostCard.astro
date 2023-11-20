@@ -1,62 +1,89 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import '@/styles/prose.css';
-import { slugify } from '@/utils/slugify';
-import { getFormattedDate } from '@/utils/dateFormating';
-import { Image } from 'astro:assets';
+import type { CollectionEntry } from "astro:content";
+import "@/styles/prose.css";
+import { slugify } from "@/utils/slugify";
+import { getFormattedDate } from "@/utils/dateFormating";
+import { Image } from "astro:assets";
 
 export interface Props {
-    post: CollectionEntry<'blog'>;
+    post: CollectionEntry<"blog">;
 }
 
-const {
-    post,
-    form = post.data.form,
-} = Astro.props;
+const { post } = Astro.props;
 
 const tagList = post.data.tags;
+const form = post.data.form;
 
 const { Content } = await post.render();
 ---
 
 <article class="post">
-    <div class:list={[
-        "prose",
-        form
-        ]}
-    >
-
-        {post.data.form === 'link' && post.data.title ?
-            <h2 class="header">→ <a href={post.data.linkurl}  target="_blank">{post.data.title}</a></h2>
-            : <h2 class="header">{post.data.title ? `${post.data.title}` : `Пост ${post.data.id}` }</h2>
+    <div class:list={["prose", form]}>
+        {
+            post.data.form === "link" && post.data.title ? (
+                <h2 class="header">
+                    →{" "}
+                    <a href={post.data.linkurl} target="_blank">
+                        {post.data.title}
+                    </a>
+                </h2>
+            ) : (
+                <h2 class="header">
+                    {post.data.title
+                        ? `${post.data.title}`
+                        : `Пост ${post.data.id}`}
+                </h2>
+            )
         }
 
-        { post.data.form === 'photo' && post.data.photo &&
-            <Image
-                src={post.data.photo}
-                class="cover"
-                alt={post.data.photo_caption || post.data.title || ""}
-                loading="lazy"
-            />
+        {
+            post.data.form === "photo" && post.data.photo && (
+                <Image
+                    src={post.data.photo}
+                    class="cover"
+                    alt={post.data.photo_caption || post.data.title || ""}
+                    loading="lazy"
+                />
+            )
         }
 
         <div class="content">
-            { Content && <Content />}
+            {Content && <Content />}
         </div>
     </div>
     <div class="details">
-        {tagList && tagList.length > 0 &&
-            <ul class="tags">
-                { tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}/`} class="taglink">{tag}</a></li>)}
-            </ul>
+        {
+            tagList && tagList.length > 0 && (
+                <ul class="tags">
+                    {tagList.map((tag) => (
+                        <li>
+                            <a
+                                href={`/tagged/${slugify(tag)}/`}
+                                class="taglink"
+                            >
+                                {tag}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            )
         }
         <nav>
-            <a class="date" href={`/post/${post.slug}/`} itemprop="datePublished">{getFormattedDate(post.data.date)}</a>
+            <a
+                class="date"
+                href={`/post/${post.slug}/`}
+                itemprop="datePublished">{getFormattedDate(post.data.date)}</a
+            >
 
-            { post.data.photo_source_url &&
-                <>
-                    ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_title}</a>
-                </>
+            {
+                post.data.photo_source_url && (
+                    <>
+                        ★ Из{" "}
+                        <a href={post.data.photo_source_url}>
+                            {post.data.photo_source_title}
+                        </a>
+                    </>
+                )
             }
         </nav>
     </div>
