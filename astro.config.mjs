@@ -16,11 +16,11 @@ export default defineConfig({
             SVG: false,
         }),
     ],
-    output: "static",
+    output: "hybrid",
     adapter: netlify(),
     outputOptions: {
         format: "esm",
-      },
+    },
     // adapter: node({
     //     mode: "standalone",
     // }),
