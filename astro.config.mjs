@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 
-import node from "@astrojs/node";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import netlify from "@astrojs/netlify/functions";
@@ -21,7 +20,4 @@ export default defineConfig({
     outputOptions: {
         format: "esm",
     },
-    // adapter: node({
-    //     mode: "standalone",
-    // }),
 });
