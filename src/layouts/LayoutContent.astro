@@ -1,15 +1,13 @@
 ---
-import Layout from './LayoutBase.astro';
+import Layout from "@/layouts/LayoutBase.astro";
 
-const {
-    frontmatter
-} = Astro.props;
+const { frontmatter, ogImage } = Astro.props;
 
 const title = frontmatter.title;
 const description = frontmatter.description;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} ogImage={ogImage}>
     <article class="prose">
         <slot />
     </article>

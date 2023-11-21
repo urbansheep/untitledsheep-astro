@@ -1,29 +1,24 @@
 ---
 export const prerender = true;
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import Layout from '@/layouts/LayoutBase.astro';
-import Pagination from '@/components/Pagination.astro';
-import '@/styles/prose.css';
-import { slugify } from '@/utils/slugify';
-import { getFormattedDate, getFormattedTime } from '@/utils/dateFormating';
-import getSortedPosts from '@/utils/getSortedPosts';
+import Layout from "@/layouts/LayoutBase.astro";
+import Pagination from "@/components/Pagination.astro";
+import "@/styles/prose.css";
+import { slugify } from "@/utils/slugify";
+import { getFormattedDate, getFormattedTime } from "@/utils/dateFormating";
+import getSortedPosts from "@/utils/getSortedPosts";
 
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
-    post: CollectionEntry<'blog'>;
-    form: string,
+    post: CollectionEntry<"blog">;
+    form: string;
     next?: any;
     prev?: any;
 }
 
-const {
-    post,
-    next,
-    prev,
-    form = post.data.form,
-} = Astro.props;
+const { post, next, prev, form = post.data.form } = Astro.props;
 
 export async function getStaticPaths() {
     const posts = await getSortedPosts();
@@ -31,7 +26,7 @@ export async function getStaticPaths() {
     // console.log(posts[posts.indexOf(post) + 1]);
 
     return posts.flatMap((post) => ({
-        params: { slug: post.slug},
+        params: { slug: post.slug },
         props: {
             post,
             next: posts[posts.indexOf(post) + 1],
@@ -47,65 +42,106 @@ const description = "";
 
 // Filter out the "post" tag
 const tagList = post.data.tags;
+
+const ogImage = {
+    template: "blog",
+    data: {
+        title: title,
+    },
+};
 ---
 
-<Layout title={title} description={description} type="article">
-
-    <article class:list={[
-        "prose",
-        form
-        ]} itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting"
+<Layout
+    title={title}
+    description={description}
+    type="article"
+    ogImage={ogImage}
+>
+    <article
+        class:list={["prose", form]}
+        itemprop="blogPost"
+        itemscope
+        itemtype="http://schema.org/BlogPosting"
     >
-
-    {post.data.form === 'link' && post.data.linkurl ?
-        <h1 class="header">→ <a href={post.data.linkurl} target="_blank" rel="noopener noreferrer nofollow">{post.data.title}</a></h1>
-        : <h1 class="header">{post.data.title ? `${post.data.title}` : `Пост ${post.data.id}` }</h1>
-    }
-
-        { form === 'photo' && post.data.photo &&
-            <Image
-                src={post.data.photo}
-                class="cover"
-                alt={post.data.photo_caption || post.data.title || ""}
-                loading="lazy"
-            />
+        {
+            post.data.form === "link" && post.data.linkurl ? (
+                <h1 class="header">
+                    →{" "}
+                    <a
+                        href={post.data.linkurl}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                    >
+                        {post.data.title}
+                    </a>
+                </h1>
+            ) : (
+                <h1 class="header">
+                    {post.data.title
+                        ? `${post.data.title}`
+                        : `Пост ${post.data.id}`}
+                </h1>
+            )
         }
 
+        {
+            form === "photo" && post.data.photo && (
+                <Image
+                    src={post.data.photo}
+                    class="cover"
+                    alt={post.data.photo_caption || post.data.title || ""}
+                    loading="lazy"
+                />
+            )
+        }
 
-        { Content && <Content />}
-
+        {Content && <Content />}
     </article>
 
     <div class="details">
         {
-            tagList && tagList.length > 0 &&
+            tagList && tagList.length > 0 && (
                 <ul class="tags">
-                    { tagList.map((tag) => <li><a href={`/tagged/${slugify(tag)}/`}>{tag}</a></li>)}
+                    {tagList.map((tag) => (
+                        <li>
+                            <a href={`/tagged/${slugify(tag)}/`}>{tag}</a>
+                        </li>
+                    ))}
                 </ul>
+            )
         }
         <nav>
-            <a class="date" href={`/post/${post.slug}`} itemprop="datePublished">{getFormattedDate(post.data.date)}</a> ★
-            <a class="date" href={post.data.tumblr}>{getFormattedTime(post.data.date)}</a>
-            { post.data.photo_source_url &&
-                <>
-                    ★ Из <a href={post.data.photo_source_url}>{post.data.photo_source_title}</a>
-                </>
+            <a class="date" href={`/post/${post.slug}`} itemprop="datePublished"
+                >{getFormattedDate(post.data.date)}</a
+            > ★
+            <a class="date" href={post.data.tumblr}
+                >{getFormattedTime(post.data.date)}</a
+            >
+            {
+                post.data.photo_source_url && (
+                    <>
+                        ★ Из{" "}
+                        <a href={post.data.photo_source_url}>
+                            {post.data.photo_source_title}
+                        </a>
+                    </>
+                )
             }
         </nav>
     </div>
 
-    { next && prev &&
-        <Pagination next={`/post/${next?.data.id}`} prev={`/post/${prev?.data.id}`} />
+    {
+        next && prev && (
+            <Pagination
+                next={`/post/${next?.data.id}`}
+                prev={`/post/${prev?.data.id}`}
+            />
+        )
     }
 
-    { next && !prev &&
-        <Pagination next={`/post/${next.data.id}`} />
-    }
+    {next && !prev && <Pagination next={`/post/${next.data.id}`} />}
 
-    { !next && prev &&
-        <Pagination prev={`/post/${prev.data.id}`} />
-    }
-
+    {!next && prev && <Pagination prev={`/post/${prev.data.id}`} />}
 </Layout>
 
 <style>
@@ -138,10 +174,10 @@ const tagList = post.data.tags;
     }
 
     .tags li::after {
-        content: '•';
+        content: "•";
     }
 
     .tags li:last-child::after {
-        content: ' ';
+        content: " ";
     }
 </style>
