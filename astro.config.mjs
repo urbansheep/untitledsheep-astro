@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
-import netlify from "@astrojs/netlify/functions";
+import vercel from "@astrojs/vercel/static";
 
 export default defineConfig({
     site: "https://untitled.urbansheep.com",
@@ -15,14 +15,23 @@ export default defineConfig({
             SVG: false,
         }),
     ],
+    redirects: {
+        "/archive/1": "/archive/",
+        "/archive/1/": "/archive/",
+    },
     output: "hybrid",
-    adapter: netlify(),
     outputOptions: {
         format: "esm",
     },
+    adapter: vercel({
+        webAnalytics: {
+            enabled: true,
+        },
+    }),
     vite: {
         optimizeDeps: {
             exclude: ["@resvg/resvg-js"],
         },
     },
+
 });
