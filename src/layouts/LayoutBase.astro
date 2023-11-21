@@ -1,13 +1,13 @@
 ---
-import MetaHead from '@/components/MetaHead.astro';
-import MetaDev from '@/components/MetaDev.astro';
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
-import SkipLinks from '@/components/SkipLinks.astro';
-import '@/styles/global.css';
-import '@/styles/prose.css';
-import { SITE } from '@/config'
-import { THEME } from '@/config'
+import MetaHead from "@/components/MetaHead.astro";
+import MetaDev from "@/components/MetaDev.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import SkipLinks from "@/components/SkipLinks.astro";
+import "@/styles/global.css";
+import "@/styles/prose.css";
+import { SITE } from "@/config";
+import { THEME } from "@/config";
 
 // const isDevMetaVisible = true;
 const isDevMetaVisible = false;
@@ -17,27 +17,45 @@ export interface Props {
     title?: string;
     description?: string;
     type?: string;
+    ogImage?: {
+        template: string;
+        data?: Record<string, any>;
+    };
 }
 
 const {
     homepage = false,
     title = SITE.title,
     description = SITE.description,
-    type = "website"
+    type = "website",
+    ogImage,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// create new const ogImageUrl which is string
+// if ogImage is not defined, use default image: og/default.png
+// else use the template and data to generate the image: /og/blog.png?title={data.title}
+
+const ogImageUrl = ogImage
+    ? `${Astro.url.origin}/og/${
+          ogImage.template
+      }.png?title=${encodeURIComponent(title)}`
+    : `${Astro.url.origin}/og/default.png`;
+
+console.log("Astro.url.pathname is: ", Astro.url.pathname);
+console.log("ogImageUrl for page is: ", ogImageUrl);
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={THEME.language} dir={THEME.textDirection} class="page">
-
     <MetaHead
         homepage={homepage}
         title={title}
         description={description}
         canonical={canonical}
         type={type}
+        ogImage={ogImageUrl}
     />
 
     <body class="body">
@@ -50,14 +68,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             <Footer />
         </div>
 
-        {isDevMetaVisible &&
-            <MetaDev
-                title={title}
-                description={description}
-                canonical={canonical}
-            />
+        {
+            isDevMetaVisible && (
+                <MetaDev
+                    title={title}
+                    description={description}
+                    canonical={canonical}
+                />
+            )
         }
-
     </body>
-
 </html>
