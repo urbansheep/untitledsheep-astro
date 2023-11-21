@@ -20,4 +20,9 @@ export default defineConfig({
     outputOptions: {
         format: "esm",
     },
+    vite: {
+        optimizeDeps: {
+            exclude: ["@resvg/resvg-js"],
+        },
+    },
 });
