@@ -42,9 +42,6 @@ const ogImageUrl = ogImage
           ogImage.template
       }.png?title=${encodeURIComponent(title)}`
     : `${Astro.url.origin}/og/default.png`;
-
-console.log("Astro.url.pathname is: ", Astro.url.pathname);
-console.log("ogImageUrl for page is: ", ogImageUrl);
 ---
 
 <!doctype html>
