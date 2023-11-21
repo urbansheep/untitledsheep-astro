@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 
-// import node from "@astrojs/node";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel/static";
@@ -20,17 +19,19 @@ export default defineConfig({
         "/archive/1": "/archive/",
         "/archive/1/": "/archive/",
     },
-    output: "static",
-    // output: "server",
+    output: "hybrid",
+    outputOptions: {
+        format: "esm",
+    },
     adapter: vercel({
         webAnalytics: {
             enabled: true,
         },
     }),
-    outputOptions: {
-        format: "esm",
+    vite: {
+        optimizeDeps: {
+            exclude: ["@resvg/resvg-js"],
+        },
     },
-    // adapter: node({
-    //     mode: "standalone",
-    // }),
+
 });
