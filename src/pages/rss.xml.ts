@@ -25,7 +25,7 @@ export async function get(context: APIContext) {
             title: post.data.title || `Пост ${post.data.id}`,
             pubDate: post.data.date,
             description: post.data.photo
-                ? `${SITE.url}${post.data.photo} ${post.body}`
+                ? `${SITE.url}${post.data.photo.src} ${post.body}`
                 : post.body,
             link: `/post/${post.data.id}`,
             guid: post.data.id,
