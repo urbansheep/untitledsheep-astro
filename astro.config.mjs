@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 
-import node from "@astrojs/node";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import netlify from "@astrojs/netlify/functions";
@@ -16,12 +15,14 @@ export default defineConfig({
             SVG: false,
         }),
     ],
-    output: "server",
+    output: "hybrid",
     adapter: netlify(),
     outputOptions: {
         format: "esm",
-      },
-    // adapter: node({
-    //     mode: "standalone",
-    // }),
+    },
+    vite: {
+        optimizeDeps: {
+            exclude: ["@resvg/resvg-js"],
+        },
+    },
 });

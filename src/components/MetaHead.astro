@@ -1,12 +1,13 @@
 ---
-import { SITE } from '@/config'
+import { SITE } from "@/config";
 
 export interface Props {
     homepage?: boolean;
     title: string;
     description: string;
     canonical?: URL;
-    type: string
+    type: string;
+    ogImage: string;
 }
 
 const {
@@ -14,7 +15,8 @@ const {
     title,
     description,
     canonical,
-    type
+    type,
+    ogImage,
 } = Astro.props;
 ---
 
@@ -23,25 +25,47 @@ const {
     <meta name="viewport" content="width=device-width" />
 
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" type="application/rss+xml" title={SITE.title} href={`${SITE.url}/rss.xml`} />
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={SITE.title}
+        href={`${SITE.url}/rss.xml`}
+    />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet"
+    />
 
     <!-- Primary Meta Tags -->
-    {homepage ? <title>{title}</title> : <title>{title} • {SITE.title}</title>}
-    {homepage ? <meta name="title" content={title} /> : <meta name="title" content={`${title} • ${SITE.title}`} />}
-    <meta name="description" content={description}>
+    {
+        homepage ? (
+            <title>{title}</title>
+        ) : (
+            <title>
+                {title} • {SITE.title}
+            </title>
+        )
+    }
+    {
+        homepage ? (
+            <meta name="title" content={title} />
+        ) : (
+            <meta name="title" content={`${title} • ${SITE.title}`} />
+        )
+    }
+    <meta name="description" content={description} />
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <!-- <meta property="og:image" content="TODO:" /> -->
+    <meta property="og:image" content={ogImage} />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="telephone=no" />
 </head>
