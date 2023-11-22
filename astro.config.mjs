@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel/static";
+import vercel from "@astrojs/vercel/serverless";
 
 export default defineConfig({
     site: "https://untitled.urbansheep.com",
@@ -33,5 +33,4 @@ export default defineConfig({
             exclude: ["@resvg/resvg-js"],
         },
     },
-
 });

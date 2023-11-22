@@ -1,29 +1,31 @@
 ---
-export const prerender = true;
+import { type CollectionEntry } from "astro:content";
+import type { GetStaticPaths, Page } from "astro";
 
-import { CollectionEntry, getCollection } from "astro:content";
-
-import { THEME } from '@/config';
-import Layout from '@/layouts/LayoutBase.astro';
-import PostList from '@/components/PostList.astro';
-import Pagination from '@/components/Pagination.astro';
-import '@/styles/prose.css';
+import { THEME } from "@/config";
+import Layout from "@/layouts/LayoutBase.astro";
+import PostList from "@/components/PostList.astro";
+import Pagination from "@/components/Pagination.astro";
+import "@/styles/prose.css";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { slugify } from "@/utils/slugify";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
-  tag: string;
+    page: Page<CollectionEntry<"blog">>;
+    post: CollectionEntry<"blog">;
+    tag: string;
 }
 
-export async function getStaticPaths({ paginate }) {
-  const posts = await getSortedPosts();
+export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
+    const posts = await getSortedPosts();
 
-  const uniqueTags = getUniqueTags(posts);
+    const uniqueTags = getUniqueTags(posts);
 
-  return uniqueTags.flatMap((tag: string) => {
-        const filterPosts = posts.filter((post) => post.data.tags?.includes(tag));
+    return uniqueTags.flatMap((tag: string) => {
+        const filterPosts = posts.filter((post) =>
+            post.data.tags?.includes(tag),
+        );
 
         return paginate(filterPosts, {
             params: {
@@ -32,39 +34,46 @@ export async function getStaticPaths({ paginate }) {
             pageSize: THEME.postsPerPage,
             props: {
                 tag: tag,
-
-            }
+            },
         });
     });
-
-}
+};
 
 const { page, tag } = Astro.props;
 
-const title = page.currentPage === 1 ? `Все записи с тегом «${tag}»` : `Все записи с тегом «${tag}» - Страница ${page.currentPage}`;
+const title =
+    page.currentPage === 1
+        ? `Все записи с тегом «${tag}»`
+        : `Все записи с тегом «${tag}» - Страница ${page.currentPage}`;
 const description = "";
 const pageTotal = Math.ceil(page.total / THEME.postsPerPage);
 ---
 
 <Layout title={title} description={description}>
+    <h1 class="title">
+        Все записи с тегом «<a href={`/tagged/${slugify(tag)}/`}>{tag}</a>»
+    </h1>
 
-    <h1 class="title">Все записи с тегом «<a href={`/tagged/${slugify(tag)}/`}>{tag}</a>»</h1>
-
-    {page.currentPage !== 1 &&
-        <p class="counter">Страница {page.currentPage} из {pageTotal}</p>
+    {
+        page.currentPage !== 1 && (
+            <p class="counter">
+                Страница {page.currentPage} из {pageTotal}
+            </p>
+        )
     }
 
     <PostList posts={page.data} />
 
-    { page.total > THEME.postsPerPage &&  (
-        <Pagination
-            next={page.url.next}
-            prev={page.url.prev}
-            current={page.currentPage}
-            total={pageTotal}
-        />
-    )}
-
+    {
+        page.total > THEME.postsPerPage && (
+            <Pagination
+                next={page.url.next}
+                prev={page.url.prev}
+                current={page.currentPage}
+                total={pageTotal}
+            />
+        )
+    }
 </Layout>
 
 <style>
@@ -94,4 +103,3 @@ const pageTotal = Math.ceil(page.total / THEME.postsPerPage);
         text-align: center;
     }
 </style>
-

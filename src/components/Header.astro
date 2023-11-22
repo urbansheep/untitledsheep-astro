@@ -1,40 +1,43 @@
 ---
 const links = [
     {
-        title: 'Архив',
-        href: '/archive/',
-    }, {
-        title: 'Избранное',
-        href: '/tagged/избранное/'
-    }, {
-        title: 'Рубрики',
-        href: '/tagcloud/'
-    }, {
-        title: 'Кикстартер',
-        href: '/kickstarter/'
-    }, {
-        title: 'Задать вопрос',
-        href: '/ask/'
-    }
+        title: "Архив",
+        href: "/archive/",
+    },
+    {
+        title: "Избранное",
+        href: "/tagged/избранное/",
+    },
+    {
+        title: "Рубрики",
+        href: "/tagcloud/",
+    },
+    {
+        title: "Кикстартер",
+        href: "/kickstarter/",
+    },
+    {
+        title: "Задать вопрос",
+        href: "/ask/",
+    },
 ];
 ---
 
 <header class="header">
     <div class="title"><a href="/">*Безымянная овца</a></div>
     <nav class="menu" data-menu>
-        <ul
-            role="list"
-            class="list"
-        >
-            { links.map((link) => (
-                <li class="item">
-                    <a class="link" href={link.href} data-navLink>{link.title}</a>
-                </li>
-            ))}
-
+        <ul role="list" class="list">
+            {
+                links.map((link) => (
+                    <li class="item">
+                        <a class="link" href={link.href} data-navLink>
+                            {link.title}
+                        </a>
+                    </li>
+                ))
+            }
         </ul>
     </nav>
-
 </header>
 
 <style>
@@ -66,7 +69,6 @@ const links = [
         display: flex;
         flex-flow: row wrap;
         list-style: none;
-        
     }
 
     .item {
@@ -74,12 +76,12 @@ const links = [
     }
 
     .item::after {
-        content: '•';
+        content: "•";
         padding: 0 var(--spacing-sm);
     }
 
     .item:last-child::after {
-        content: ' ';
+        content: " ";
     }
 
     .link {
@@ -92,14 +94,12 @@ const links = [
         text-decoration: underline;
         color: var(--theme-color-base);
     }
-    
 
     /* Link current */
 
     [aria-current="page"] {
         text-decoration: underline;
     }
-
 </style>
 
 <script>

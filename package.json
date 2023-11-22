@@ -13,7 +13,7 @@
     "start": "astro dev",
     "check": "astro check",
     "lint:editorconfig": "editorconfig-checker -exclude 'src/content/blog/*'",
-    "link:js": "eslint . --fix",
+    "lint:js": "eslint . --fix",
     "lint:css": "stylelint \"src/**/*.{astro,css}\" --fix",
     "test": "npm run lint:editorconfig && npm run lint:css && npm run lint:js && npm run check",
     "build": "astro build",
@@ -22,15 +22,15 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.3.1",
     "@astrojs/rss": "^3.0.0",
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/vercel": "^5.2.0",
-    "astro": "^3.5.5"
+    "astro": "^3.5.5",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.0",
-    "satori": "^0.10.11",
-    "satori-html": "^0.3.2",
     "@typescript-eslint/parser": "^6.11.0",
     "astro-compress": "^2.2.3",
     "autoprefixer": "^10.4.16",
@@ -43,9 +43,12 @@
     "postcss-preset-env": "^9.3.0",
     "prettier": "^3.1.0",
     "prettier-plugin-astro": "^0.12.2",
+    "satori": "^0.10.11",
+    "satori-html": "^0.3.2",
     "stylelint": "^15.11.0",
     "stylelint-config-astro": "^1.0.4",
     "stylelint-config-html": "^1.1.0",
-    "stylelint-config-standard": "^34.0.0"
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-order": "^6.0.3"
   }
 }

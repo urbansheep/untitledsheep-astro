@@ -15,28 +15,42 @@ const linksBottom = [
 ---
 
 <footer class="footer">
-
     <ul role="list" class="list">
-        { linksTop.map((link) => (
-            <li class="item">
-                <a class:list={["link primary", {filled: link.isFilled}]} href={link.href}>{link.title}</a>
-            </li>
-        ))}
+        {
+            linksTop.map((link) => (
+                <li class="item">
+                    <a
+                        class:list={["link primary", { filled: link.isFilled }]}
+                        href={link.href}
+                    >
+                        {link.title}
+                    </a>
+                </li>
+            ))
+        }
     </ul>
 
     <ul role="list" class="list">
-        { linksBottom.map((link) => (
-            <li class="item">
-                <a class="link secondary" href={link.href}>{link.title}</a>
-            </li>
-        ))}
+        {
+            linksBottom.map((link) => (
+                <li class="item">
+                    <a class="link secondary" href={link.href}>
+                        {link.title}
+                    </a>
+                </li>
+            ))
+        }
     </ul>
 
-    <p class="description">Безымянная овца — нерегулярное приложение к овцепедии. Порн, картинки, рок-н-ролл. Хотите что-то сказать? Пишите на <a href="mailto:urbansheep@gmail.com">urbansheep@gmail.com</a>.</p>
-
+    <p class="description">
+        Безымянная овца — нерегулярное приложение к овцепедии. Порн, картинки,
+        рок-н-ролл. Хотите что-то сказать? Пишите на <a
+            href="mailto:urbansheep@gmail.com"
+            class="link primary">urbansheep@gmail.com</a
+        >.
+    </p>
 
     <p class="description">&copy; 2008—2023, Urbansheep</p>
-
 </footer>
 
 <style>
@@ -49,27 +63,27 @@ const linksBottom = [
     }
 
     .description {
+        padding-top: 16px;
         text-align: center;
         font-size: small;
-        padding-top: 16px;
     }
 
     .list {
         display: flex;
         flex-flow: row wrap;
-        list-style: none;
         justify-content: center;
-        font-size: var(--font-size-xs);
+        list-style: none;
         line-height: var(--line-height-base);
+        font-size: var(--font-size-xs);
     }
 
     .item::after {
-        content: '•';
+        content: "•";
         padding: 0 var(--spacing-sm);
     }
 
     .item:last-child::after {
-        content: ' ';
+        content: " ";
     }
 
     .link {
@@ -102,9 +116,8 @@ const linksBottom = [
     .filled,
     .filled:hover,
     .filled:visited {
-        color: var(--color-white);
-        background-color: var(--color-orange-600);
         padding: var(--spacing-xxs);
+        background-color: var(--color-orange-600);
+        color: var(--color-white);
     }
-
 </style>

@@ -48,7 +48,7 @@ export async function GET(context: APIContext) {
         },
     });
 
-    const image = await resvgInstance.render();
+    const image = resvgInstance.render();
 
     return new Response(image.asPng());
 }

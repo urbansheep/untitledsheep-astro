@@ -1,9 +1,0 @@
-{ "extends": [
-    "stylelint-config-standard",
-    "stylelint-config-html",
-    "stylelint-config-astro"
-  ],
-  "rules": {
-    "media-feature-range-notation": "prefix"
-  }
-}

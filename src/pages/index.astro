@@ -1,11 +1,8 @@
 ---
-export const prerender = true;
+import Layout from "@/layouts/LayoutBase.astro";
+import PostCard from "@/components/PostCard.astro";
 
-import Layout from '@/layouts/LayoutBase.astro';
-import PostCard from '@/components/PostCard.astro';
-import { getCollection } from 'astro:content';
-
-import getPublishedPosts from '@/utils/getPublishedPosts';
+import getPublishedPosts from "@/utils/getPublishedPosts";
 
 const title = "*Безымянная овца";
 const description = "";

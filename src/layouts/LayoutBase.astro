@@ -37,10 +37,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // if ogImage is not defined, use default image: og/default.png
 // else use the template and data to generate the image: /og/blog.png?title={data.title}
 
+// prettier-ignore
 const ogImageUrl = ogImage
     ? `${Astro.url.origin}/og/${
-          ogImage.template
-      }.png?title=${encodeURIComponent(title)}`
+        ogImage.template
+        }.png?title=${encodeURIComponent(title)}`
     : `${Astro.url.origin}/og/default.png`;
 ---
 

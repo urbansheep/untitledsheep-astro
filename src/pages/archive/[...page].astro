@@ -1,8 +1,6 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { type CollectionEntry } from "astro:content";
 import type { GetStaticPaths, Page } from "astro";
-
-export const prerender = true;
 
 import Layout from "@/layouts/LayoutBase.astro";
 import PostList from "@/components/PostList.astro";

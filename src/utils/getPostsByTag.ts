@@ -1,4 +1,3 @@
-import { slugify } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 
 function getPostsByTag(posts: CollectionEntry<"blog">[], tag: string) {
