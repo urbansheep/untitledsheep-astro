@@ -1,9 +1,9 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /* prefers reduced motion */
@@ -102,31 +102,31 @@
 }
 
 html {
-    font-family: var(--font-family-text);
-    color: var(--color-grey-700);
     background-color: var(--color-white);
-    font-size: var(--font-size-sm);
+    color: var(--color-grey-700);
     line-height: var(--line-height-base);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-family-text);
 }
 
 h1,
 h2 {
-    color: var(--color-grey-700);
-    font-weight: normal;
     margin: var(--spacing-lg) 0;
-    font-size: var(--font-size-lg);
+    color: var(--color-grey-700);
     line-height: var(--line-height-base);
+    font-weight: normal;
+    font-size: var(--font-size-lg);
 }
 
 h3,
 h4,
 h5,
 h6 {
-    color: var(--color-grey-700);
-    font-weight: normal;
     margin: var(--spacing-md) 0;
-    font-size: var(--font-size-base);
+    color: var(--color-grey-700);
     line-height: var(--line-height-base);
+    font-weight: normal;
+    font-size: var(--font-size-base);
 }
 
 code,
@@ -154,11 +154,11 @@ input,
 optgroup,
 select,
 textarea {
-    font-family: inherit;
-    font-size: 100%;
-    font-weight: inherit;
-    line-height: inherit;
     color: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    font-size: 100%;
+    font-family: inherit;
 }
 
 /* ======= Remove default button styles. */
@@ -167,8 +167,8 @@ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {
-    background-color: transparent; /* 2 */
-    background-image: none; /* 2 */
+    background-color: transparent;
+    background-image: none;
 }
 
 a,
@@ -198,10 +198,10 @@ object {
 
 .visually-hidden {
     position: absolute;
-    width: 1px;
-    height: 1px;
     margin: -1px;
     padding: 0;
+    width: 1px;
+    height: 1px;
     overflow: hidden;
     white-space: nowrap;
     border: 0;
@@ -234,41 +234,41 @@ Make sure disabled buttons don't get the pointer cursor.
 }
 
 .body {
-    height: 100%;
+    margin: 0 auto;
     min-width: 320px;
     max-width: 1920px;
-    margin: 0 auto;
+    height: 100%;
 }
 
 .wrapper {
     display: flex;
     flex-flow: column;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
     max-width: 800px;
     min-height: 100vh;
-    padding: 0 var(--spacing-sm);
-    margin: 0 auto;
 }
 
-@media (min-width: 360px) {
+@media (width >= 360px) {
     .wrapper {
         padding: 0 var(--spacing-lg);
     }
 }
 
-@media (min-width: 600px) {
+@media (width >= 600px) {
     .wrapper {
         padding: 0 var(--spacing-xl);
     }
 }
 
 .main {
-    padding: var(--spacing-2xl) 0;
     flex: 1;
+    padding: var(--spacing-2xl) 0;
 }
 
 .text-base {
-    font-size: var(--font-size-base);
     line-height: var(--line-height-base);
+    font-size: var(--font-size-base);
 }
 
 .cover {
@@ -297,8 +297,8 @@ Make sure disabled buttons don't get the pointer cursor.
 .tags {
     display: flex;
     flex-wrap: wrap;
-    list-style: none;
     justify-content: center;
+    list-style: none;
 }
 
 .tags li::after {
