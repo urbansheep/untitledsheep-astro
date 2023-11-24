@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel/serverless";
+import node from "@astrojs/node";
 
 export default defineConfig({
     site: "https://untitled.urbansheep.com",
@@ -23,11 +24,10 @@ export default defineConfig({
     outputOptions: {
         format: "esm",
     },
-    adapter: vercel({
-        webAnalytics: {
-            enabled: true,
-        },
-    }),
+    // adapter: node({
+    //     mode: "standalone",
+    // }),
+    adapter: vercel({}),
     vite: {
         optimizeDeps: {
             exclude: ["@resvg/resvg-js"],
