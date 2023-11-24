@@ -3,13 +3,11 @@ import MetaHead from "@/components/MetaHead.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkipLinks from "@/components/SkipLinks.astro";
+import "@/styles/fonts.css";
 import "@/styles/global.css";
 import "@/styles/prose.css";
 import { SITE } from "@/config";
 import { THEME } from "@/config";
-
-// const isDevMetaVisible = true;
-const isDevMetaVisible = false;
 
 export interface Props {
     homepage?: boolean;

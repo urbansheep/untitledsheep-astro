@@ -1,0 +1,103 @@
+/* Lora Bold */
+
+@font-face {
+    font-weight: 700;
+    font-family: Lora;
+    font-style: normal;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-Bold.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-Bold.woff") format("woff"),
+        url("/fonts/Lora/Lora-Bold.ttf") format("truetype");
+}
+
+/* Lora Bold Italic */
+
+@font-face {
+    font-weight: 700;
+    font-family: Lora;
+    font-style: italic;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-BoldItalic.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-BoldItalic.woff") format("woff"),
+        url("/fonts/Lora/Lora-BoldItalic.ttf") format("truetype");
+}
+
+/* Lora Regular */
+
+@font-face {
+    font-weight: 400;
+    font-family: Lora;
+    font-style: normal;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-Regular.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-Regular.woff") format("woff"),
+        url("/fonts/Lora/Lora-Regular.ttf") format("truetype");
+}
+
+/* Lora Regular Italic */
+
+@font-face {
+    font-weight: 400;
+    font-family: Lora;
+    font-style: italic;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-Italic.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-Italic.woff") format("woff"),
+        url("/fonts/Lora/Lora-Italic.ttf") format("truetype");
+}
+
+/* Lora Medium */
+
+@font-face {
+    font-weight: 500;
+    font-family: Lora;
+    font-style: normal;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-Medium.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-Medium.woff") format("woff"),
+        url("/fonts/Lora/Lora-Medium.ttf") format("truetype");
+}
+
+/* Lora Medium Italic */
+
+@font-face {
+    font-weight: 500;
+    font-family: Lora;
+    font-style: italic;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-MediumItalic.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-MediumItalic.woff") format("woff"),
+        url("/fonts/Lora/Lora-MediumItalic.ttf") format("truetype");
+}
+
+/* Lora SemiBold */
+
+@font-face {
+    font-weight: 600;
+    font-family: Lora;
+    font-style: normal;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-SemiBold.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-SemiBold.woff") format("woff"),
+        url("/fonts/Lora/Lora-SemiBold.ttf") format("truetype");
+}
+
+/* Lora SemiBold Italic */
+
+@font-face {
+    font-weight: 600;
+    font-family: Lora;
+    font-style: italic;
+    font-display: swap;
+    src:
+        url("/fonts/Lora/Lora-SemiBoldItalic.woff2") format("woff2"),
+        url("/fonts/Lora/Lora-SemiBoldItalic.woff") format("woff"),
+        url("/fonts/Lora/Lora-SemiBoldItalic.ttf") format("truetype");
+}

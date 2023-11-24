@@ -1,18 +1,22 @@
 ---
-import PostCard from '@/components/PostCard.astro';
-import type { CollectionEntry } from 'astro:content';
+import PostCard from "@/components/PostCard.astro";
+import type { CollectionEntry } from "astro:content";
 
 export interface Props {
-    posts: CollectionEntry<'blog'>[];
+    posts: CollectionEntry<"blog">[];
 }
 
 const { posts } = Astro.props;
 ---
 
 <ul class="list">
-    {posts.map((post) => (
-        <li class="listitem"><PostCard post={post} /></li>
-    ))}
+    {
+        posts.map((post) => (
+            <li class="listitem">
+                <PostCard post={post} />
+            </li>
+        ))
+    }
 </ul>
 
 <style>
@@ -20,6 +24,7 @@ const { posts } = Astro.props;
         display: grid;
         gap: var(--spacing-5xl);
         list-style: none;
+        font-family: var(--font-family-text);
     }
 
     .listitem {
@@ -28,13 +33,15 @@ const { posts } = Astro.props;
 
     .listitem::after {
         position: absolute;
-        content: '* * *';
+        content: "* * *";
         bottom: calc(-1 * var(--spacing-3xl));
         width: 100%;
         text-align: center;
+        font-family: var(--font-family-text);
     }
 
     .listitem:last-child::after {
-        content: ' ';
+        content: "";
+        font-family: var(--font-family-text);
     }
 </style>

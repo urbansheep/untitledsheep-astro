@@ -6,47 +6,52 @@ export interface Props {
     total?: number;
 }
 
-const {
-    next,
-    prev,
-    current,
-    total,
-} = Astro.props;
+const { next, prev, current, total } = Astro.props;
 ---
 
 <nav class="pagination">
-    { next && (
-        <span>← <a href={next}>В прошлое</a></span>
-    )}
-    { current && total && (
-        <span>Страница {current} из {total}</span>
-    )}
-    { prev && (
-        <span><a href={prev}>В будущее</a> →</span>
-    )}
+    {
+        next && (
+            <span>
+                ← <a href={next}>В прошлое</a>
+            </span>
+        )
+    }
+    {
+        current && total && (
+            <span>
+                Страница {current} из {total}
+            </span>
+        )
+    }
+    {
+        prev && (
+            <span>
+                <a href={prev}>В будущее</a> →
+            </span>
+        )
+    }
 </nav>
 
-
 <style>
-
     .pagination {
-        display:flex;
+        display: flex;
         flex-direction: row;
         justify-content: space-between;
         margin: var(--spacing-2xl) 0;
         color: var(--color-grey-400);
         font-size: var(--font-size-xs);
+        font-family: var(--font-family-text);
     }
 
     .pagination a {
         color: var(--color-grey-400);
-        text-decoration: none;
         text-transform: uppercase;
+        text-decoration: none;
     }
 
     .pagination a:hover {
         color: var(--color-grey-400);
         text-decoration: underline;
     }
-
 </style>
