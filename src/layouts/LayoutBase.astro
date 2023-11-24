@@ -1,6 +1,5 @@
 ---
 import MetaHead from "@/components/MetaHead.astro";
-import MetaDev from "@/components/MetaDev.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import SkipLinks from "@/components/SkipLinks.astro";
@@ -65,15 +64,5 @@ const ogImageUrl = ogImage
             </main>
             <Footer />
         </div>
-
-        {
-            isDevMetaVisible && (
-                <MetaDev
-                    title={title}
-                    description={description}
-                    canonical={canonical}
-                />
-            )
-        }
     </body>
 </html>
