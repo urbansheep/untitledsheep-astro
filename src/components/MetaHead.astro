@@ -80,6 +80,13 @@ const {
 
     <meta
         http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src https://*; child-src 'none'; frame-src youtube.com https://www.youtube.com;"
+        content="
+            default-src 'self';
+            img-src https://*;
+            media-src https://untitled.urbansheep.com/;
+            frame-src youtube.com https://www.youtube.com;
+            style-src 'self' 'unsafe-inline';
+            connect-src 'self' https://untitled.urbansheep.com/;
+        "
     />
 </head>
