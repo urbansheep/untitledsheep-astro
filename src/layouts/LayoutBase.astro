@@ -30,6 +30,12 @@ const {
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
+// Headers for Content Security Policy
+Astro.response.headers.set("Content-Security-Policy", "default-src 'self'");
+
+// Headers for caching - 1 week
+Astro.response.headers.set("Cache-Control", "max-age=604800");
+
 // create new const ogImageUrl which is string
 // if ogImage is not defined, use default image: og/default.png
 // else use the template and data to generate the image: /og/blog.png?title={data.title}
