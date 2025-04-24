@@ -33,7 +33,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // Headers for Content Security Policy
 Astro.response.headers.set(
     "Content-Security-Policy",
-    "default-src 'self' urbansheep.com *.urbansheep.com; img-src *; ",
+    "default-src 'self' urbansheep.com *.urbansheep.com; style-src 'self' 'unsafe-inline'; img-src *; ",
 );
 
 // Headers for caching - 1 week
