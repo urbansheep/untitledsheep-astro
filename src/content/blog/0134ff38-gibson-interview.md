@@ -1,5 +1,5 @@
 ---
-id: 145791403746
+id: 20250424091016
 form: regular
 date: 2025-04-24 09:10:16
 title: "Интервью с Уильямом Гибсоном, 1996, Дублин, Ирландия"
@@ -10,7 +10,7 @@ tags:
 
 ---
 
-![](@/assets/media/2025-04-gibson-via-protein.webp)
+[![](@/assets/media/2025-04-gibson-via-protein.webp)](https://vimeo.com/1077352792)
 
 <small><a href="https://vimeo.com/1077352792">20 minute press interview with William Gibson in Dublin, Ireland</a> whilst he was promoting Idoru on 1st November 1996.</small>
 
@@ -115,7 +115,6 @@ I’ve always found the downloading/immortality thing as vaguely laughable. I su
 I actually have a lot of fun in _Idoru_, more or less deliberately spinning out a lot products that I would like to see designed. I’ve loved to have a virtual Venice; I would happily accept one from the first software company that puts it together. 
 
 _This interview has been edited and condensed for clarity._
-
 
 |SEED|#8313|
 |:--|:--|
