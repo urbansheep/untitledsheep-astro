@@ -11,7 +11,8 @@ tags:
 ---
 
 ![](@/assets/media/2025-04-gibson-via-protein.webp)
-[20 minute press interview with William Gibson in Dublin, Ireland](https://vimeo.com/1077352792) whilst he was promoting Idoru on 1st November 1996.
+
+<small><a href="https://vimeo.com/1077352792">20 minute press interview with William Gibson in Dublin, Ireland</a> whilst he was promoting Idoru on 1st November 1996.</small>
 
 **Interviewer: Can you tell us something about your literary influences?**
 
