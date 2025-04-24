@@ -1,6 +1,6 @@
 .prose .content {
-    max-width: 60ch;
     margin: 0 auto;
+    max-width: 60ch;
 }
 
 .prose p {
@@ -17,23 +17,23 @@
 
 .prose .splitter {
     margin: var(--spacing-lg) 0;
-    text-align: center;
     color: var(--color-grey-300);
+    text-align: center;
 }
 
 .prose a,
 .prose a:link,
 .prose a:active {
     padding: 1px 0;
-    color: var(--color-grey-700);
     background-color: var(--color-blue-100);
+    color: var(--color-grey-700);
     text-decoration: none;
 }
 
 .prose a:visited {
     padding: 1px 0;
-    color: var(--color-grey-700);
     background-color: var(--color-blue-100);
+    color: var(--color-grey-700);
 }
 
 .prose a:hover {
@@ -45,10 +45,10 @@
 }
 
 .prose hr {
-    width: 80%;
     margin: 2em auto;
-    border: 0;
+    width: 80%;
     height: 1px;
+    border: 0;
     background-image: linear-gradient(
         to left,
         rgb(0 0 0 / 0%),
@@ -58,12 +58,12 @@
 }
 
 .prose.regular blockquote {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: -1.5em;
     padding: 5px 5px 5px 20px;
     border-left: var(--color-grey-300) var(--spacing-xxs) solid;
     background-color: var(--color-grey-50);
-    margin-left: -1.5em;
-    margin-top: 1em;
-    margin-bottom: 1em;
 }
 
 .prose.quote {
@@ -72,9 +72,9 @@
 
 .prose.quote blockquote {
     position: relative;
-    padding-left: var(--spacing-2xl);
-    padding-bottom: var(--spacing-3xl);
     margin-bottom: var(--spacing-3xl);
+    padding-bottom: var(--spacing-3xl);
+    padding-left: var(--spacing-2xl);
     box-shadow: 0 12px 18px -20px var(--color-grey-400);
 }
 
@@ -82,11 +82,11 @@
     position: relative;
     top: 0;
     left: -32px;
+    z-index: -1;
     display: block;
-    content: "«";
     color: var(--color-grey-200);
     font-size: 4em;
-    z-index: -1;
+    content: "«";
 }
 
 .prose .gallery {
@@ -127,26 +127,26 @@
 }
 
 .prose .tagcloud {
-    list-style: none;
     display: flex;
     flex-wrap: wrap;
     gap: 16px 8px;
+    list-style: none;
 }
 
 .prose .tagclouditem {
-    border: 1px solid var(--theme-color-base);
-    background-color: var(--color-blue-100);
-    border-radius: 4px;
-    padding: 2px 8px;
     margin-left: 0;
+    padding: 2px 8px;
     min-width: 40px;
+    border: 1px solid var(--theme-color-base);
+    border-radius: 4px;
+    background-color: var(--color-blue-100);
     text-align: center;
 }
 
 .prose .tagcloudlink {
-    text-decoration: none;
-    color: var(--theme-color-base);
     background-color: transparent;
+    color: var(--theme-color-base);
+    text-decoration: none;
 }
 
 .prose .tagcloudlink:visited {
