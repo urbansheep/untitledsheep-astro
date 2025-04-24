@@ -2,7 +2,7 @@
 export const SITE = {
     name: "untitled",
     title: "*Безымянная овца",
-    description: "Untitled Urbansheep",
+    description: "Untitled Sheep",
     url: "https://untitled.urbansheep.com",
 };
 
