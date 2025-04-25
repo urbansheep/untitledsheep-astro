@@ -7,12 +7,15 @@ tags:
     - Гибсон
     - будущее прекрасно
     - современная культура
+    - интервью
 
 ---
 
 [![](@/assets/media/2025-04-gibson-via-protein.webp)](https://vimeo.com/1077352792)
 
 <small><a href="https://vimeo.com/1077352792">20 minute press interview with William Gibson in Dublin, Ireland</a> whilst he was promoting Idoru on 1st November 1996. (via <a href="https://www.protein.xyz/william-gibson/">Protein</a>)</small>
+
+<p class="post_splitter" style="text-align:center">☆ ☆ ☆</p>
 
 **Interviewer: Can you tell us something about your literary influences?**
 
