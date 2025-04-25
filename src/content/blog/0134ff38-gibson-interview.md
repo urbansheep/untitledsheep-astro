@@ -12,7 +12,7 @@ tags:
 
 [![](@/assets/media/2025-04-gibson-via-protein.webp)](https://vimeo.com/1077352792)
 
-<small><a href="https://vimeo.com/1077352792">20 minute press interview with William Gibson in Dublin, Ireland</a> whilst he was promoting Idoru on 1st November 1996.</small>
+<small><a href="https://vimeo.com/1077352792">20 minute press interview with William Gibson in Dublin, Ireland</a> whilst he was promoting Idoru on 1st November 1996. (via <a href="https://www.protein.xyz/william-gibson/">Protein</a>)</small>
 
 **Interviewer: Can you tell us something about your literary influences?**
 
@@ -119,4 +119,4 @@ _This interview has been edited and condensed for clarity._
 |SEED|#8313|
 |:--|:--|
 |DATE|24.04.25|
-|PLANTED BY|WILL ROWE|
+|PLANTED BY|[WILL ROWE](https://www.protein.xyz/william-gibson/)|
