@@ -46,14 +46,35 @@ const currentYear = new Date().getFullYear();
     </ul>
 
     <p class="description">
-        Безымянная овца — нерегулярное приложение к овцепедии. Порн, картинки,
+        Безымянная овца &mdash; нерегулярное приложение к овцепедии. Порн, картинки,
         рок-н-ролл. Хотите что-то сказать? Пишите на <a
             href="mailto:urbansheep@gmail.com"
             class="link primary">urbansheep@gmail.com</a>.
     </p>
 
-    <p class="description">&copy; 2008—{currentYear}, Urbansheep</p>
+    <p class="description" id="copyright">&copy; 2008—{currentYear}, Urbansheep</p>
 </footer>
+
+<script>
+    // Client-side JavaScript to ensure the copyright year is always current
+    document.addEventListener('DOMContentLoaded', () => {
+        const copyrightElement = document.getElementById('copyright');
+        if (copyrightElement) {
+            const actualYear = new Date().getFullYear().toString();
+            const copyrightText = copyrightElement.textContent || '';
+            
+            // Extract the year from the copyright text (assuming format "© 2008—YYYY, Urbansheep")
+            const match = copyrightText.match(/\d{4}—(\d{4})/);
+            
+            if (match && match[1] !== actualYear) {
+                // Update the year if it's different from the actual year
+                const updatedText = copyrightText.replace(match[1], actualYear);
+                copyrightElement.textContent = updatedText;
+                console.log(`Copyright year updated to ${actualYear}`);
+            }
+        }
+    });
+</script>
 
 <style>
     .footer {
