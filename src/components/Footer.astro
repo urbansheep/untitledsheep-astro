@@ -12,6 +12,9 @@ const linksBottom = [
     { href: "/about/", title: "О блоге" },
     { href: "/changelog/", title: "Changelog" },
 ];
+
+// Get current year for the copyright
+const currentYear = new Date().getFullYear();
 ---
 
 <footer class="footer">
@@ -46,11 +49,10 @@ const linksBottom = [
         Безымянная овца — нерегулярное приложение к овцепедии. Порн, картинки,
         рок-н-ролл. Хотите что-то сказать? Пишите на <a
             href="mailto:urbansheep@gmail.com"
-            class="link primary">urbansheep@gmail.com</a
-        >.
+            class="link primary">urbansheep@gmail.com</a>.
     </p>
 
-    <p class="description">&copy; 2008—2023, Urbansheep</p>
+    <p class="description">&copy; 2008—{currentYear}, Urbansheep</p>
 </footer>
 
 <style>
