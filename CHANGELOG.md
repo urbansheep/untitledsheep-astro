@@ -13,3 +13,4 @@ All notable changes to the Untitled Sheep project will be documented in this fil
 
 ### Changed
 - Added "Efficient File Operations" section to .clinerules/CLINE-RULES.md with guidelines for batching file operations [AI]
+- Updated "Efficient File Operations" section to include a rule about cleaning up temporary files after tasks [AI]

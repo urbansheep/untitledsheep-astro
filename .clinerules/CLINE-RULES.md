@@ -43,6 +43,7 @@ When performing file operations, follow these guidelines to improve efficiency:
 4. **Minimize file checks**: Perform file existence checks in batches or use commands that handle non-existent files gracefully
 5. **Combine operations**: Use compound commands (e.g., `&&`, `||`, `;`) to execute multiple operations in a single command
 6. **Create scripts for complex operations**: For complex sequences of operations, create a script file instead of executing commands one by one
+7. **Clean up temporary files**: Remove any temporary files or scripts after completing tasks
 
 ### Examples:
 
