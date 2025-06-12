@@ -10,3 +10,6 @@ All notable changes to the Untitled Sheep project will be documented in this fil
 - Updated .clinerules/CLINE-RULES.md with guidelines for project documentation, change logging, and git repository management [AI]
 - Added .gitmessage template file to standardize commit messages and distinguish between AI and human changes [AI]
 - Created commit-project-docs.sh script to help with the initial commit of documentation files [AI]
+
+### Changed
+- Added "Efficient File Operations" section to .clinerules/CLINE-RULES.md with guidelines for batching file operations [AI]

@@ -33,6 +33,34 @@ When changes are made by AI assistants like Cline:
 3. Document the prompt or task that led to the AI-generated changes
 4. Review AI-generated code thoroughly before committing
 
+## Efficient File Operations
+
+When performing file operations, follow these guidelines to improve efficiency:
+
+1. **Pre-plan operations**: Before executing file operations, plan the entire sequence of operations needed
+2. **Batch similar operations**: Group similar operations together to reduce the number of commands
+3. **Use wildcards and patterns**: Utilize wildcards and patterns to operate on multiple files at once
+4. **Minimize file checks**: Perform file existence checks in batches or use commands that handle non-existent files gracefully
+5. **Combine operations**: Use compound commands (e.g., `&&`, `||`, `;`) to execute multiple operations in a single command
+6. **Create scripts for complex operations**: For complex sequences of operations, create a script file instead of executing commands one by one
+
+### Examples:
+
+```bash
+# Instead of multiple individual file checks and removals:
+# ls -la file1.txt
+# rm file1.txt
+# ls -la file2.txt
+# rm file2.txt
+
+# Do this instead:
+ls -la file1.txt file2.txt  # Check multiple files at once
+rm -f file1.txt file2.txt   # Remove multiple files, -f ignores non-existent files
+
+# Or even better, use a single command with pattern matching:
+rm -f *.txt                 # Remove all .txt files
+```
+
 ## Git Repository Management
 
 The project is hosted on GitHub at `https://github.com/urbansheep/untitledsheep-astro.git`.
