@@ -1,0 +1,21 @@
+# [AI/HUMAN] Short (50 chars or less) summary of changes
+#
+# More detailed explanatory text, if necessary. Wrap it to about 72
+# characters. The blank line separating the summary from the body is
+# critical (unless you omit the body entirely).
+#
+# Write your commit message in the imperative: "Fix bug" not "Fixed bug"
+# or "Fixes bug." This convention matches the commit messages generated
+# by commands like git merge and git revert.
+#
+# Further paragraphs come after blank lines.
+#
+# - Bullet points are okay, too
+# - Use a hyphen or asterisk followed by a space
+#
+# If changes are AI-generated, start the commit message with [AI]
+# If changes are human-generated, start with [HUMAN] or omit the prefix
+#
+# Reference issues and pull requests liberally
+# e.g., Resolves: #123
+#       See also: #456, #789
