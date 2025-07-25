@@ -40,10 +40,11 @@ When performing file operations, follow these guidelines to improve efficiency:
 1. **Pre-plan operations**: Before executing file operations, plan the entire sequence of operations needed
 2. **Batch similar operations**: Group similar operations together to reduce the number of commands
 3. **Use wildcards and patterns**: Utilize wildcards and patterns to operate on multiple files at once
-4. **Minimize file checks**: Perform file existence checks in batches or use commands that handle non-existent files gracefully
-5. **Combine operations**: Use compound commands (e.g., `&&`, `||`, `;`) to execute multiple operations in a single command
-6. **Create scripts for complex operations**: For complex sequences of operations, create a script file instead of executing commands one by one
-7. **Clean up temporary files**: Remove any temporary files or scripts after completing tasks
+4. **Quote file paths**: Always enclose file paths in quotes (`"`) to prevent shell interpretation of special characters like brackets, spaces, or asterisks.
+5. **Minimize file checks**: Perform file existence checks in batches or use commands that handle non-existent files gracefully
+6. **Combine operations**: Use compound commands (e.g., `&&`, `||`, `;`) to execute multiple operations in a single command
+7. **Create scripts for complex operations**: For complex sequences of operations, create a script file instead of executing commands one by one
+8. **Clean up temporary files**: Remove any temporary files or scripts after completing tasks
 
 ### Examples:
 
@@ -61,6 +62,10 @@ rm -f file1.txt file2.txt   # Remove multiple files, -f ignores non-existent fil
 # Or even better, use a single command with pattern matching:
 rm -f *.txt                 # Remove all .txt files
 ```
+
+## Development Server
+
+Before launching a new test blog instance with `npm run dev`, check if one is already running to avoid port conflicts and unnecessary resource usage. You can check for running processes on the development port (the default for Astro is 4321) or look for existing terminal sessions running the dev server.
 
 ## Git Repository Management
 

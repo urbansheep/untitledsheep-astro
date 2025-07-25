@@ -2,6 +2,11 @@
 
 All notable changes to the Untitled Sheep project will be documented in this file.
 
+## [2025-07-25]
+
+### Changed
+- Updated `CLINE-RULES.md` to require quoting file paths in shell commands to prevent errors with special characters. (`.clinerules/CLINE-RULES.md`) [AI]
+
 ## [2025-07-15]
 
 ### Fixed
