@@ -37,7 +37,7 @@ export async function getStaticPaths() {
 
 const { Content } = await post.render();
 
-const title = "Пост " + post.data.id;
+const title = post.data.title || `Пост ${post.data.id}`;
 const description = "";
 
 // Filter out the "post" tag
