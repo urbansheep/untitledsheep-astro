@@ -18,7 +18,7 @@ This document consolidates all AI guidelines, rules, and instructions for workin
 
 ## Project Overview
 
-**Before working on this project, review the comprehensive [PROJECT-OVERVIEW.md](.clinerules/PROJECT-OVERVIEW.md) file** to understand the project structure, architecture, and workflows. This document will help you quickly orient yourself with the codebase.
+**Before working on this project, review the comprehensive [PROJECT-OVERVIEW.md](../docs/PROJECT-OVERVIEW.md) file** to understand the project structure, architecture, and workflows. This document will help you quickly orient yourself with the codebase.
 
 ### Quick Reference
 - **Framework**: Astro.js v3 with Node.js v18.14.1+
@@ -138,6 +138,7 @@ mv "file with spaces.txt" "new location/"
 4. **Keep commits focused** on single logical change
 5. **For AI changes, prefix with "[AI]"**
 6. **Use provided `.gitmessage` template**
+7. **Commit `CHANGELOG.md` last** to ensure it includes all other changes in a batch.
 
 ### Branching Strategy:
 - `main` branch should always be deployable
@@ -239,7 +240,7 @@ Located in `.claude/settings.local.json`:
 
 ## Quick Reference Links
 
-- **Project overview**: [.clinerules/PROJECT-OVERVIEW.md](.clinerules/PROJECT-OVERVIEW.md)
+- **Project overview**: [PROJECT-OVERVIEW.md](../docs/PROJECT-OVERVIEW.md)
 - **Change log**: [CHANGELOG.md](./CHANGELOG.md)
 - **Git commit template**: [.gitmessage](./.gitmessage)
 - **Git repository**: https://github.com/urbansheep/untitledsheep-astro.git
