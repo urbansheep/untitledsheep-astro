@@ -211,7 +211,7 @@ const tagSlug = slugify(tag);
 | Command                | Action                                            |
 | :--------------------- | :------------------------------------------------ |
 | `npm install`          | Installs dependencies                             |
-| `npm run dev`          | Starts local dev server at `localhost:3000`       |
+| `npm run dev`          | Starts local dev server at `localhost:4321`       |
 | `npm run dev:host`     | Starts local dev server in local network (mobile) |
 | `npm run check`        | Run Astro checks                                  |
 | `npm run test`         | Run linting and Astro checks before build         |
@@ -221,10 +221,11 @@ const tagSlug = slugify(tag);
 
 ### Development Workflow
 
-1. Run `npm run dev` to start the development server
-2. Make changes to files in the `src/` directory
-3. The development server will automatically reload with your changes
-4. Use `npm run test` to check for linting errors before committing
+1. Before starting a new development server, check if an instance is already running to avoid port conflicts.
+2. Run `npm run dev` to start the development server.
+3. Make changes to files in the `src/` directory.
+4. The development server will automatically reload with your changes.
+5. Use `npm run test` to check for linting errors before committing.
 
 ### Production Build Process
 
@@ -285,7 +286,7 @@ From the README.md, the following features are planned:
 2. Clone the repository: `git clone https://github.com/urbansheep/untitledsheep-astro.git`
 3. Install dependencies: `npm install`
 4. Start the development server: `npm run dev`
-5. Open your browser to `http://localhost:3000`
+5. Open your browser to `http://localhost:4321`
 
 ### Essential Commands for Common Tasks
 

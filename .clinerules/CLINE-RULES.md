@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Before working on this project, review the [PROJECT-OVERVIEW.md](./PROJECT-OVERVIEW.md) file to understand the project structure, architecture, and workflows. This comprehensive document will help you quickly orient yourself with the codebase and understand how different components interact.
+Before working on this project, review the [PROJECT-OVERVIEW.md](../docs/PROJECT-OVERVIEW.md) file to understand the project structure, architecture, and workflows. This comprehensive document will help you quickly orient yourself with the codebase and understand how different components interact.
 
 ## Change Logging
 
@@ -67,6 +67,8 @@ rm -f *.txt                 # Remove all .txt files
 
 Before launching a new test blog instance with `npm run dev`, check if one is already running to avoid port conflicts and unnecessary resource usage. You can check for running processes on the development port (the default for Astro is 4321) or look for existing terminal sessions running the dev server.
 
+
+
 ## Git Repository Management
 
 The project is hosted on GitHub at `https://github.com/urbansheep/untitledsheep-astro.git`.
@@ -101,9 +103,29 @@ The project is hosted on GitHub at `https://github.com/urbansheep/untitledsheep-
 3. Review all changes to ensure they meet project standards
 4. Ensure no sensitive information is included in the commit
 
+## Task Management
+
+A structured approach to task management is essential for maintaining clarity, focus, and resilience. This workflow ensures that all work is planned, tracked, and aligned with project goals, while also providing a persistent record of ongoing tasks.
+
+### 1. Task Definition & Planning
+
+*   **Task-List Files**: For any new feature or substantial task, create a `TASK-LIST-<feature-name>.md` file in the `.clinerules/` directory. These files are for local tracking and will not be committed to Git. They should break down the work into small, actionable steps. This serves as a "work-in-progress" indicator.
+*   **PRD for Complex Features**: For elaborate new features or significant revisions, a `PLAN-<feature-name>.md` document should be developed and stored in the `docs/` directory. This serves as a Product Requirements Document (PRD) and should detail the feature's objectives, user stories, technical approach, and acceptance criteria.
+*   **Branching**: Each new feature should have a corresponding Git branch, aligning with the `Branching Strategy`. For example, work for a new "hot or not tool" feature would be done on a branch named `feature/hot-or-not-tool`.
+
+### 2. Execution
+
+*   **Continuous Reference**: While work is underway, continuously refer to the relevant `TASK-LIST-*.md` file to confirm requirements and track progress.
+*   **Dynamic Updates**: Revise and update the task list as needed. If requirements evolve or new insights emerge, update both the `PLAN-*.md` and `TASK-LIST-*.md` documents to reflect the current understanding.
+
+### 3. Review & Completion
+
+*   **Pre-Commit Review**: Before committing changes, ensure the work completed aligns with the plan and task list.
+*   **Cleanup**: Once a task is complete and merged, the corresponding `TASK-LIST-*.md` file should be renamed to `DONE-LIST-*.md` to keep the `.clinerules/` directory organized and keep the trace of finished work.
+
 ## Quick Reference
 
-- Project overview: [PROJECT-OVERVIEW.md](./PROJECT-OVERVIEW.md)
+- Project overview: [PROJECT-OVERVIEW.md](../docs/PROJECT-OVERVIEW.md)
 - Change log: [CHANGELOG.md](./CHANGELOG.md)
 - Git commit template: [.gitmessage](./.gitmessage)
 - Development commands: See "Build & Deployment" section in PROJECT-OVERVIEW.md
