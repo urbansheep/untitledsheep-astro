@@ -1,0 +1,455 @@
+---
+import LayoutBase from "@/layouts/LayoutBase.astro";
+import PostCard from "@/components/PostCard.astro";
+---
+
+<LayoutBase title="Hot or Not Tool">
+  <main class="hot-or-not-tool">
+    <h1>Hot or Not</h1>
+    
+    <!-- Sticky Control Panel -->
+    <div id="control-panel" class="control-panel">
+      <div class="panel-content">
+        <div class="controls">
+          <button id="front-page-button" data-classification="front-page">
+            Front page
+            <span class="shortcut-hint">F</span>
+          </button>
+          <button id="bury-button" data-classification="processed">
+            Bury
+            <span class="shortcut-hint">B</span>
+          </button>
+          <button id="delete-button" data-classification="delete">
+            Delete
+            <span class="shortcut-hint">D</span>
+          </button>
+          <button id="skip-button">
+            Skip
+            <span class="shortcut-hint">S</span>
+          </button>
+        </div>
+        
+        <div class="panel-info">
+          <div class="stats">
+            <span id="stats-display">Loading...</span>
+          </div>
+          <div class="feedback-message" id="feedback-message"></div>
+          <div class="post-type" id="post-type-display"></div>
+        </div>
+        
+        <div class="queue-dots" id="queue-dots">
+          <!-- Dot indicators will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <div id="post-container">
+      <!-- Post will be loaded here -->
+    </div>
+    
+    <div id="finished-message" style="display: none;">
+      <h2>Got queue cleared, yay!</h2>
+    </div>
+  </main>
+</LayoutBase>
+
+<style>
+  .hot-or-not-tool {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 1rem;
+  }
+
+  /* Sticky Control Panel */
+  .control-panel {
+    position: sticky;
+    top: 0;
+    background: rgba(248, 249, 250, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .panel-content {
+    padding: 1rem;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    position: relative;
+    transition: all 0.2s ease;
+    min-width: 90px;
+  }
+
+  .controls button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .shortcut-hint {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+  }
+
+  #front-page-button {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+  }
+
+  #bury-button {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+  }
+
+  #delete-button {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+  }
+
+  #skip-button {
+    background-color: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+  }
+
+  .panel-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .stats {
+    font-weight: 500;
+    color: #495057;
+  }
+
+  .feedback-message {
+    color: #28a745;
+    font-weight: 500;
+    min-height: 1.2rem;
+  }
+
+  .post-type {
+    background: #e9ecef;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #495057;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .queue-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 0.5rem;
+  }
+
+  .queue-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dee2e6;
+    transition: all 0.2s ease;
+  }
+
+  .queue-dot.loaded {
+    background: #28a745;
+  }
+
+  .queue-dot.current {
+    background: #007bff;
+    transform: scale(1.2);
+  }
+
+  #post-container {
+    margin-top: 1rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .panel-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .controls {
+      gap: 0.5rem;
+    }
+    
+    .controls button {
+      min-width: 80px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<script>
+  const postContainer = document.getElementById('post-container')!;
+  const finishedMessage = document.getElementById('finished-message')!;
+  const statsDisplay = document.getElementById('stats-display')!;
+  const feedbackMessage = document.getElementById('feedback-message')!;
+  const postTypeDisplay = document.getElementById('post-type-display')!;
+  const queueDots = document.getElementById('queue-dots')!;
+  
+  let currentPostSlug = '';
+  let currentPost: any = null;
+  let postQueue: any[] = [];
+  let queueIndex = 0;
+
+  // Initialize queue dots (10 slots)
+  function initializeQueueDots() {
+    queueDots.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'queue-dot';
+      queueDots.appendChild(dot);
+    }
+  }
+
+  // Update queue dots visualization
+  function updateQueueDots() {
+    const dots = queueDots.querySelectorAll('.queue-dot');
+    dots.forEach((dot, index) => {
+      dot.className = 'queue-dot';
+      if (index < postQueue.length) {
+        dot.classList.add('loaded');
+      }
+      if (index === queueIndex) {
+        dot.classList.add('current');
+      }
+    });
+  }
+
+  // Update statistics display
+  function updateStats(stats: any) {
+    if (stats) {
+      statsDisplay.textContent = `${stats.remaining} left | ${stats.frontpage} front | ${stats.buried} buried | ${stats.deleted} deleted`;
+    }
+  }
+
+  // Show feedback message
+  function showFeedback(message: string, duration = 3000) {
+    feedbackMessage.textContent = message;
+    setTimeout(() => {
+      feedbackMessage.textContent = '';
+    }, duration);
+  }
+
+  // Enhanced content rendering based on post type
+  function renderPostContent(post: any) {
+    const data = post.data;
+    let content = '';
+
+    // Base post info
+    content += `<h1><a href="/post/${post.slug}" target="_blank">${data.title || 'Untitled'}</a></h1>`;
+    content += `<p><small>ID: ${data.id} | Date: ${new Date(data.date).toLocaleDateString()}</small></p>`;
+    
+    // Type-specific rendering
+    switch (data.form) {
+      case 'link':
+        if (data.linkurl) {
+          content += `<p><strong>Link:</strong> <a href="${data.linkurl}" target="_blank">${data.linkurl}</a></p>`;
+        }
+        break;
+      case 'photo':
+        if (data.photo_original_url) {
+          content += `<img src="${data.photo_original_url}" alt="Post image" style="max-width: 100%; height: auto;">`;
+        }
+        if (data.photo_caption) {
+          content += `<p><em>${data.photo_caption}</em></p>`;
+        }
+        break;
+      case 'quote':
+        content += `<blockquote style="border-left: 4px solid #ccc; padding-left: 1rem; margin: 1rem 0; font-style: italic;">`;
+        break;
+    }
+
+    content += '<hr>';
+    
+    // Post body
+    if (post.body && post.body.trim()) {
+      if (data.form === 'quote') {
+        content += `${post.body}</blockquote>`;
+      } else {
+        content += `<div style="white-space: pre-wrap; font-family: inherit;">${post.body}</div>`;
+      }
+    } else {
+      content += '<p><em>No content available</em></p>';
+    }
+
+    return content;
+  }
+
+  // Load next post from queue or fetch new one
+  async function getNextPost() {
+    try {
+      // If we have posts in queue, use them
+      if (queueIndex < postQueue.length) {
+        currentPost = postQueue[queueIndex];
+        currentPostSlug = currentPost.slug;
+        
+        // Display the post
+        postContainer.innerHTML = `<article class="prose">${renderPostContent(currentPost)}</article>`;
+        
+        // Update UI
+        postTypeDisplay.textContent = currentPost.data.form;
+        updateStats(currentPost.stats);
+        updateQueueDots();
+        
+        queueIndex++;
+        return;
+      }
+
+      // Fetch new batch of posts
+      const response = await fetch('/api/hot-or-not/next-post.json');
+      const post = await response.json();
+
+      if (post.empty) {
+        postContainer.innerHTML = '';
+        document.getElementById('control-panel')!.style.display = 'none';
+        finishedMessage.style.display = 'block';
+        return;
+      }
+
+      // Reset queue with new post
+      postQueue = [post];
+      queueIndex = 0;
+      currentPost = post;
+      currentPostSlug = post.slug;
+
+      // Display the post
+      postContainer.innerHTML = `<article class="prose">${renderPostContent(post)}</article>`;
+      
+      // Update UI
+      postTypeDisplay.textContent = post.data.form;
+      updateStats(post.stats);
+      updateQueueDots();
+      
+      queueIndex++;
+
+      // Preload more posts in background
+      preloadPosts();
+      
+    } catch (error) {
+      console.error('Error loading post:', error);
+      showFeedback('Error loading post', 5000);
+    }
+  }
+
+  // Preload additional posts for the queue
+  async function preloadPosts() {
+    try {
+      const promises = [];
+      for (let i = postQueue.length; i < 10; i++) {
+        promises.push(fetch('/api/hot-or-not/next-post.json').then(r => r.json()));
+      }
+      
+      const results = await Promise.all(promises);
+      const validPosts = results.filter(post => !post.empty);
+      postQueue.push(...validPosts);
+      updateQueueDots();
+    } catch (error) {
+      console.error('Error preloading posts:', error);
+    }
+  }
+
+  // Classify current post
+  async function classifyPost(classification: 'front-page' | 'processed' | 'delete') {
+    try {
+      await fetch('/api/hot-or-not/classify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ slug: currentPostSlug, classification }),
+      });
+
+      // Show feedback based on classification
+      const messages = {
+        'front-page': 'Post added to Front page set',
+        'processed': 'Post buried',
+        'delete': 'Post scheduled for deletion'
+      };
+      showFeedback(messages[classification]);
+
+      await getNextPost();
+    } catch (error) {
+      console.error('Error classifying post:', error);
+      showFeedback('Error saving classification', 5000);
+    }
+  }
+
+  // Skip current post
+  async function skipPost() {
+    showFeedback('Post skipped');
+    await getNextPost();
+  }
+
+  // Event listeners for buttons
+  document.getElementById('front-page-button')?.addEventListener('click', () => classifyPost('front-page'));
+  document.getElementById('bury-button')?.addEventListener('click', () => classifyPost('processed'));
+  document.getElementById('delete-button')?.addEventListener('click', () => classifyPost('delete'));
+  document.getElementById('skip-button')?.addEventListener('click', skipPost);
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Only trigger if not typing in an input field
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+      return;
+    }
+
+    switch (e.key.toLowerCase()) {
+      case 'f':
+        e.preventDefault();
+        classifyPost('front-page');
+        break;
+      case 'b':
+        e.preventDefault();
+        classifyPost('processed');
+        break;
+      case 'd':
+        e.preventDefault();
+        classifyPost('delete');
+        break;
+      case 's':
+        e.preventDefault();
+        skipPost();
+        break;
+    }
+  });
+
+  // Initialize and load first post
+  initializeQueueDots();
+  getNextPost();
+</script>
