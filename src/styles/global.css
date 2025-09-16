@@ -309,3 +309,33 @@ Make sure disabled buttons don't get the pointer cursor.
 .tags li:last-child::after {
     content: " ";
 }
+
+.intro {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.favorites ul {
+    list-style: none;
+    padding: 0;
+}
+
+.favorites li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--spacing-sm);
+}
+
+.favorites a {
+    color: var(--color-grey-700);
+    text-decoration: none;
+}
+
+.favorites a:hover {
+    text-decoration: underline;
+}
+
+.favorites time {
+    color: var(--color-grey-400);
+    font-size: var(--font-size-xs);
+}

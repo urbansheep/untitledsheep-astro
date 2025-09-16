@@ -1,19 +1,84 @@
 ---
 import Layout from "@/layouts/LayoutBase.astro";
 import PostCard from "@/components/PostCard.astro";
-
+import { getCollection } from "astro:content";
 import getPublishedPosts from "@/utils/getPublishedPosts";
+import { getFormattedDate } from "@/utils/dateFormating";
 
 const title = "*Безымянная овца";
-const description = "";
+const description = "Блог об интернете, технологиях и дизайне";
 
-const posts = await getPublishedPosts();
+const favoritePostSlugs = ["112873", "105494", "110276", "112895", "1076482"];
+const allPosts = await getCollection("blog");
 
-// receive one random post from the collection
-const randomPost = posts[Math.floor(Math.random() * posts.length)];
+const favoritePosts = allPosts.filter(post => favoritePostSlugs.includes(post.slug));
+
+const publishedPosts = await getPublishedPosts();
+const randomPost = publishedPosts[Math.floor(Math.random() * publishedPosts.length)];
 ---
 
 <Layout homepage={true} title={title} description={description}>
-    <h1>Случайный пост из блога Untitled Sheep</h1>
-    <PostCard post={randomPost} />
+    <section class="intro">
+        <p>
+            Привет! Это «Безымянная овца», блог об интернете, технологиях, дизайне и всяком разном. Я стараюсь писать сюда регулярно, но не всегда получается.
+        </p>
+        <p>
+            Ниже — несколько постов, которые мне нравятся, и случайная заметка из всего архива.
+        </p>
+    </section>
+
+    <section class="favorites">
+        <h2>Избранные посты</h2>
+        <ul>
+            {favoritePosts.map(post => (
+                <li>
+                    <a href={`/post/${post.slug}/`}>{post.data.title || post.slug}</a>
+                    <time datetime={post.data.date.toISOString()}>
+                        {getFormattedDate(post.data.date)}
+                    </time>
+                </li>
+            ))}
+        </ul>
+    </section>
+
+    <section id="random-post-section">
+        <h2>Случайный пост</h2>
+        <PostCard post={randomPost} />
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const randomPostSection = document.getElementById('random-post-section');
+            if (!randomPostSection) return;
+
+            fetch('/api/posts.json')
+                .then(response => response.json())
+                .then(posts => {
+                    const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                    
+                    // This is a simplified update. It does not re-render the full PostCard component
+                    // on the client side, as that would be complex. Instead, it just updates the
+                    // most visible parts of the post card. The content of the post will be from the
+                    // statically rendered post, which might be confusing for the user.
+                    // A better implementation would involve a more complex client-side component
+                    // or an API that returns pre-rendered HTML for a post card.
+
+                    const postLink = randomPostSection.querySelector('.post .details .date') as HTMLAnchorElement;
+                    const postTitle = randomPostSection.querySelector('.post .prose .header');
+
+                    if (postLink && postTitle) {
+                        postLink.href = `/post/${randomPost.slug}/`;
+                        
+                        const titleLink = postTitle.querySelector('a') as HTMLAnchorElement;
+                        if (titleLink) {
+                            titleLink.href = randomPost.url;
+                            titleLink.textContent = randomPost.title || `Post ${randomPost.slug}`;
+                        } else {
+                            postTitle.textContent = randomPost.title || `Post ${randomPost.slug}`;
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching random post:', error));
+        });
+    </script>
 </Layout>
