@@ -27,7 +27,9 @@ export default defineConfig({
     // adapter: node({
     //     mode: "standalone",
     // }),
-    adapter: vercel({}),
+    adapter: vercel({
+        runtime: "nodejs20.x",
+    }),
     vite: {
         optimizeDeps: {
             exclude: ["@resvg/resvg-js"],
