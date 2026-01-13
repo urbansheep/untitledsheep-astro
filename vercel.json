@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs20.x"
+    },
+    ".vercel/output/functions/**/*.func": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
