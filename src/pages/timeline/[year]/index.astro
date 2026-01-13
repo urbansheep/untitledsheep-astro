@@ -1,0 +1,102 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "@/layouts/LayoutBase.astro";
+import TimelineMonthBlock from "@/components/TimelineMonthBlock.astro";
+import { getPostsByYear, getYearDetailData } from "@/utils/getPostsByTimePeriod";
+import { formatPostCount } from "@/utils/formatTimelineDate";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const postsByYear = await getPostsByYear();
+    const years = Array.from(postsByYear.keys());
+
+    const paths = await Promise.all(
+        years.map(async (year) => {
+            const monthsData = await getYearDetailData(year);
+            const posts = postsByYear.get(year) || [];
+            return {
+                params: { year: year.toString() },
+                props: {
+                    year,
+                    monthsData,
+                    postCount: posts.length,
+                },
+            };
+        })
+    );
+
+    return paths;
+};
+
+interface Props {
+    year: number;
+    monthsData: Awaited<ReturnType<typeof getYearDetailData>>;
+    postCount: number;
+}
+
+const { year, monthsData, postCount } = Astro.props;
+
+const title = `Временная шкала - ${year}`;
+const description = `Все посты за ${year} год. ${formatPostCount(postCount)}.`;
+---
+
+<Layout title={title} description={description}>
+    <div class="year-header">
+        <nav class="breadcrumb">
+            <a href="/timeline/">← Все годы</a>
+        </nav>
+        <h1>{year} год</h1>
+        <p class="year-stats">{formatPostCount(postCount)}</p>
+    </div>
+
+    <div class="months-container">
+        {monthsData.map((monthData) => (
+            <TimelineMonthBlock year={year} monthData={monthData} />
+        ))}
+    </div>
+
+    {monthsData.length === 0 && (
+        <p class="no-posts">Нет постов за этот год.</p>
+    )}
+</Layout>
+
+<style>
+    .year-header {
+        margin-bottom: 2rem;
+    }
+
+    .breadcrumb {
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb a {
+        color: var(--color-grey-600);
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+        color: var(--color-grey-900);
+    }
+
+    .year-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .year-stats {
+        color: var(--color-grey-600);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .months-container {
+        margin-top: 2rem;
+    }
+
+    .no-posts {
+        text-align: center;
+        color: var(--color-grey-600);
+        font-size: 1.1rem;
+        padding: 2rem;
+    }
+</style>

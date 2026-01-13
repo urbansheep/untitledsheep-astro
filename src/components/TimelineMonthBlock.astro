@@ -1,0 +1,128 @@
+---
+import type { MonthDayData } from "@/utils/getPostsByTimePeriod";
+import { getMonthName, formatPostCount, formatDayMonth } from "@/utils/formatTimelineDate";
+
+export interface Props {
+    year: number;
+    monthData: MonthDayData;
+}
+
+const { year, monthData } = Astro.props;
+---
+
+<section class="timeline-month-block">
+    <h3 class="month-header">
+        {getMonthName(monthData.month).toUpperCase()}
+        <span class="month-count">({formatPostCount(monthData.count)})</span>
+    </h3>
+
+    <div class="days-list">
+        {monthData.days.map((dayData) => (
+            <div class="day-block">
+                <div class="day-header">
+                    <strong>{formatDayMonth(dayData.day, monthData.month)}</strong>
+                    <span class="day-count">{formatPostCount(dayData.count)}</span>
+                </div>
+                <ul class="posts-list">
+                    {dayData.posts.map((post) => (
+                        <li>
+                            <a href={`/post/${post.slug}/`}>
+                                {post.data.title ? post.data.title : `Пост ${post.data.id}`}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+</section>
+
+<style>
+    .timeline-month-block {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--color-grey-300);
+    }
+
+    .timeline-month-block:last-child {
+        border-bottom: none;
+    }
+
+    .month-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--color-grey-800);
+    }
+
+    .month-count {
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--color-grey-600);
+        margin-left: 0.5rem;
+    }
+
+    .days-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .day-block {
+        padding-left: 1rem;
+        border-left: 3px solid var(--color-grey-300);
+    }
+
+    .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+    }
+
+    .day-header strong {
+        font-size: 1.1rem;
+        color: var(--color-grey-700);
+    }
+
+    .day-count {
+        font-size: 0.9rem;
+        color: var(--color-grey-600);
+    }
+
+    .posts-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .posts-list li {
+        padding-left: 1rem;
+        position: relative;
+    }
+
+    .posts-list li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--color-grey-500);
+    }
+
+    .posts-list a {
+        color: var(--color-grey-700);
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+
+    .posts-list a:hover {
+        text-decoration: underline;
+        color: var(--color-grey-900);
+    }
+
+    .posts-list a:visited {
+        color: var(--color-grey-600);
+    }
+</style>

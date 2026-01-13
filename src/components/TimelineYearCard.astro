@@ -1,0 +1,115 @@
+---
+import type { YearData } from "@/utils/getPostsByTimePeriod";
+import { getMonthName, formatPostCount } from "@/utils/formatTimelineDate";
+
+export interface Props {
+    yearData: YearData;
+}
+
+const { yearData } = Astro.props;
+---
+
+<article class="timeline-year-card">
+    <div class="year-header">
+        <h2>
+            <a href={`/timeline/${yearData.year}/`}>{yearData.year}</a>
+        </h2>
+        <span class="year-count">{formatPostCount(yearData.count)}</span>
+    </div>
+
+    <div class="months-grid">
+        {yearData.months.map((monthData) => (
+            <div class="month-item">
+                <a href={`/timeline/${yearData.year}/`}>
+                    <span class="month-name">{getMonthName(monthData.month)}</span>
+                    <span class="month-count">{monthData.count}</span>
+                </a>
+            </div>
+        ))}
+    </div>
+</article>
+
+<style>
+    .timeline-year-card {
+        border: 1px solid var(--color-grey-300);
+        border-radius: 8px;
+        padding: 1.5rem;
+        background: var(--color-white);
+        transition: box-shadow 0.2s ease;
+    }
+
+    .timeline-year-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .year-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--color-grey-300);
+    }
+
+    .year-header h2 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+
+    .year-header h2 a {
+        color: var(--color-grey-700);
+        text-decoration: none;
+    }
+
+    .year-header h2 a:hover {
+        color: var(--color-grey-900);
+        text-decoration: underline;
+    }
+
+    .year-count {
+        color: var(--color-grey-600);
+        font-size: 0.95rem;
+    }
+
+    .months-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .month-item {
+        text-align: center;
+    }
+
+    .month-item a {
+        display: block;
+        padding: 0.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        color: var(--color-grey-700);
+        transition: background-color 0.2s ease;
+    }
+
+    .month-item a:hover {
+        background-color: var(--color-grey-100);
+    }
+
+    .month-name {
+        display: block;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .month-count {
+        display: block;
+        font-weight: 600;
+        color: var(--color-grey-900);
+    }
+
+    @media (max-width: 640px) {
+        .months-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>

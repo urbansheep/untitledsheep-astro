@@ -1,0 +1,56 @@
+---
+import Layout from "@/layouts/LayoutBase.astro";
+import TimelineYearCard from "@/components/TimelineYearCard.astro";
+import { getYearDataList, getTimelineStats } from "@/utils/getPostsByTimePeriod";
+import { formatPostCount, formatYearCount } from "@/utils/formatTimelineDate";
+
+const yearDataList = await getYearDataList();
+const stats = await getTimelineStats();
+
+const title = "Временная шкала";
+const description = `Архив всех постов по годам и месяцам. ${formatPostCount(stats.totalPosts)} за ${formatYearCount(stats.totalYears)}.`;
+---
+
+<Layout title={title} description={description}>
+    <div class="timeline-header">
+        <h1>Временная шкала</h1>
+        <p class="stats">
+            {formatPostCount(stats.totalPosts)} за {formatYearCount(stats.totalYears)} ({stats.earliestYear}—{stats.latestYear})
+        </p>
+    </div>
+
+    <div class="timeline-grid">
+        {yearDataList.map((yearData) => (
+            <TimelineYearCard yearData={yearData} />
+        ))}
+    </div>
+</Layout>
+
+<style>
+    .timeline-header {
+        margin-bottom: 2rem;
+    }
+
+    .timeline-header h1 {
+        margin-bottom: 0.5rem;
+    }
+
+    .stats {
+        color: var(--color-grey-600);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .timeline-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .timeline-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
