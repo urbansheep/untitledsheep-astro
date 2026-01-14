@@ -3,14 +3,12 @@ import { defineConfig } from "astro/config";
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel/serverless";
-import node from "@astrojs/node";
 
 export default defineConfig({
     site: "https://untitled.urbansheep.com",
     integrations: [
-        sitemap({
-            entryLimit: 5000,
-        }),
+        // TODO: sitemap() fails with Astro 4.x hybrid mode - needs investigation
+        // sitemap(),
         Compress({
             Image: false,
             SVG: false,
@@ -24,9 +22,6 @@ export default defineConfig({
     outputOptions: {
         format: "esm",
     },
-    // adapter: node({
-    //     mode: "standalone",
-    // }),
     adapter: vercel({
         runtime: "nodejs20.x",
     }),
