@@ -3,7 +3,7 @@ import type { APIContext } from "astro";
 import { SITE, THEME } from "@/config";
 import { getCollection } from "astro:content";
 
-export async function get(context: APIContext) {
+export async function GET(context: APIContext) {
     const allPosts = await getCollection("blog", (post) => {
         return !post.data.isDraft && post.data.date <= new Date();
     });
