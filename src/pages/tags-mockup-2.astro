@@ -1,0 +1,313 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import { slugify } from '@/utils/slugify.js';
+import { getCollection } from 'astro:content';
+
+const title = "Макет 2: Облако по популярности";
+const description = "Теги, где размер показывает количество постов";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// Count tags
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+    post.data.tags?.forEach((tag) => {
+        const tagStr = tag.toString();
+        tagCounts.set(tagStr, (tagCounts.get(tagStr) || 0) + 1);
+    });
+});
+
+// Get all tags with counts
+const tagsWithCounts = [...tagCounts.entries()]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count);
+
+const maxCount = tagsWithCounts[0]?.count || 1;
+const minCount = tagsWithCounts[tagsWithCounts.length - 1]?.count || 1;
+
+// Calculate size level (1-7) based on logarithmic scale
+function getSizeLevel(count: number): number {
+    if (count >= 200) return 7;
+    if (count >= 100) return 6;
+    if (count >= 50) return 5;
+    if (count >= 25) return 4;
+    if (count >= 10) return 3;
+    if (count >= 5) return 2;
+    return 1;
+}
+
+// Shuffle for cloud effect but keep some structure
+const shuffledTags = [...tagsWithCounts].sort(() => Math.random() - 0.5);
+
+// Top tags for highlight section
+const topTags = tagsWithCounts.slice(0, 20);
+const rareTags = tagsWithCounts.filter(t => t.count === 1);
+---
+
+<Layout title={title} description={description}>
+    <article class="prose cloud-layout">
+        <header class="page-header">
+            <h1>Облако тегов</h1>
+            <p class="subtitle">Размер показывает популярность тега</p>
+            <p class="meta">
+                Топ: {topTags[0]?.tag} ({topTags[0]?.count}) ·
+                Всего: {tagsWithCounts.length} тегов ·
+                <a href="/tags-analysis/">Вернуться к анализу</a>
+            </p>
+        </header>
+
+        <section class="stats-bar">
+            <div class="stat">
+                <span class="stat-num">{tagsWithCounts.length}</span>
+                <span class="stat-label">тегов</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">{maxCount}</span>
+                <span class="stat-label">макс. постов</span>
+            </div>
+            <div class="stat">
+                <span class="stat-num">{rareTags.length}</span>
+                <span class="stat-label">уникальных</span>
+            </div>
+        </section>
+
+        <section class="legend">
+            <span class="legend-item size-1">1-4</span>
+            <span class="legend-item size-2">5-9</span>
+            <span class="legend-item size-3">10-24</span>
+            <span class="legend-item size-4">25-49</span>
+            <span class="legend-item size-5">50-99</span>
+            <span class="legend-item size-6">100-199</span>
+            <span class="legend-item size-7">200+</span>
+        </section>
+
+        <div class="cloud-container">
+            {shuffledTags.map(({ tag, count }) => (
+                <a
+                    href={`/tagged/${slugify(tag)}/`}
+                    class={`cloud-tag size-${getSizeLevel(count)}`}
+                    title={`${tag}: ${count} постов`}
+                >
+                    {tag}
+                </a>
+            ))}
+        </div>
+
+        <hr />
+
+        <section class="top-section">
+            <h2>Топ-20 тегов</h2>
+            <ol class="top-list">
+                {topTags.map(({ tag, count }, i) => (
+                    <li class="top-item">
+                        <span class="rank">{i + 1}</span>
+                        <a href={`/tagged/${slugify(tag)}/`}>{tag}</a>
+                        <span class="bar" style={`width: ${(count / maxCount) * 100}%`}></span>
+                        <span class="count">{count}</span>
+                    </li>
+                ))}
+            </ol>
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .cloud-layout {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .page-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .subtitle {
+        color: var(--color-grey-500);
+        font-style: italic;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+    }
+
+    .stats-bar {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-2xl);
+        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, var(--color-blue-50), var(--color-grey-50));
+        border-radius: 8px;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-num {
+        display: block;
+        font-size: var(--font-size-2xl);
+        font-weight: bold;
+        color: var(--theme-color-base);
+    }
+
+    .stat-label {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-500);
+    }
+
+    .legend {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xl);
+        font-size: var(--font-size-2xs);
+    }
+
+    .legend-item {
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--color-grey-100);
+    }
+
+    .cloud-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 8px 12px;
+        padding: var(--spacing-xl);
+        background: var(--color-grey-50);
+        border-radius: 12px;
+        line-height: 1.8;
+    }
+
+    .cloud-tag {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .cloud-tag:hover {
+        background: var(--color-blue-200);
+        transform: scale(1.1);
+    }
+
+    /* Size levels */
+    .size-1 {
+        font-size: 0.7rem;
+        color: var(--color-grey-400);
+    }
+
+    .size-2 {
+        font-size: 0.8rem;
+        color: var(--color-grey-500);
+    }
+
+    .size-3 {
+        font-size: 0.95rem;
+        color: var(--color-grey-600);
+    }
+
+    .size-4 {
+        font-size: 1.1rem;
+        color: var(--color-grey-700);
+        font-weight: 500;
+    }
+
+    .size-5 {
+        font-size: 1.3rem;
+        color: var(--color-blue-600);
+        font-weight: 500;
+    }
+
+    .size-6 {
+        font-size: 1.6rem;
+        color: var(--color-blue-700);
+        font-weight: 600;
+    }
+
+    .size-7 {
+        font-size: 2rem;
+        color: var(--color-blue-800);
+        font-weight: 700;
+    }
+
+    /* Legend colors */
+    .legend .size-1 { color: var(--color-grey-400); }
+    .legend .size-2 { color: var(--color-grey-500); }
+    .legend .size-3 { color: var(--color-grey-600); }
+    .legend .size-4 { color: var(--color-grey-700); }
+    .legend .size-5 { color: var(--color-blue-600); }
+    .legend .size-6 { color: var(--color-blue-700); }
+    .legend .size-7 { color: var(--color-blue-800); font-weight: 600; }
+
+    .top-section {
+        margin-top: var(--spacing-2xl);
+    }
+
+    .top-section h2 {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .top-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .top-item {
+        display: grid;
+        grid-template-columns: 30px 1fr auto 50px;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+        border-bottom: 1px solid var(--color-grey-100);
+        margin: 0;
+    }
+
+    .rank {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+        text-align: right;
+    }
+
+    .top-item a {
+        color: var(--color-grey-700);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+    }
+
+    .top-item a:hover {
+        color: var(--theme-color-base);
+    }
+
+    .bar {
+        height: 8px;
+        background: linear-gradient(90deg, var(--color-blue-200), var(--color-blue-400));
+        border-radius: 4px;
+        min-width: 4px;
+    }
+
+    .top-item .count {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-500);
+        text-align: right;
+    }
+</style>

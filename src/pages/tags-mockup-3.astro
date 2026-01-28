@@ -1,0 +1,390 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import { slugify } from '@/utils/slugify.js';
+import { getCollection } from 'astro:content';
+
+const title = "Макет 3: Сворачиваемые секции";
+const description = "Теги в аккордеоне с категориями";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// Count tags
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+    post.data.tags?.forEach((tag) => {
+        const tagStr = tag.toString();
+        tagCounts.set(tagStr, (tagCounts.get(tagStr) || 0) + 1);
+    });
+});
+
+const allTags = [...tagCounts.keys()].sort();
+
+// Alphabetical grouping
+const alphabetGroups = new Map<string, string[]>();
+allTags.forEach(tag => {
+    const firstChar = tag.charAt(0).toUpperCase();
+    // Group by first letter, with special handling
+    let group: string;
+    if (/[А-Яа-яЁё]/.test(firstChar)) {
+        group = firstChar.toUpperCase();
+    } else if (/[A-Za-z]/.test(firstChar)) {
+        group = firstChar.toUpperCase();
+    } else if (/[0-9]/.test(firstChar)) {
+        group = '#';
+    } else {
+        group = '...';
+    }
+
+    if (!alphabetGroups.has(group)) {
+        alphabetGroups.set(group, []);
+    }
+    alphabetGroups.get(group)!.push(tag);
+});
+
+// Sort groups: Russian first, then English, then numbers, then special
+const russianLetters = [...alphabetGroups.keys()].filter(k => /[А-ЯЁ]/.test(k)).sort();
+const englishLetters = [...alphabetGroups.keys()].filter(k => /[A-Z]/.test(k)).sort();
+const otherGroups = [...alphabetGroups.keys()].filter(k => !/[А-ЯЁA-Z]/.test(k)).sort();
+const sortedGroups = [...russianLetters, ...englishLetters, ...otherGroups];
+
+// Thematic categories
+const thematicCategories = [
+    {
+        id: "curated",
+        title: "Избранное и лучшее",
+        icon: "★",
+        tags: ["избранное", "прекрасное", "любимое", "о хорошем"].filter(t => tagCounts.has(t))
+    },
+    {
+        id: "content",
+        title: "Типы контента",
+        icon: "◈",
+        tags: allTags.filter(t =>
+            ["картинки", "цитаты", "твиты", "ссылки", "иллюстрации", "видео", "комиксы", "диалоги", "списки"].includes(t)
+        )
+    },
+    {
+        id: "about",
+        title: "Рубрики «про X»",
+        icon: "◉",
+        tags: allTags.filter(t => t.startsWith("про "))
+    },
+    {
+        id: "people",
+        title: "Персоналии",
+        icon: "◎",
+        tags: allTags.filter(t =>
+            /^[А-ЯA-Z]/.test(t) &&
+            !t.startsWith("про ") &&
+            tagCounts.get(t)! >= 3 &&
+            !["Apple", "Amazon", "Google", "House MD", "Team Fortress 2", "Wired", "The Onion"].includes(t) &&
+            !["Москва", "Петербург", "Звёздные войны"].includes(t)
+        ).slice(0, 30)
+    },
+    {
+        id: "series",
+        title: "Рубрики-серии",
+        icon: "◆",
+        tags: ["безжалостный постмодернизм", "роскошь человеческого общения", "удивительные факты", "вкусы в цифрах", "правила жизни социопата", "говорящие компьютеры", "будущее прекрасно", "живой уголок", "мантры", "рассказывание историй"].filter(t => tagCounts.has(t))
+    },
+    {
+        id: "aesthetic",
+        title: "Эстетика",
+        icon: "◇",
+        tags: ["девушки", "чб", "глаза", "ноги", "руки", "коленки", "каблуки", "чулки", "блондинки", "веснушки", "порно", "инстаграм"].filter(t => tagCounts.has(t))
+    }
+];
+
+// Calculate totals for each category
+thematicCategories.forEach(cat => {
+    (cat as any).total = cat.tags.reduce((sum, t) => sum + (tagCounts.get(t) || 0), 0);
+});
+---
+
+<Layout title={title} description={description}>
+    <article class="prose accordion-layout">
+        <header class="page-header">
+            <h1>Теги: сворачиваемые секции</h1>
+            <p class="subtitle">Нажмите на заголовок, чтобы развернуть</p>
+            <p class="meta">Всего: {allTags.length} тегов · <a href="/tags-analysis/">Вернуться к анализу</a></p>
+        </header>
+
+        <nav class="tab-nav">
+            <a href="#thematic" class="tab-link active">По темам</a>
+            <a href="#alphabetic" class="tab-link">По алфавиту</a>
+        </nav>
+
+        <section id="thematic" class="accordion-section">
+            <h2>Тематические категории</h2>
+
+            {thematicCategories.map((cat) => (
+                <details class="accordion-item" open={cat.id === "curated"}>
+                    <summary class="accordion-header">
+                        <span class="icon">{cat.icon}</span>
+                        <span class="title">{cat.title}</span>
+                        <span class="badge">{cat.tags.length} тегов · {(cat as any).total} постов</span>
+                        <span class="chevron">▼</span>
+                    </summary>
+                    <div class="accordion-content">
+                        <ul class="tag-list">
+                            {cat.tags.sort((a, b) => (tagCounts.get(b) || 0) - (tagCounts.get(a) || 0)).map((tag) => (
+                                <li>
+                                    <a href={`/tagged/${slugify(tag)}/`}>
+                                        {tag}
+                                        <span class="count">{tagCounts.get(tag)}</span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </details>
+            ))}
+        </section>
+
+        <section id="alphabetic" class="accordion-section">
+            <h2>Алфавитный указатель</h2>
+
+            <div class="letter-nav">
+                {sortedGroups.map(letter => (
+                    <a href={`#letter-${letter}`} class="letter-link">{letter}</a>
+                ))}
+            </div>
+
+            {sortedGroups.map((letter) => (
+                <details class="accordion-item" id={`letter-${letter}`}>
+                    <summary class="accordion-header">
+                        <span class="letter">{letter}</span>
+                        <span class="badge">{alphabetGroups.get(letter)!.length} тегов</span>
+                        <span class="chevron">▼</span>
+                    </summary>
+                    <div class="accordion-content">
+                        <ul class="tag-list compact">
+                            {alphabetGroups.get(letter)!.map((tag) => (
+                                <li>
+                                    <a href={`/tagged/${slugify(tag)}/`}>
+                                        {tag}
+                                        <span class="count">{tagCounts.get(tag)}</span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </details>
+            ))}
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .accordion-layout {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .page-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .subtitle {
+        color: var(--color-grey-500);
+        font-style: italic;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+    }
+
+    .tab-nav {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-sm);
+        background: var(--color-grey-50);
+        border-radius: 8px;
+    }
+
+    .tab-link {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--color-grey-600);
+        font-size: var(--font-size-sm);
+        transition: all 0.2s ease;
+    }
+
+    .tab-link:hover,
+    .tab-link.active {
+        background: var(--color-white);
+        color: var(--theme-color-base);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .accordion-section {
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .accordion-section h2 {
+        font-size: var(--font-size-base);
+        color: var(--color-grey-500);
+        margin-bottom: var(--spacing-lg);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .letter-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-sm);
+        background: var(--color-grey-50);
+        border-radius: 6px;
+    }
+
+    .letter-link {
+        padding: 4px 8px;
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-600);
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .letter-link:hover {
+        background: var(--color-blue-100);
+        color: var(--theme-color-base);
+    }
+
+    .accordion-item {
+        margin-bottom: var(--spacing-sm);
+        border: 1px solid var(--color-grey-200);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .accordion-header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md) var(--spacing-lg);
+        background: var(--color-grey-50);
+        cursor: pointer;
+        list-style: none;
+        transition: background 0.2s ease;
+    }
+
+    .accordion-header::-webkit-details-marker {
+        display: none;
+    }
+
+    .accordion-header:hover {
+        background: var(--color-blue-50);
+    }
+
+    .icon {
+        font-size: var(--font-size-lg);
+        color: var(--theme-color-base);
+    }
+
+    .letter {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--theme-color-base);
+        min-width: 2ch;
+    }
+
+    .title {
+        flex: 1;
+        font-weight: 500;
+        color: var(--color-grey-700);
+    }
+
+    .badge {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+        background: var(--color-white);
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
+    .chevron {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+        transition: transform 0.2s ease;
+    }
+
+    details[open] .chevron {
+        transform: rotate(180deg);
+    }
+
+    .accordion-content {
+        padding: var(--spacing-lg);
+        background: var(--color-white);
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tag-list.compact {
+        gap: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .tag-list li {
+        margin: 0;
+    }
+
+    .tag-list a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: 4px 10px;
+        background: var(--color-grey-50);
+        border: 1px solid var(--color-grey-200);
+        border-radius: 16px;
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-700);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .tag-list a:hover {
+        background: var(--color-blue-100);
+        border-color: var(--theme-color-base);
+        color: var(--theme-color-base);
+    }
+
+    .count {
+        font-size: 0.7rem;
+        color: var(--color-grey-400);
+        background: var(--color-white);
+        padding: 1px 5px;
+        border-radius: 10px;
+    }
+
+    .compact a {
+        padding: 2px 8px;
+        font-size: var(--font-size-2xs);
+    }
+
+    .compact .count {
+        font-size: 0.65rem;
+        padding: 0 4px;
+    }
+</style>

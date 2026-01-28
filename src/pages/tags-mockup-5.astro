@@ -1,0 +1,453 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import { slugify } from '@/utils/slugify.js';
+import { getCollection } from 'astro:content';
+
+const title = "Макет 5: Хронология";
+const description = "Теги по времени последнего использования";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// Sort posts by date (newest first)
+const sortedPosts = posts.sort((a, b) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Collect tag data with temporal info
+interface TagData {
+    tag: string;
+    count: number;
+    latestDate: Date;
+    oldestDate: Date;
+    years: Set<number>;
+}
+
+const tagDataMap = new Map<string, TagData>();
+
+sortedPosts.forEach((post) => {
+    const postDate = new Date(post.data.date);
+    const year = postDate.getFullYear();
+
+    post.data.tags?.forEach((tag) => {
+        const tagStr = tag.toString();
+        if (!tagDataMap.has(tagStr)) {
+            tagDataMap.set(tagStr, {
+                tag: tagStr,
+                count: 0,
+                latestDate: postDate,
+                oldestDate: postDate,
+                years: new Set()
+            });
+        }
+
+        const data = tagDataMap.get(tagStr)!;
+        data.count++;
+        data.years.add(year);
+
+        if (postDate > data.latestDate) {
+            data.latestDate = postDate;
+        }
+        if (postDate < data.oldestDate) {
+            data.oldestDate = postDate;
+        }
+    });
+});
+
+// Convert to array
+const allTagData = [...tagDataMap.values()];
+
+// Group by recency
+const now = new Date();
+const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+const threeMonthsAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+const threeYearsAgo = new Date(now.getTime() - 3 * 365 * 24 * 60 * 60 * 1000);
+
+const timeGroups = {
+    recent: {
+        title: "На этой неделе",
+        icon: "🔥",
+        tags: allTagData.filter(t => t.latestDate >= oneWeekAgo)
+            .sort((a, b) => b.latestDate.getTime() - a.latestDate.getTime())
+    },
+    thisMonth: {
+        title: "В этом месяце",
+        icon: "📅",
+        tags: allTagData.filter(t => t.latestDate >= oneMonthAgo && t.latestDate < oneWeekAgo)
+            .sort((a, b) => b.latestDate.getTime() - a.latestDate.getTime())
+    },
+    lastQuarter: {
+        title: "За последние 3 месяца",
+        icon: "📆",
+        tags: allTagData.filter(t => t.latestDate >= threeMonthsAgo && t.latestDate < oneMonthAgo)
+            .sort((a, b) => b.latestDate.getTime() - a.latestDate.getTime())
+    },
+    thisYear: {
+        title: "В этом году",
+        icon: "🗓",
+        tags: allTagData.filter(t => t.latestDate >= oneYearAgo && t.latestDate < threeMonthsAgo)
+            .sort((a, b) => b.latestDate.getTime() - a.latestDate.getTime())
+    },
+    lastFewYears: {
+        title: "За последние несколько лет",
+        icon: "📚",
+        tags: allTagData.filter(t => t.latestDate >= threeYearsAgo && t.latestDate < oneYearAgo)
+            .sort((a, b) => b.latestDate.getTime() - a.latestDate.getTime())
+    },
+    archive: {
+        title: "Архив (давно не использовались)",
+        icon: "🗄",
+        tags: allTagData.filter(t => t.latestDate < threeYearsAgo)
+            .sort((a, b) => b.count - a.count)
+    }
+};
+
+// Long-running tags (used across many years)
+const longRunningTags = allTagData
+    .filter(t => t.years.size >= 5)
+    .sort((a, b) => b.years.size - a.years.size)
+    .slice(0, 20);
+
+// Format date
+function formatDate(date: Date): string {
+    return date.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+// Format year range
+function formatYearRange(oldest: Date, latest: Date): string {
+    const oldYear = oldest.getFullYear();
+    const newYear = latest.getFullYear();
+    if (oldYear === newYear) return `${oldYear}`;
+    return `${oldYear}—${newYear}`;
+}
+
+// Days since last use
+function daysSince(date: Date): number {
+    return Math.floor((now.getTime() - date.getTime()) / (24 * 60 * 60 * 1000));
+}
+---
+
+<Layout title={title} description={description}>
+    <article class="prose timeline-layout">
+        <header class="page-header">
+            <h1>Теги: хронология</h1>
+            <p class="subtitle">Теги по времени последнего использования</p>
+            <p class="meta">Всего: {allTagData.length} тегов · <a href="/tags-analysis/">Вернуться к анализу</a></p>
+        </header>
+
+        <section class="longevity-section">
+            <h2>Долгожители (используются много лет)</h2>
+            <div class="longevity-list">
+                {longRunningTags.map((data) => (
+                    <a href={`/tagged/${slugify(data.tag)}/`} class="longevity-item">
+                        <span class="tag-name">{data.tag}</span>
+                        <span class="year-span">{formatYearRange(data.oldestDate, data.latestDate)}</span>
+                        <span class="year-count">{data.years.size} лет</span>
+                        <span class="post-count">{data.count} постов</span>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        <hr />
+
+        <div class="timeline">
+            {Object.entries(timeGroups).map(([key, group]) => (
+                group.tags.length > 0 && (
+                    <section class={`time-section ${key}`}>
+                        <h2>
+                            <span class="icon">{group.icon}</span>
+                            {group.title}
+                            <span class="count-badge">{group.tags.length}</span>
+                        </h2>
+                        <div class="tag-list">
+                            {group.tags.map((data) => (
+                                <a href={`/tagged/${slugify(data.tag)}/`} class="timeline-tag">
+                                    <span class="tag-name">{data.tag}</span>
+                                    <span class="tag-meta">
+                                        <span class="post-count">{data.count}</span>
+                                        <span class="last-used">{formatDate(data.latestDate)}</span>
+                                    </span>
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                )
+            ))}
+        </div>
+
+        <section class="stats-section">
+            <h2>Статистика по годам</h2>
+            <div class="year-stats">
+                {[...new Set(allTagData.flatMap(t => [...t.years]))].sort((a, b) => b - a).slice(0, 10).map(year => {
+                    const tagsThisYear = allTagData.filter(t => t.years.has(year)).length;
+                    const maxTags = Math.max(...[...new Set(allTagData.flatMap(t => [...t.years]))].map(y =>
+                        allTagData.filter(t => t.years.has(y)).length
+                    ));
+                    return (
+                        <div class="year-row">
+                            <span class="year">{year}</span>
+                            <div class="year-bar">
+                                <div class="year-fill" style={`width: ${(tagsThisYear / maxTags) * 100}%`}></div>
+                            </div>
+                            <span class="year-count">{tagsThisYear} тегов</span>
+                        </div>
+                    );
+                })}
+            </div>
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .timeline-layout {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .page-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .subtitle {
+        color: var(--color-grey-500);
+        font-style: italic;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+    }
+
+    .longevity-section {
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .longevity-section h2 {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .longevity-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .longevity-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: linear-gradient(135deg, var(--color-blue-50), var(--color-grey-50));
+        border: 1px solid var(--color-blue-200);
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .longevity-item:hover {
+        background: var(--color-blue-100);
+        border-color: var(--theme-color-base);
+    }
+
+    .longevity-item .tag-name {
+        color: var(--color-grey-700);
+        font-weight: 500;
+    }
+
+    .longevity-item .year-span {
+        font-size: var(--font-size-2xs);
+        color: var(--theme-color-base);
+        background: var(--color-white);
+        padding: 1px 6px;
+        border-radius: 4px;
+    }
+
+    .longevity-item .year-count {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-500);
+    }
+
+    .longevity-item .post-count {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: var(--spacing-xl);
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--color-blue-400), var(--color-grey-200));
+    }
+
+    .time-section {
+        position: relative;
+        margin-bottom: var(--spacing-2xl);
+        padding-bottom: var(--spacing-lg);
+    }
+
+    .time-section::before {
+        content: '';
+        position: absolute;
+        left: calc(-1 * var(--spacing-xl) + 4px);
+        top: 8px;
+        width: 10px;
+        height: 10px;
+        background: var(--color-white);
+        border: 2px solid var(--theme-color-base);
+        border-radius: 50%;
+    }
+
+    .time-section.recent::before { background: var(--color-orange-600); border-color: var(--color-orange-600); }
+    .time-section.thisMonth::before { background: var(--color-blue-500); border-color: var(--color-blue-500); }
+    .time-section.lastQuarter::before { background: var(--color-blue-400); border-color: var(--color-blue-400); }
+    .time-section.thisYear::before { background: var(--color-blue-300); border-color: var(--color-blue-300); }
+    .time-section.lastFewYears::before { background: var(--color-grey-300); border-color: var(--color-grey-300); }
+    .time-section.archive::before { background: var(--color-grey-200); border-color: var(--color-grey-200); }
+
+    .time-section h2 {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin: 0 0 var(--spacing-md) 0;
+        font-size: var(--font-size-base);
+        color: var(--color-grey-700);
+    }
+
+    .icon {
+        font-size: var(--font-size-lg);
+    }
+
+    .count-badge {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+        background: var(--color-grey-100);
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-left: auto;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .timeline-tag {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--color-white);
+        border: 1px solid var(--color-grey-200);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        min-width: 120px;
+    }
+
+    .timeline-tag:hover {
+        border-color: var(--theme-color-base);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .timeline-tag .tag-name {
+        color: var(--color-grey-700);
+        font-size: var(--font-size-sm);
+    }
+
+    .tag-meta {
+        display: flex;
+        gap: var(--spacing-sm);
+        font-size: var(--font-size-2xs);
+    }
+
+    .tag-meta .post-count {
+        color: var(--theme-color-base);
+        font-weight: 500;
+    }
+
+    .tag-meta .last-used {
+        color: var(--color-grey-400);
+    }
+
+    .stats-section {
+        margin-top: var(--spacing-3xl);
+        padding: var(--spacing-xl);
+        background: var(--color-grey-50);
+        border-radius: 12px;
+    }
+
+    .stats-section h2 {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .year-stats {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .year-row {
+        display: grid;
+        grid-template-columns: 50px 1fr 80px;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .year {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-600);
+        font-weight: 500;
+    }
+
+    .year-bar {
+        height: 8px;
+        background: var(--color-grey-200);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .year-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--color-blue-300), var(--color-blue-500));
+        border-radius: 4px;
+    }
+
+    .year-count {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-500);
+        text-align: right;
+    }
+</style>

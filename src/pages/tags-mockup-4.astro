@@ -1,0 +1,332 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import { slugify } from '@/utils/slugify.js';
+import { getCollection } from 'astro:content';
+
+const title = "Макет 4: Сетка карточек";
+const description = "Теги как карточки с метаданными";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// Sort posts by date (newest first)
+const sortedPosts = posts.sort((a, b) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Collect tag data with latest post info
+interface TagData {
+    tag: string;
+    count: number;
+    latestPost: {
+        title: string;
+        slug: string;
+        date: Date;
+    } | null;
+    firstPost: Date | null;
+}
+
+const tagDataMap = new Map<string, TagData>();
+
+sortedPosts.forEach((post) => {
+    post.data.tags?.forEach((tag) => {
+        const tagStr = tag.toString();
+        if (!tagDataMap.has(tagStr)) {
+            tagDataMap.set(tagStr, {
+                tag: tagStr,
+                count: 0,
+                latestPost: null,
+                firstPost: null
+            });
+        }
+
+        const data = tagDataMap.get(tagStr)!;
+        data.count++;
+
+        // Latest post (first encounter in sorted array)
+        if (!data.latestPost) {
+            data.latestPost = {
+                title: post.data.title || 'Без названия',
+                slug: post.slug,
+                date: post.data.date
+            };
+        }
+
+        // Track first (oldest) post
+        if (!data.firstPost || post.data.date < data.firstPost) {
+            data.firstPost = post.data.date;
+        }
+    });
+});
+
+// Convert to array and sort by count
+const tagCards = [...tagDataMap.values()].sort((a, b) => b.count - a.count);
+
+// Top tags for featured section
+const featuredTags = tagCards.slice(0, 12);
+const regularTags = tagCards.slice(12);
+
+// Format date
+function formatDate(date: Date): string {
+    return date.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+// Calculate tag age
+function getTagAge(firstPost: Date | null): string {
+    if (!firstPost) return '';
+    const years = Math.floor((Date.now() - firstPost.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+    if (years < 1) return 'новый';
+    if (years === 1) return '1 год';
+    if (years < 5) return `${years} года`;
+    return `${years} лет`;
+}
+
+// Truncate title
+function truncate(str: string, len: number): string {
+    if (str.length <= len) return str;
+    return str.slice(0, len - 1) + '…';
+}
+---
+
+<Layout title={title} description={description}>
+    <article class="prose cards-layout">
+        <header class="page-header">
+            <h1>Теги: карточки</h1>
+            <p class="subtitle">Каждый тег с контекстом и последним постом</p>
+            <p class="meta">Всего: {tagCards.length} тегов · <a href="/tags-analysis/">Вернуться к анализу</a></p>
+        </header>
+
+        <section class="featured-section">
+            <h2>Популярные теги</h2>
+            <div class="cards-grid featured">
+                {featuredTags.map((data) => (
+                    <a href={`/tagged/${slugify(data.tag)}/`} class="tag-card featured">
+                        <div class="card-header">
+                            <span class="tag-name">{data.tag}</span>
+                            <span class="tag-count">{data.count}</span>
+                        </div>
+                        <div class="card-meta">
+                            <span class="age">{getTagAge(data.firstPost)}</span>
+                        </div>
+                        {data.latestPost && (
+                            <div class="latest-post">
+                                <span class="latest-label">Последний:</span>
+                                <span class="latest-title">{truncate(data.latestPost.title, 40)}</span>
+                                <span class="latest-date">{formatDate(data.latestPost.date)}</span>
+                            </div>
+                        )}
+                        <div class="card-bar">
+                            <div class="bar-fill" style={`width: ${Math.min(100, (data.count / featuredTags[0].count) * 100)}%`}></div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </section>
+
+        <section class="all-section">
+            <h2>Все теги ({regularTags.length})</h2>
+            <div class="cards-grid compact">
+                {regularTags.map((data) => (
+                    <a href={`/tagged/${slugify(data.tag)}/`} class="tag-card compact">
+                        <div class="card-header">
+                            <span class="tag-name">{data.tag}</span>
+                            <span class="tag-count">{data.count}</span>
+                        </div>
+                        {data.latestPost && (
+                            <div class="latest-date-only">
+                                {formatDate(data.latestPost.date)}
+                            </div>
+                        )}
+                    </a>
+                ))}
+            </div>
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .cards-layout {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .page-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .subtitle {
+        color: var(--color-grey-500);
+        font-style: italic;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+    }
+
+    section h2 {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .featured-section {
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .cards-grid {
+        display: grid;
+        gap: var(--spacing-md);
+    }
+
+    .cards-grid.featured {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .cards-grid.compact {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--spacing-sm);
+    }
+
+    .tag-card {
+        display: flex;
+        flex-direction: column;
+        padding: var(--spacing-md);
+        background: var(--color-white);
+        border: 1px solid var(--color-grey-200);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .tag-card:hover {
+        border-color: var(--theme-color-base);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+
+    .tag-card.featured {
+        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, var(--color-white), var(--color-blue-50));
+    }
+
+    .tag-card.compact {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+
+    .tag-name {
+        font-weight: 500;
+        color: var(--color-grey-800);
+        font-size: var(--font-size-base);
+        line-height: 1.3;
+    }
+
+    .compact .tag-name {
+        font-size: var(--font-size-sm);
+    }
+
+    .tag-count {
+        flex-shrink: 0;
+        padding: 2px 8px;
+        background: var(--color-blue-100);
+        color: var(--theme-color-base);
+        font-size: var(--font-size-2xs);
+        font-weight: 600;
+        border-radius: 12px;
+    }
+
+    .card-meta {
+        display: flex;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-xs);
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+    }
+
+    .age {
+        padding: 1px 6px;
+        background: var(--color-grey-100);
+        border-radius: 4px;
+    }
+
+    .latest-post {
+        margin-top: var(--spacing-md);
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--color-grey-100);
+    }
+
+    .latest-label {
+        display: block;
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-xxs);
+    }
+
+    .latest-title {
+        display: block;
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-600);
+        line-height: 1.4;
+        margin-bottom: var(--spacing-xxs);
+    }
+
+    .latest-date {
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+    }
+
+    .latest-date-only {
+        margin-top: var(--spacing-xs);
+        font-size: var(--font-size-2xs);
+        color: var(--color-grey-400);
+    }
+
+    .card-bar {
+        margin-top: var(--spacing-md);
+        height: 4px;
+        background: var(--color-grey-100);
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--color-blue-300), var(--color-blue-500));
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+        .cards-grid.featured {
+            grid-template-columns: 1fr;
+        }
+
+        .cards-grid.compact {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>

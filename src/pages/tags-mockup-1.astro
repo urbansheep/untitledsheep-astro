@@ -1,0 +1,301 @@
+---
+export const prerender = true;
+
+import Layout from '@/layouts/LayoutBase.astro';
+import { slugify } from '@/utils/slugify.js';
+import { getCollection } from 'astro:content';
+
+const title = "Макет 1: Семантические категории";
+const description = "Теги, сгруппированные по смысловым категориям";
+
+const posts = await getCollection('blog', (post) => {
+    return !post.data.isDraft && post.data.date <= new Date();
+});
+
+// Count tags
+const tagCounts = new Map<string, number>();
+posts.forEach((post) => {
+    post.data.tags?.forEach((tag) => {
+        const tagStr = tag.toString();
+        tagCounts.set(tagStr, (tagCounts.get(tagStr) || 0) + 1);
+    });
+});
+
+// Define semantic categories with patterns and manual assignments
+const categories = {
+    curated: {
+        title: "Курированные коллекции",
+        emoji: "⭐",
+        description: "Лучшее для перечитывания",
+        tags: ["избранное", "прекрасное", "любимое", "о хорошем"]
+    },
+    contentType: {
+        title: "Типы контента",
+        emoji: "📚",
+        description: "Формат записи",
+        patterns: ["картинки", "цитаты", "твиты", "ссылки", "иллюстрации", "видео", "комиксы", "тексты для чтения", "диалоги", "списки", "графики и диаграммы", "скриншоты", "автопортреты"]
+    },
+    topics: {
+        title: "Тематика",
+        emoji: "💭",
+        description: "О чём это",
+        patterns: ["про "]
+    },
+    people: {
+        title: "Персоналии",
+        emoji: "👤",
+        description: "Люди, авторы, персонажи",
+        patterns: ["Волобуев", "Гибсон", "Нил Гейман", "Митчелл", "Горалик", "Стив Джобс", "Афиша", "Медуза", "Данилкин", "Подшибякин", "Сапрыкин", "Зельвенский", "Олеся", "Григорий Остер", "Харуки Мураками", "Сет Годин", "Кори Докторов", "Дуглас Адамс", "Нил Стивенсон", "Макс Фрай", "Russell Davies", "Paul Ford", "Clive Thompson", "Карл Витакер"]
+    },
+    series: {
+        title: "Рубрики и серии",
+        emoji: "📖",
+        description: "Повторяющиеся форматы",
+        patterns: ["безжалостный постмодернизм", "роскошь человеческого общения", "удивительные факты", "вкусы в цифрах", "правила жизни социопата", "говорящие компьютеры", "вся жизнь игра", "будущее прекрасно", "мгновенный оргазм", "упрощение строптивой", "дело не в деньгах", "женщины и люди", "схватил за мозг", "легион тайных поклонниц", "мой домашний башорг", "слово дня", "топология овцы"]
+    },
+    aesthetic: {
+        title: "Эстетика и визуал",
+        emoji: "🎨",
+        description: "Визуальные категории",
+        patterns: ["девушки", "чб", "глаза", "ноги", "руки", "коленки", "каблуки", "чулки", "веснушки", "блондинки", "рыжие", "порно", "порнтреты", "м-м-м... грудь", "полоски"]
+    },
+    mood: {
+        title: "Настроение и философия",
+        emoji: "🌙",
+        description: "Эмоциональные теги",
+        patterns: ["мизантропия", "мантры", "современная культура", "рассказывание историй", "актуальное искусство", "нарратив", "гипертекст", "терпенье и труд", "великие люди"]
+    },
+    platforms: {
+        title: "Платформы и источники",
+        emoji: "🔗",
+        description: "Откуда это пришло",
+        patterns: ["formspring.me", "bash", "tumblr", "инстаграм", "твиттер", "xkcd", "House MD", "Звёздные войны", "Лост", "Apple", "Google", "Amazon", "Wired", "The Onion", "37signals", "Team Fortress 2"]
+    },
+    life: {
+        title: "Жизнь и быт",
+        emoji: "🏠",
+        description: "Повседневное",
+        patterns: ["живой уголок", "кошки", "овцы", "панды", "кролики", "города и люди", "и о погоде", "это родина моя", "осторожно — дети", "о вкусной и здоровой пище", "песни и пляски", "ездит и летает", "архитектура", "Москва", "Петербург"]
+    }
+};
+
+// Get all tags
+const allTags = [...tagCounts.keys()].sort();
+
+// Categorize tags
+const categorizedTags: Record<string, string[]> = {};
+const usedTags = new Set<string>();
+
+Object.entries(categories).forEach(([key, cat]) => {
+    categorizedTags[key] = [];
+
+    // Manual tags
+    if ('tags' in cat) {
+        cat.tags.forEach(tag => {
+            if (tagCounts.has(tag)) {
+                categorizedTags[key].push(tag);
+                usedTags.add(tag);
+            }
+        });
+    }
+
+    // Pattern matching
+    if ('patterns' in cat) {
+        allTags.forEach(tag => {
+            if (usedTags.has(tag)) return;
+            const matches = cat.patterns.some(p =>
+                tag.toLowerCase().includes(p.toLowerCase()) ||
+                tag === p
+            );
+            if (matches) {
+                categorizedTags[key].push(tag);
+                usedTags.add(tag);
+            }
+        });
+    }
+
+    // Sort by count
+    categorizedTags[key].sort((a, b) => (tagCounts.get(b) || 0) - (tagCounts.get(a) || 0));
+});
+
+// Uncategorized tags
+const uncategorizedTags = allTags.filter(t => !usedTags.has(t))
+    .sort((a, b) => (tagCounts.get(b) || 0) - (tagCounts.get(a) || 0));
+---
+
+<Layout title={title} description={description}>
+    <article class="prose categories-layout">
+        <header class="page-header">
+            <h1>Теги по категориям</h1>
+            <p class="subtitle">Семантическая группировка тегов блога</p>
+            <p class="meta">Всего тегов: {allTags.length} · <a href="/tags-analysis/">Вернуться к анализу</a></p>
+        </header>
+
+        <div class="categories-grid">
+            {Object.entries(categories).map(([key, cat]) => (
+                <section class="category-section">
+                    <h2>
+                        <span class="emoji">{cat.emoji}</span>
+                        {cat.title}
+                    </h2>
+                    <p class="category-desc">{cat.description}</p>
+                    <ul class="tag-list">
+                        {categorizedTags[key].map((tag) => (
+                            <li class="tag-item">
+                                <a href={`/tagged/${slugify(tag)}/`}>
+                                    {tag}
+                                    <span class="count">{tagCounts.get(tag)}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ))}
+        </div>
+
+        <section class="category-section other-section">
+            <h2>
+                <span class="emoji">📁</span>
+                Прочие теги
+            </h2>
+            <p class="category-desc">Теги без явной категории ({uncategorizedTags.length})</p>
+            <ul class="tag-list compact">
+                {uncategorizedTags.map((tag) => (
+                    <li class="tag-item">
+                        <a href={`/tagged/${slugify(tag)}/`}>
+                            {tag}
+                            <span class="count">{tagCounts.get(tag)}</span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    </article>
+</Layout>
+
+<style>
+    .categories-layout {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--spacing-3xl);
+    }
+
+    .page-header h1 {
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .subtitle {
+        color: var(--color-grey-500);
+        font-style: italic;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-400);
+    }
+
+    .categories-grid {
+        display: grid;
+        gap: var(--spacing-2xl);
+    }
+
+    @media (min-width: 600px) {
+        .categories-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .category-section {
+        padding: var(--spacing-lg);
+        background: var(--color-grey-50);
+        border-radius: 8px;
+        border-left: 4px solid var(--theme-color-base);
+    }
+
+    .category-section h2 {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin: 0 0 var(--spacing-xs) 0;
+        font-size: var(--font-size-base);
+        color: var(--theme-color-base);
+    }
+
+    .emoji {
+        font-size: var(--font-size-lg);
+    }
+
+    .category-desc {
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-500);
+        margin: 0 0 var(--spacing-md) 0;
+        font-style: italic;
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tag-list.compact {
+        gap: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .tag-item {
+        margin: 0;
+    }
+
+    .tag-item a {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: 4px 10px;
+        background: var(--color-white);
+        border: 1px solid var(--color-grey-200);
+        border-radius: 16px;
+        font-size: var(--font-size-xs);
+        color: var(--color-grey-700);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .tag-item a:hover {
+        background: var(--color-blue-100);
+        border-color: var(--theme-color-base);
+        color: var(--theme-color-base);
+    }
+
+    .count {
+        font-size: 0.7rem;
+        color: var(--color-grey-400);
+        background: var(--color-grey-100);
+        padding: 1px 5px;
+        border-radius: 10px;
+    }
+
+    .other-section {
+        grid-column: 1 / -1;
+        background: var(--color-white);
+        border: 1px dashed var(--color-grey-300);
+        border-left: 4px solid var(--color-grey-300);
+    }
+
+    .compact .tag-item a {
+        padding: 2px 8px;
+        font-size: var(--font-size-2xs);
+    }
+
+    .compact .count {
+        font-size: 0.65rem;
+        padding: 0 4px;
+    }
+</style>
