@@ -32,6 +32,9 @@
     --spacing-4xl: 48px;
     --spacing-5xl: 64px;
 
+    /* Wrapper padding (used for full-bleed calculations) */
+    --wrapper-padding: var(--spacing-sm);
+
     /* Font sizes */
 
     --font-size-2xs: 0.75rem; /* 12px */
@@ -244,20 +247,20 @@ Make sure disabled buttons don't get the pointer cursor.
     display: flex;
     flex-flow: column;
     margin: 0 auto;
-    padding: 0 var(--spacing-sm);
+    padding: 0 var(--wrapper-padding);
     max-width: 800px;
     min-height: 100vh;
 }
 
 @media (width >= 360px) {
-    .wrapper {
-        padding: 0 var(--spacing-lg);
+    :root {
+        --wrapper-padding: var(--spacing-lg);
     }
 }
 
 @media (width >= 600px) {
-    .wrapper {
-        padding: 0 var(--spacing-xl);
+    :root {
+        --wrapper-padding: var(--spacing-xl);
     }
 }
 
@@ -273,6 +276,16 @@ Make sure disabled buttons don't get the pointer cursor.
 
 .cover {
     max-width: 100%;
+}
+
+/* Full-bleed images on mobile */
+@media (width < 600px) {
+    .cover {
+        width: calc(100% + 2 * var(--wrapper-padding));
+        max-width: none;
+        margin-left: calc(-1 * var(--wrapper-padding));
+        margin-right: calc(-1 * var(--wrapper-padding));
+    }
 }
 
 .details {
