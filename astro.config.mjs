@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 
 import Compress from "astro-compress";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import node from "@astrojs/node";
 
 export default defineConfig({
@@ -19,12 +19,8 @@ export default defineConfig({
     ],
     redirects: {
         "/archive/1": "/archive/",
-        "/archive/1/": "/archive/",
     },
-    output: "hybrid",
-    outputOptions: {
-        format: "esm",
-    },
+    output: "static",
     // adapter: node({
     //     mode: "standalone",
     // }),
