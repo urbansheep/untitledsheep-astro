@@ -13,21 +13,21 @@ const { next, prev, current, total } = Astro.props;
     {
         next && (
             <span>
-                ← <a href={next}>В прошлое</a>
+                ←&nbsp;<a href={next}>В&nbsp;прошлое</a>
             </span>
         )
     }
     {
         current && total && (
             <span>
-                Страница {current} из {total}
+                Страница {current}&nbsp;из&nbsp;{total}
             </span>
         )
     }
     {
         prev && (
             <span>
-                <a href={prev}>В будущее</a> →
+                <a href={prev}>В&nbsp;будущее</a>&nbsp;→
             </span>
         )
     }
