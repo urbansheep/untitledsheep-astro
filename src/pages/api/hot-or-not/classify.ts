@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import fs from "fs/promises";
 import path from "path";
 
-const dataDir = path.resolve(process.cwd(), "src/data");
+const dataDir = path.resolve(process.cwd(), "var/data");
 const frontPagePostsPath = path.join(dataDir, "front-page-posts.json");
 const processedPostsPath = path.join(dataDir, "processed-posts.json");
 const deletePostsPath = path.join(dataDir, "delete-posts.json");

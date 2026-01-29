@@ -40,6 +40,7 @@ import PostCard from "@/components/PostCard.astro";
         <div class="queue-dots" id="queue-dots">
           <!-- Dot indicators will be populated here -->
         </div>
+        <div class="debug-log" id="debug-log" aria-live="polite"></div>
       </div>
     </div>
 
@@ -191,6 +192,16 @@ import PostCard from "@/components/PostCard.astro";
     transform: scale(1.2);
   }
 
+  .debug-log {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: #6c757d;
+    max-height: 4.5rem;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+
   #post-container {
     margin-top: 1rem;
   }
@@ -221,11 +232,24 @@ import PostCard from "@/components/PostCard.astro";
   const feedbackMessage = document.getElementById('feedback-message')!;
   const postTypeDisplay = document.getElementById('post-type-display')!;
   const queueDots = document.getElementById('queue-dots')!;
+  const debugLogEl = document.getElementById('debug-log')!;
   
   let currentPostSlug = '';
   let currentPost: any = null;
   let postQueue: any[] = [];
   let queueIndex = 0;
+
+  const debugBuffer = [];
+  function debug(message: string, data?: any) {
+    const timestamp = new Date().toISOString().split('T')[1]?.slice(0, 8) ?? '';
+    const entry = data ? `${timestamp} ${message} ${JSON.stringify(data)}` : `${timestamp} ${message}`;
+    debugBuffer.unshift(entry);
+    if (debugBuffer.length > 6) {
+      debugBuffer.pop();
+    }
+    debugLogEl.textContent = debugBuffer.join('\n');
+    console.log(`[hot-or-not] ${message}`, data ?? '');
+  }
 
   // Initialize queue dots (10 slots)
   function initializeQueueDots() {
@@ -328,6 +352,7 @@ import PostCard from "@/components/PostCard.astro";
         updateQueueDots();
         
         queueIndex++;
+        debug('Display queued post', { slug: currentPost.slug, queueIndex, queueLength: postQueue.length });
         return;
       }
 
@@ -339,6 +364,7 @@ import PostCard from "@/components/PostCard.astro";
         postContainer.innerHTML = '';
         document.getElementById('control-panel')!.style.display = 'none';
         finishedMessage.style.display = 'block';
+        debug('Queue empty');
         return;
       }
 
@@ -347,6 +373,7 @@ import PostCard from "@/components/PostCard.astro";
       queueIndex = 0;
       currentPost = post;
       currentPostSlug = post.slug;
+      debug('Fetched fresh post', { slug: currentPostSlug });
 
       // Display the post
       postContainer.innerHTML = `<article class="prose">${renderPostContent(post)}</article>`;
@@ -363,6 +390,7 @@ import PostCard from "@/components/PostCard.astro";
       
     } catch (error) {
       console.error('Error loading post:', error);
+      debug('Error loading post');
       showFeedback('Error loading post', 5000);
     }
   }
@@ -379,8 +407,10 @@ import PostCard from "@/components/PostCard.astro";
       const validPosts = results.filter(post => !post.empty);
       postQueue.push(...validPosts);
       updateQueueDots();
+      debug('Preloaded posts', { added: validPosts.length, queueLength: postQueue.length });
     } catch (error) {
       console.error('Error preloading posts:', error);
+      debug('Error preloading posts');
     }
   }
 
@@ -402,17 +432,20 @@ import PostCard from "@/components/PostCard.astro";
         'delete': 'Post scheduled for deletion'
       };
       showFeedback(messages[classification]);
+      debug('Classified post', { slug: currentPostSlug, classification });
 
       await getNextPost();
     } catch (error) {
       console.error('Error classifying post:', error);
       showFeedback('Error saving classification', 5000);
+      debug('Error classifying post');
     }
   }
 
   // Skip current post
   async function skipPost() {
     showFeedback('Post skipped');
+    debug('Skipped post', { slug: currentPostSlug });
     await getNextPost();
   }
 
@@ -451,5 +484,6 @@ import PostCard from "@/components/PostCard.astro";
 
   // Initialize and load first post
   initializeQueueDots();
+  debug('Hot-or-Not initialized');
   getNextPost();
 </script>

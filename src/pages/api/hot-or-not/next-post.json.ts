@@ -1,15 +1,31 @@
 import type { APIRoute } from "astro";
 import getPublishedPosts from "@/utils/getPublishedPosts";
-import frontPagePostsData from "@/data/front-page-posts.json";
-import processedPostsData from "@/data/processed-posts.json";
-import deletePostsData from "@/data/delete-posts.json";
+import fs from "fs/promises";
+import path from "path";
 
-const frontPagePosts: string[] = frontPagePostsData;
-const processedPosts: string[] = processedPostsData;
-const deletePosts: string[] = deletePostsData;
+const dataDir = path.resolve(process.cwd(), "var/data");
+
+async function readJson(fileName: string): Promise<string[]> {
+  try {
+    const file = await fs.readFile(path.join(dataDir, fileName), "utf-8");
+    const parsed = JSON.parse(file);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return [];
+    }
+    throw error;
+  }
+}
 
 export const GET: APIRoute = async () => {
   const allPosts = await getPublishedPosts();
+
+  const [frontPagePosts, processedPosts, deletePosts] = await Promise.all([
+    readJson("front-page-posts.json"),
+    readJson("processed-posts.json"),
+    readJson("delete-posts.json"),
+  ]);
 
   const classifiedSlugs = new Set([
     ...frontPagePosts,
