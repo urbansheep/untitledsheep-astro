@@ -7,6 +7,13 @@ All notable changes to the Untitled Sheep project will be documented in this fil
 ### Changed
 - Disabled HTML minification by updating `astro-compress` settings (`astro.config.mjs`) [AI]
 
+## [2026-01-29]
+
+### Added
+- Tweet cleanup planning and reports (`docs/PLAN-tweet-cleanup.md`, `docs/TASK-LIST-tweet-cleanup.md`, `docs/REPORT-tweet-format-analysis.md`, `docs/REPORT-tweet-transformation.md`) [AI]
+- Tweet format analysis + transformation scripts (`scripts/analyze-tweet-formats.mjs`, `scripts/transform-tweets.mjs`) [AI]
+- Tweet format comparison page (`src/pages/tweet-format-playground.astro`) [AI]
+
 ## [2025-09-16]
 
 ### Added
