@@ -239,6 +239,7 @@
         max-width: none;
         margin-left: calc(-1 * var(--wrapper-padding));
         margin-right: calc(-1 * var(--wrapper-padding));
+        padding-bottom: 0;
     }
 }
 
