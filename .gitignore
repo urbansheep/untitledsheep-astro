@@ -25,3 +25,4 @@ nohup.out
 
 # AI-specific files
 .claude/
+var/

@@ -12,6 +12,7 @@ export default defineConfig({
             entryLimit: 5000,
         }),
         Compress({
+            HTML: false,
             Image: false,
             SVG: false,
         }),

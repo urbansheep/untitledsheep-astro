@@ -2,6 +2,11 @@
 
 All notable changes to the Untitled Sheep project will be documented in this file.
 
+## [2025-09-26]
+
+### Changed
+- Disabled HTML minification by updating `astro-compress` settings (`astro.config.mjs`) [AI]
+
 ## [2025-09-16]
 
 ### Added

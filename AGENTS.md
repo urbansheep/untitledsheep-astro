@@ -1,29 +1,31 @@
 # AI Agent Guidelines for Untitled Sheep Project
 
-This document consolidates all AI guidelines, rules, and instructions for working with the Untitled Sheep blog project. This includes rules for Cline, Claude, and any other AI agents working on this codebase.
+This document consolidates AI guidelines, rules, and instructions for working with the Untitled Sheep blog project. This includes rules for Cline, Claude, and any other AI agents working on this codebase.
+
+WiseArchitect&OlympicSmart&Concise&Ternary
 
 ## Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Change Logging Requirements](#change-logging-requirements)
-3. [AI-Generated Changes Protocol](#ai-generated-changes-protocol)
-4. [File Operations Guidelines](#file-operations-guidelines)
-5. [Development Server Management](#development-server-management)
-6. [Git Repository Management](#git-repository-management)
-7. [Task Management Workflow](#task-management-workflow)
-8. [Architecture and Technical Guidelines](#architecture-and-technical-guidelines)
-9. [Claude Code Specific Settings](#claude-code-specific-settings)
+1. Project Overview
+2. Change Logging Requirements
+3. AI-Generated Changes Protocol
+4. File Operations Guidelines
+5. Development Server Management
+6. Git Repository Management
+7. Task Management Workflow
+8. Architecture and Technical Guidelines
+9. Claude Code Specific Settings
 
 ---
 
 ## Project Overview
 
-**Before working on this project, review the comprehensive [PROJECT-OVERVIEW.md](../docs/PROJECT-OVERVIEW.md) file** to understand the project structure, architecture, and workflows. This document will help you quickly orient yourself with the codebase.
+**Before working on this project, review the comprehensive [PROJECT-OVERVIEW.md](/docs/PROJECT-OVERVIEW.md) file** to understand the project structure, architecture, and workflows. This document will help you quickly orient yourself with the codebase.
 
 ### Quick Reference
 - **Framework**: Astro.js v3 with Node.js v18.14.1+
 - **Architecture**: Static site generator with Content Collections
-- **Language**: Russian-language blog ("Безымянная овца")
+- **Language**: Russian with occasional English
 - **Deployment**: Configured for Vercel
 - **Repository**: https://github.com/urbansheep/untitledsheep-astro.git
 
@@ -156,7 +158,7 @@ mv "file with spaces.txt" "new location/"
 ## Task Management Workflow
 
 ### 1. Task Definition & Planning
-- **Task-List Files**: Create `TASK-LIST-<feature-name>.md` in `.clinerules/` directory
+- **Task-List Files**: Create `TASK-LIST-<feature-name>.md` in `docs/` directory
 - **PRD for Complex Features**: Create `PLAN-<feature-name>.md` in `docs/` directory
 - **Branching**: Each feature gets corresponding Git branch
 - **Break down work** into small, actionable steps
