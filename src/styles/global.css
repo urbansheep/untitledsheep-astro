@@ -97,8 +97,7 @@
 
     /* Fonts */
 
-    --font-family-text: "Lora", "Iowan Old Style", "Georgia", "Times New Roman",
-        "Times", serif;
+    --font-family-text: "Lora", "Iowan Old Style", "Georgia", "Times New Roman", "Times", serif;
 }
 
 html {
@@ -107,6 +106,8 @@ html {
     line-height: var(--line-height-base);
     font-size: var(--font-size-sm);
     font-family: var(--font-family-text);
+    scrollbar-width: thin;
+    scrollbar-color: gray transparent;
 }
 
 h1,
